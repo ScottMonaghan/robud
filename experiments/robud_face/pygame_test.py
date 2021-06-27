@@ -2,8 +2,8 @@ import pytweening
 import pygame 
 import random
 import os
-import rospy
-from std_msgs.msg import Int16MultiArray
+#import rospy
+#from std_msgs.msg import Int16MultiArray
 
 ROBUD_EYE_SPACING = 50
 SCREENWIDTH = 800
@@ -192,14 +192,15 @@ def apply_face_expression(robud_face:RobudFace, face_expression):
     robud_face.center_y_offset = face_expression[CENTER_Y_OFFSET]
 
 def main():
-    rospy.init_node('robud_face')
-    rospy.Subscriber('robud_face_expression', Int16MultiArray, callback)
+    #rospy.init_node('robud_face')
+    #rospy.Subscriber('robud_face_expression', Int16MultiArray, callback)
     random.seed()
+    #pygame.display.init()
     pygame.init()
     pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
 
     screensize = (SCREENWIDTH, SCREENHEIGHT)
-    screen = pygame.display.set_mode(screensize)
+    screen = pygame.display.set_mode(screensize,pygame.FULLSCREEN)
     script_dir = os.path.dirname(__file__)
     robud_face = RobudFace(
         os.path.join(script_dir,"robud_eye.png"),
@@ -213,11 +214,14 @@ def main():
     face_angle = 0
     carry_on = True
 
-    while not rospy.is_shutdown() and carry_on:
+    while carry_on:
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 carry_on = False
-        
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                    print("pressed CTRL-C as an event")
+                    carry_on = False
         if face_expression is not None and not robud_face.is_blinking:
             apply_face_expression(robud_face, face_expression)
         
