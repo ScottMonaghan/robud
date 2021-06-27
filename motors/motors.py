@@ -1,6 +1,7 @@
 from time import sleep, time
 from adafruit_motorkit import MotorKit
 from adafruit_motor import servo
+import paho.mqtt.client as mqtt
 
 MOTOR_TIMEOUT = 0.2
 MQTT_BROKER_ADDRESS = "localhost"
@@ -24,7 +25,7 @@ class RobudMotorWapper(object):
             self.motor.throttle = 0
             self.timeout_start = 0 
 
-import paho.mqtt.client as mqtt
+
 
 def on_message_motor_throttle(client, userdata, message):
     print(message.topic, message.payload)
