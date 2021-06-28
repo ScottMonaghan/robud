@@ -2,6 +2,11 @@ import sys, select, tty, termios
 import paho.mqtt.client as mqtt
 import time
 import pygame
+
+def on_heading_message(client, userdata, message):
+        userdata["heading"] = int(float(message.payload))
+
+
 if __name__ == '__main__':
 
     MQTT_BROKER_ADDRESS = "robud.local"
@@ -9,41 +14,63 @@ if __name__ == '__main__':
     TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
     TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
     TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
+    TOPIC_ORIENTATION_HEADING = 'robud/sensors/orientation/heading'
     HEAD_SERVO_MAX_ANGLE = 180
     HEAD_SERVO_MIN_ANGLE = 0
     SCREENHEIGHT = 320
     SCREENWIDTH = 640
     MOTOR_SPEED_BASE = 0.5
-    MOTOR_SPEED_ACCELERATED = 1
+    MOTOR_SPEED_ACCELERATED = 0.7
 
     rate = 100 #100hz rate for sending messages
     carry_on = True
-    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME)
+    client_userdata = {"heading":0}
+    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata)
+    stopped=True
+    target_heading = 0
 
-    def move_forward():
-        print("move forward")
-        mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, MOTOR_SPEED_BASE)
-        mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, MOTOR_SPEED_BASE)
+    def move_forward(stopped,target_heading):
+        left_speed = MOTOR_SPEED_BASE
+        right_speed = MOTOR_SPEED_BASE
+        current_heading = int(client_userdata["heading"])
+        if stopped:
+            target_heading = current_heading
+        elif current_heading > target_heading:
+            #veering to the right, add more power to right wheel
+            right_speed = MOTOR_SPEED_ACCELERATED
+        elif current_heading < target_heading:
+            #veering to the left, add more power to left wheel
+            left_speed = MOTOR_SPEED_ACCELERATED
+        print("move forward: target_heading:{}".format(target_heading))
+        stopped = False
+        mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, left_speed)
+        mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, right_speed)
+        return stopped, target_heading
 
-    def move_backward():
+    def move_backward(stopped):
         print("move backward")
+        stopped = False
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, -1 * MOTOR_SPEED_BASE)
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, -1 * MOTOR_SPEED_BASE)
-
-    def turn_right():
+        return stopped
+    def turn_right(stopped):
         print("turn right")
+        stopped = False
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, MOTOR_SPEED_BASE)
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, -1 * MOTOR_SPEED_BASE)
-
-    def turn_left():
+        return stopped
+    def turn_left(stopped):
         print("turn left")
+        stopped = False
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, -1 * MOTOR_SPEED_BASE)
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, MOTOR_SPEED_BASE)
-
-    def stop():
+        return stopped
+    def stop(stopped):
         print("stop")
+        stopped = True
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, 0)
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, 0)
+        return stopped
 
     
     pygame.init()
@@ -52,6 +79,9 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(screensize)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
     mqtt_client.loop_start()
+    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, 90)
+    mqtt_client.subscribe(TOPIC_ORIENTATION_HEADING)
+    mqtt_client.on_message=on_heading_message
     while carry_on:
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
@@ -62,15 +92,15 @@ if __name__ == '__main__':
                     carry_on = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            move_forward()
+            stopped, target_heading = move_forward(stopped, target_heading)
         elif keys[pygame.K_DOWN]:
-            move_backward()
+            stopped = move_backward(stopped)
         elif keys[pygame.K_LEFT]:
-            turn_left()
+            stopped = turn_left(stopped)
         elif keys[pygame.K_RIGHT]:
-            turn_right()
+            stopped = turn_right(stopped)
         else:
-            stop()
+            stopped = stop(stopped)
         clock.tick(rate)
                     
 # if __name__ == '__main__':
