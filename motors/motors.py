@@ -25,8 +25,6 @@ class RobudMotorWapper(object):
             self.motor.throttle = 0
             self.timeout_start = 0 
 
-
-
 def on_message_motor_throttle(client, userdata, message):
     print(message.topic, message.payload)
     robud_motor = None

@@ -54,12 +54,12 @@ while camera.isReady():
         encoded_frame = cv2.imencode('.jpg',frame, [int(cv2.IMWRITE_JPEG_QUALITY), 75])
         payload=encoded_frame[1].tobytes()
         client.publish(topic=topic_camera_raw,payload=payload,qos=2)
-        np_bytes = np.frombuffer(payload, np.uint8)
-        frame2 = cv2.imdecode(np_bytes, cv2.IMREAD_COLOR)
-        cv2.imshow("Video Frame", frame)
+        #np_bytes = np.frombuffer(payload, np.uint8)
+        #frame2 = cv2.imdecode(np_bytes, cv2.IMREAD_COLOR)
+        #cv2.imshow("Video Frame", frame)
         #cv2.imshow("Video Frame 2", frame2)
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
+        #if cv2.waitKey(25) & 0xFF == ord('q'):
+        #    break
     except KeyboardInterrupt:
         break
 
