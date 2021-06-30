@@ -7,12 +7,13 @@ import time
 
 from segnet_utils import *
 RATE = 15 #15hz
+topic_ai_image_segementation_mask = "robud/ai/image_segmentation/mask"
+
 
 processor = {'is_processing':False,'last_frame_start':0}
 # process frames until user exits
 def on_message(client, userdata, message):
     processor = userdata
-    print(processor['is_processing'])
     if not processor['is_processing'] and time.time() - processor['last_frame_start'] > 1/RATE:
         processor['last_frame_start'] = time.time()
         processor['is_processing'] = True
@@ -24,13 +25,7 @@ def on_message(client, userdata, message):
         cv_image = cv2.cvtColor(cv_image,cv2.COLOR_BGR2RGB)
         #convert to cuda image
         img_input = jetson.utils.cudaFromNumpy(cv_image)
-        # allocate the output, with half the size of the input
-        #img_input = jetson.utils.cudaAllocMapped(width=320, 
-        #                                        height=180, 
-        #                                        format=cuda_image.format)
-
-        # rescale the image (the dimensions are taken from the image capsules)
-        #jetson.utils.cudaResize(cuda_image, img_input)
+        
         # allocate buffers for this size image
         buffers.Alloc(img_input.shape, img_input.format)
 
@@ -51,8 +46,14 @@ def on_message(client, userdata, message):
             jetson.utils.cudaOverlay(buffers.overlay, buffers.composite, 0, 0)
             jetson.utils.cudaOverlay(buffers.mask, buffers.composite, buffers.overlay.width, 0)
 
+        cv_mask = jetson.utils.cudaToNumpy(buffers.mask)
+        cv_mask = cv2.cvtColor(cv_mask, cv2.COLOR_RGB2BGR)
+        jpg_mask = cv2.imencode('.png',cv_mask) #[int(cv2.IMWRITE_JPEG_QUALITY), 75])
+        payload=jpg_mask[1].tobytes()
+        client.publish(topic=topic_ai_image_segementation_mask,payload=payload,qos=2)
+
         # render the output image
-        output.Render(buffers.output)
+        #output.Render(buffers.output)
         processor['is_processing'] = False
     else: print("throttling until next frame")
 
@@ -93,7 +94,7 @@ buffers = segmentationBuffers(net, opt)
 
 # create video sources & outputs
 #input = jetson.utils.videoSource(opt.input_URI, argv=sys.argv)
-output = jetson.utils.videoOutput(opt.output_URI, argv=sys.argv+is_headless)
+#output = jetson.utils.videoOutput(opt.output_URI, argv=sys.argv+is_headless)
 import jetson.inference #needs to be imported after output is set (see https://github.com/dusty-nv/jetson-inference/issues/619)
 
 broker_address="robud.local"
