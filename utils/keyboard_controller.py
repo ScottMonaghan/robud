@@ -15,12 +15,15 @@ if __name__ == '__main__':
     TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
     TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
     TOPIC_ORIENTATION_HEADING = 'robud/sensors/orientation/heading'
-    HEAD_SERVO_MAX_ANGLE = 180
-    HEAD_SERVO_MIN_ANGLE = 0
+    HEAD_SERVO_MAX_ANGLE = 170
+    HEAD_SERVO_MIN_ANGLE = 60
     SCREENHEIGHT = 320
     SCREENWIDTH = 640
     MOTOR_SPEED_BASE = 0.5
     MOTOR_SPEED_ACCELERATED = 0.7
+    HEAD_ANGLE_CHANGE = 2
+    HEAD_ANGLE_MAX = 180
+    HEAD_ANGLE_MIN = 60
 
     rate = 100 #100hz rate for sending messages
     carry_on = True
@@ -71,7 +74,23 @@ if __name__ == '__main__':
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, 0)
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, 0)
         return stopped
+    def look_up(head_angle):
+        print("look up")
+        new_angle = head_angle + HEAD_ANGLE_CHANGE
+        if new_angle >= HEAD_ANGLE_MAX: 
+            new_angle = HEAD_ANGLE_MAX
+        head_angle = new_angle
+        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
+        return head_angle
 
+    def look_down(head_angle):
+        print("look down")
+        new_angle = head_angle - HEAD_ANGLE_CHANGE
+        if new_angle <= HEAD_ANGLE_MIN:
+            new_angle = HEAD_ANGLE_MIN 
+        head_angle = new_angle
+        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
+        return head_angle
     
     pygame.init()
     clock = pygame.time.Clock()
@@ -79,7 +98,8 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(screensize)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
     mqtt_client.loop_start()
-    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, 90)
+    head_angle = 75
+    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
     mqtt_client.subscribe(TOPIC_ORIENTATION_HEADING)
     mqtt_client.on_message=on_heading_message
     while carry_on:
@@ -101,6 +121,11 @@ if __name__ == '__main__':
             stopped = turn_right(stopped)
         else:
             stopped = stop(stopped)
+        if keys[pygame.K_w]:
+            head_angle = look_up(head_angle)
+        elif keys[pygame.K_s]:
+            head_angle = look_down(head_angle)
+
         clock.tick(rate)
                     
 # if __name__ == '__main__':
