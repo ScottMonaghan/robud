@@ -2,8 +2,7 @@ import pytweening
 import pygame 
 import random
 import os
-#import rospy
-#from std_msgs.msg import Int16MultiArray
+
 
 ROBUD_EYE_SPACING = 50
 SCREENWIDTH = 800
@@ -11,6 +10,7 @@ SCREENHEIGHT = 480
 BLINK_DURATION = 200
 MINIMUM_BLINK_DELAY = 500
 AVG_BLINK_DELAY = 3000
+
 
 LEFT_TOP_FLAT_LID_X         = 0
 LEFT_TOP_FLAT_LID_Y         = 1
@@ -222,6 +222,8 @@ def main():
                 if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
                     print("pressed CTRL-C as an event")
                     carry_on = False
+                if  event.key == pygame.K_f and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                    pygame.display.toggle_fullscreen()
         if face_expression is not None and not robud_face.is_blinking:
             apply_face_expression(robud_face, face_expression)
         
