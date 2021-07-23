@@ -142,7 +142,7 @@ def main():
 
     #initialize mqtt client
     client_userdata = {
-    "face_expression":face_expression,
+        "face_expression":face_expression,
     }
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)

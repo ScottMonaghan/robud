@@ -18,6 +18,7 @@ EYE_MOVEMENT_DURATION = 0.1
 PYTWEENING_S = 3
 
 TOPIC_FACE_ANIMATION_FRAME = 'robud/robud_face/animation_frame'
+TOPIC_FACE_KEYFRAMES = 'robud/robud_face/keyframes'
 
 #Face Expression Array Constants
 LEFT_TOP_FLAT_LID_X         = 0
@@ -165,6 +166,19 @@ class AnimatedValue():
                 + tween_modifier 
                 * (self.end_value - self.start_value)
             )
+#keyframe: face expression array with duration representing time in seconds we want it to take to complete this expression
+class face_keyframe():
+    def __init__(
+        self
+        ,left_expression:ExpressionCoordinates
+        ,right_expression:ExpressionCoordinates
+        ,position:tuple
+        ,duration:float
+    ) -> None:
+        self.left_expression = left_expression
+        self.right_expression = right_expression
+        self.position = position
+        self.duration = duration
 
 #updates face_expression array with new coordinates
 def set_expression(face_expression:np.ndarray, left_expression_coordinates:ExpressionCoordinates, right_expression_coordinates:ExpressionCoordinates = None):
@@ -190,6 +204,7 @@ def run_animation(
     new_left_expression:ExpressionCoordinates,
     new_right_expression:ExpressionCoordinates = None,
     new_position = None,
+    duration = EXPRESSION_CHANGE_DURATION
     ):
     
     face_expression = current_face_expression
@@ -207,17 +222,17 @@ def run_animation(
     if new_position is not None:
         face_expression[CENTER_X_OFFSET] = new_position[0]
         face_expression[CENTER_Y_OFFSET] = new_position[1]
-
+    
     #get the start time of the entire animation
     animation_start_time = time()
-    
+
     #create array to hold animated values for each expression array value
     face_expression_animated_values = [None] * FACE_EXPRESSION_ARRAY_SIZE
     for i in range(0,FACE_EXPRESSION_ARRAY_SIZE):
         face_expression_animated_values[i] = AnimatedValue(
             start_value=last_face_expression[i],
             end_value=face_expression[i],
-            duration=EXPRESSION_CHANGE_DURATION,
+            duration=duration,
             start_time=animation_start_time,
             animation_function=pytweening.easeInOutQuad,
             pytweening_s = PYTWEENING_S
@@ -234,19 +249,19 @@ def run_animation(
     #eye position movement settings
     face_expression_animated_values[CENTER_Y_OFFSET].animation_function = pytweening.easeOutBack
     face_expression_animated_values[CENTER_X_OFFSET].animation_function = pytweening.easeOutBack
-    face_expression_animated_values[CENTER_X_OFFSET].duration = EYE_MOVEMENT_DURATION
-    face_expression_animated_values[CENTER_Y_OFFSET].duration = EYE_MOVEMENT_DURATION
-
-    while(time()-animation_start_time <= EXPRESSION_CHANGE_DURATION):
+    
+    while(time()-animation_start_time <= duration):
         loopstart = time()
         for i in range(0,FACE_EXPRESSION_ARRAY_SIZE):
             face_expression[i] = face_expression_animated_values[i].get_updated_value()
         face_expression_bytes = face_expression.tobytes()
-        mqtt_client.publish(TOPIC_FACE_ANIMATION_FRAME,face_expression_bytes)
+        mqtt_client.publish(TOPIC_FACE_ANIMATION_FRAME,face_expression_bytes,qos=2)
         loop_duration = time() - loopstart
         if loop_duration < 1/ANIMATION_FPS:
             sleep(1/ANIMATION_FPS - loop_duration)
     if new_left_expression is not None:
         set_expression(face_expression,new_left_expression, new_right_expression)
-    mqtt_client.publish(TOPIC_FACE_ANIMATION_FRAME,face_expression_bytes)
+        face_expression_bytes = face_expression.tobytes()
+    mqtt_client.publish(TOPIC_FACE_ANIMATION_FRAME,face_expression_bytes,qos=2)
+    return face_expression
    
