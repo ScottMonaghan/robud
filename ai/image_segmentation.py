@@ -6,7 +6,7 @@ import cv2
 import time
 
 from segnet_utils import *
-RATE = 15 #15hz
+RATE = 10 #10hz
 topic_ai_image_segementation_mask = "robud/ai/image_segmentation/mask"
 
 
@@ -48,9 +48,9 @@ def on_message(client, userdata, message):
 
         cv_mask = jetson.utils.cudaToNumpy(buffers.mask)
         cv_mask = cv2.cvtColor(cv_mask, cv2.COLOR_RGB2BGR)
-        jpg_mask = cv2.imencode('.png',cv_mask) #[int(cv2.IMWRITE_JPEG_QUALITY), 75])
+        jpg_mask = cv2.imencode('.jpg',cv_mask, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
         payload=jpg_mask[1].tobytes()
-        client.publish(topic=topic_ai_image_segementation_mask,payload=payload,qos=2)
+        client.publish(topic=topic_ai_image_segementation_mask,payload=payload,qos=0)
 
         # render the output image
         #output.Render(buffers.output)
