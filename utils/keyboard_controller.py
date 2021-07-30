@@ -2,6 +2,8 @@ import sys, select, tty, termios
 import paho.mqtt.client as mqtt
 import time
 import pygame
+import pickle
+from robud.robud_face.robud_face_common import *
 
 def on_heading_message(client, userdata, message):
         userdata["heading"] = int(float(message.payload))
@@ -9,7 +11,7 @@ def on_heading_message(client, userdata, message):
 
 if __name__ == '__main__':
 
-    MQTT_BROKER_ADDRESS = "robud.local"
+    MQTT_BROKER_ADDRESS = "localhost" #"robud.local"
     MQTT_CLIENT_NAME = "robud_utils_keyboard_controller.py"
     TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
     TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
@@ -92,6 +94,38 @@ if __name__ == '__main__':
         mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
         return head_angle
     
+    def move_eyes(
+        face_expression, 
+        left_expression:ExpressionCoordinates, 
+        right_expression:ExpressionCoordinates, 
+        selected_position:tuple,
+        change_expression:bool, 
+        mqtt_client:mqtt.Client):    
+        if (
+            change_expression
+            or
+            face_expression[CENTER_X_OFFSET] != selected_position[0]
+            or 
+            face_expression[CENTER_Y_OFFSET] != selected_position[1]
+            ):
+            face_expression[CENTER_X_OFFSET] = selected_position[0]
+            face_expression[CENTER_Y_OFFSET] = selected_position[1]
+            
+            #put the animation in a keyframe and send it!
+            keyframe = face_keyframe(
+                left_expression=left_expression,
+                right_expression=right_expression,
+                position=selected_position,
+                duration=EXPRESSION_CHANGE_DURATION
+            )
+            #add the keyframe to a list
+            keyframes = [keyframe]
+
+            #publish it!
+            mqtt_client.publish(TOPIC_FACE_KEYFRAMES,pickle.dumps(keyframes),qos=2)
+            change_expression = False
+        return face_expression, change_expression
+
     pygame.init()
     clock = pygame.time.Clock()
     screensize = (SCREENWIDTH, SCREENHEIGHT)
@@ -102,6 +136,21 @@ if __name__ == '__main__':
     mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
     mqtt_client.subscribe(TOPIC_ORIENTATION_HEADING)
     mqtt_client.on_message=on_heading_message
+    
+    #init face expression
+    face_expression = np.zeros(shape=FACE_EXPRESSION_ARRAY_SIZE, dtype=np.int16)
+    set_expression(face_expression, Expressions[ExpressionId.OPEN])
+    selected_expression = Expressions[ExpressionId.OPEN]
+    left_expression:ExpressionCoordinates = Expressions[ExpressionId.OPEN]
+    right_expression:ExpressionCoordinates = Expressions[ExpressionId.OPEN]
+    position_left = -50
+    position_right = 50
+    position_center = 0
+    position_up = -50
+    position_down = 50
+    selected_position = (position_center,position_center)
+    change_expression:bool = False
+
     while carry_on:
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
@@ -117,34 +166,84 @@ if __name__ == '__main__':
             stopped = move_backward(stopped)
         elif keys[pygame.K_LEFT]:
             stopped = turn_left(stopped)
+            #look left
+            selected_position = (
+                    position_left,
+                    selected_position[1]
+                    )
         elif keys[pygame.K_RIGHT]:
             stopped = turn_right(stopped)
+            #look right
+            selected_position = (
+                    position_right,
+                    selected_position[1]
+                    )
         else:
             stopped = stop(stopped)
+            #center eyes
+            selected_position = (
+                    position_center,
+                    selected_position[1]
+                    )
         if keys[pygame.K_w]:
             head_angle = look_up(head_angle)
+            #look up
+            selected_position = (
+                    selected_position[0],
+                    position_up
+                    )
         elif keys[pygame.K_s]:
             head_angle = look_down(head_angle)
-
+            #look down
+            selected_position = (
+                    selected_position[0],
+                    position_down
+                    )
+        else:
+            #look center
+            selected_position = (
+                    selected_position[0],
+                    position_center
+                    )
+        if keys[pygame.K_1] or keys[pygame.K_KP1]:
+            if left_expression != Expressions[ExpressionId.OPEN] and right_expression != Expressions[ExpressionId.OPEN]:
+                left_expression = Expressions[ExpressionId.OPEN]
+                right_expression = Expressions[ExpressionId.OPEN]
+                change_expression = True
+        if keys[pygame.K_2] or keys[pygame.K_KP2]:
+            if left_expression != Expressions[ExpressionId.HAPPY] and right_expression != Expressions[ExpressionId.HAPPY]:
+                left_expression = Expressions[ExpressionId.HAPPY]
+                right_expression = Expressions[ExpressionId.HAPPY]
+                change_expression = True
+        if keys[pygame.K_3] or keys[pygame.K_KP3]:
+            if left_expression != Expressions[ExpressionId.OVERJOYED] and right_expression != Expressions[ExpressionId.OVERJOYED]:
+                left_expression = Expressions[ExpressionId.OVERJOYED]
+                right_expression = Expressions[ExpressionId.OVERJOYED]
+                change_expression = True
+        if keys[pygame.K_4] or keys[pygame.K_KP4]:
+            if left_expression != Expressions[ExpressionId.BORED] and right_expression != Expressions[ExpressionId.BORED]:
+                left_expression = Expressions[ExpressionId.BORED]
+                right_expression = Expressions[ExpressionId.BORED]
+                change_expression = True
+        if keys[pygame.K_5] or keys[pygame.K_KP5]:
+            if left_expression != Expressions[ExpressionId.ANGRY] and right_expression != Expressions[ExpressionId.ANGRY]:
+                left_expression = Expressions[ExpressionId.ANGRY]
+                right_expression = Expressions[ExpressionId.ANGRY]
+                change_expression = True
+        if keys[pygame.K_6] or keys[pygame.K_KP6]:
+            if left_expression != Expressions[ExpressionId.SKEPTICAL_LEFT] and right_expression != Expressions[ExpressionId.SKEPTICAL_RIGHT]:
+                left_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
+                right_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
+                change_expression = True
+        face_expression, change_expression = move_eyes(
+                face_expression = face_expression,
+                left_expression = left_expression,
+                right_expression = right_expression,
+                selected_position = selected_position,
+                change_expression = change_expression,
+                mqtt_client = mqtt_client
+                )
         clock.tick(rate)
-                    
-# if __name__ == '__main__':
-#     try:
-#         mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME)
-#         mqtt_client.connect(MQTT_BROKER_ADDRESS)
-#         mqtt_client.loop_start()
-#         old_attr=termios.tcgetattr(sys.stdin)
-#         tty.setcbreak(sys.stdin.fileno())
-#         while True:
-#             loop_start = time.time()
-#             if select.select([sys.stdin], [], [], 0)[0] == [sys.stdin]:
-#                 print(sys.stdin.read(1))
-            
-#             #make sure we're publishing at about the expected rate
-#             loop_time = time.time() - loop_start            
-#             if loop_time < 1/rate:
-#                 time.sleep((1/rate) - loop_time)
-#     except KeyboardInterrupt:
-#         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_attr)
-#         print("Keybord Interrupt Detected. Exiting")
-#         exit(0)
+"Exiting"
+pygame.quit()
+exit()                

@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 import numpy as np
 import pickle
 
-MQTT_BROKER_ADDRESS = "localhost"
+MQTT_BROKER_ADDRESS = "localhost" #"robud.local"
 MQTT_CLIENT_NAME = "robud_face_controller.py"
 
 def on_message_face_keyframes(client,userdata,message):
