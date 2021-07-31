@@ -1,5 +1,5 @@
 import pytweening
-from time import time
+from time import time, sleep
 from robud.robud_face.robud_face_common import *
 import paho.mqtt.client as mqtt
 import numpy as np
@@ -49,7 +49,7 @@ def robud_face_animator():
                 new_position=keyframe.position,
                 duration=keyframe.duration
                 )
-       
+        sleep(0.1)   
 
 if __name__ == '__main__':
     robud_face_animator()
