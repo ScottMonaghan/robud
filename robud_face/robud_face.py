@@ -1,4 +1,3 @@
-from numpy.core.arrayprint import dtype_is_implied
 import pytweening
 import pygame 
 import random
@@ -162,7 +161,7 @@ def main():
     #set screensize
     screensize = (SCREENWIDTH, SCREENHEIGHT)
     #update the display mode
-    screen = pygame.display.set_mode(screensize) #,pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(screensize,pygame.FULLSCREEN)
     #get script dir for local file paths
     script_dir = os.path.dirname(__file__)
     #initilialize the face object

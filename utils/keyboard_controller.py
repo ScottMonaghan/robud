@@ -143,8 +143,8 @@ if __name__ == '__main__':
     selected_expression = Expressions[ExpressionId.OPEN]
     left_expression:ExpressionCoordinates = Expressions[ExpressionId.OPEN]
     right_expression:ExpressionCoordinates = Expressions[ExpressionId.OPEN]
-    position_left = -50
-    position_right = 50
+    position_left = 50
+    position_right = -50
     position_center = 0
     position_up = -50
     position_down = 50

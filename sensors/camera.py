@@ -21,6 +21,8 @@ while camera.isReady():
         client.publish(topic=topic_camera_raw,payload=payload,qos=0)
     except KeyboardInterrupt:
         break
+    except Exception as e:
+        print(e)
 
     # close the camera instance
 camera.release()
