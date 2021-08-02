@@ -6,6 +6,7 @@ import numpy as np
 
 topic_ai_image_segementation_mask = "robud/ai/image_segmentation/mask"
 topic_camera_raw="robud/sensors/camera/raw" 
+TOPIC_OBJECT_DETECTION_VIDEO_FRAME = "robud/ai/object_detection/videoframe"
 
 frame=None
 monkey=None
@@ -21,6 +22,8 @@ def on_message(client, userdata, message):
             window = "Image Segmentation Mask"
         elif message.topic == topic_camera_raw:
             window = "Robud Camera Raw"
+        elif message.topic == TOPIC_OBJECT_DETECTION_VIDEO_FRAME:
+            window = "Object Detection"
         cv2.imshow(window, frame2)
         cv2.waitKey(25)
         processing_message = False
@@ -35,6 +38,9 @@ topic = topic_ai_image_segementation_mask
 print("Subscribing to topic",topic)
 client.subscribe(topic)
 topic = topic_camera_raw
+print("Subscribing to topic",topic)
+client.subscribe(topic)
+topic = TOPIC_OBJECT_DETECTION_VIDEO_FRAME
 print("Subscribing to topic",topic)
 client.subscribe(topic)
 client.loop_forever()
