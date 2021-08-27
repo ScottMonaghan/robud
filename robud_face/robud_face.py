@@ -156,12 +156,13 @@ def main():
     #initialize pygame
     pygame.init()
     #remove cursor from screen
-    pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
+    pygame.event.set_grab(True)
+    pygame.mouse.set_visible(False) #set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
 
     #set screensize
     screensize = (SCREENWIDTH, SCREENHEIGHT)
     #update the display mode
-    screen = pygame.display.set_mode(screensize,pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
     #get script dir for local file paths
     script_dir = os.path.dirname(__file__)
     #initilialize the face object
@@ -177,6 +178,10 @@ def main():
 
     #loop control variable
     carry_on = True
+
+    #set up text display
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    odom = 0
 
     while carry_on:
         for event in pygame.event.get():
@@ -212,8 +217,14 @@ def main():
                 + robud_face.center_y_offset
             )
         )
+        #get relative mouse positions
+        odom += pygame.mouse.get_rel()[1]
+        text = str(odom)
+        text_surface = font.render(text, True, (0, 255, 0), (0, 0, 128))
+        screen.blit(text_surface, text_surface.get_rect())
         #update the display and show next frame
         pygame.display.flip()
+        
  
 if __name__ == '__main__':
     main()

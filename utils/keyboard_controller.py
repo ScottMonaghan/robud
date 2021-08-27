@@ -5,28 +5,42 @@ import pygame
 import pickle
 from robud.robud_face.robud_face_common import *
 
+HEAD_SERVO_MAX_ANGLE = 170
+HEAD_SERVO_MIN_ANGLE = 60
+SCREENHEIGHT = 320
+SCREENWIDTH = 640
+MOTOR_SPEED_BASE = 0.5
+MOTOR_SPEED_ACCELERATED = 1
+MOTOR_SPEED_MIN = 0.2
+HEAD_ANGLE_CHANGE = 2
+HEAD_ANGLE_MAX = 180
+HEAD_ANGLE_MIN = 60
+MAX_VEERAGE = 10
+MQTT_BROKER_ADDRESS = "robud.local"
+MQTT_CLIENT_NAME = "robud_utils_keyboard_controller.py"
+TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
+TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
+TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
+TOPIC_ORIENTATION_HEADING = 'robud/sensors/orientation/heading'
+TOPIC_ODOMETRY_LEFT_TICKS = "robud/sensors/odometry/left/ticks"
+TOPIC_ODOMETRY_LEFT_TICKSPEED = "robud/sensors/odometry/left/tickspeed"
+TOPIC_ODOMETRY_RIGHT_TICKS = "robud/sensors/odometry/right/ticks"
+TOPIC_ODOMETRY_RIGHT_TICKSPEED = "robud/sensors/odometry/right/tickspeed"
+
 def on_heading_message(client, userdata, message):
-        userdata["heading"] = int(float(message.payload))
+        if message.topic == TOPIC_ORIENTATION_HEADING:
+            userdata["heading"] = int(float(message.payload))
+        elif message.topic == TOPIC_ODOMETRY_LEFT_TICKSPEED:
+            userdata["left_tickspeed"] = float(message.payload)
+        elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKSPEED:
+            userdata["right_tickspeed"] = float(message.payload)
+        elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKS:
+            userdata["right_ticks"] = int(message.payload)
+        elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKS:
+            userdata["left_ticks"] = int(message.payload)
 
 
 if __name__ == '__main__':
-
-    MQTT_BROKER_ADDRESS = "localhost" #"robud.local"
-    MQTT_CLIENT_NAME = "robud_utils_keyboard_controller.py"
-    TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
-    TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
-    TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
-    TOPIC_ORIENTATION_HEADING = 'robud/sensors/orientation/heading'
-    HEAD_SERVO_MAX_ANGLE = 170
-    HEAD_SERVO_MIN_ANGLE = 60
-    SCREENHEIGHT = 320
-    SCREENWIDTH = 640
-    MOTOR_SPEED_BASE = 0.5
-    MOTOR_SPEED_ACCELERATED = 0.7
-    HEAD_ANGLE_CHANGE = 2
-    HEAD_ANGLE_MAX = 180
-    HEAD_ANGLE_MIN = 60
-
     rate = 100 #100hz rate for sending messages
     carry_on = True
     client_userdata = {"heading":0}
@@ -38,14 +52,35 @@ if __name__ == '__main__':
         left_speed = MOTOR_SPEED_BASE
         right_speed = MOTOR_SPEED_BASE
         current_heading = int(client_userdata["heading"])
+        right_tickspeed = float(client_userdata["left_tickspeed"])
+        left_tickspeed = float(client_userdata["right_tickspeed"])
         if stopped:
             target_heading = current_heading
-        elif current_heading > target_heading:
+        # elif left_tickspeed != right_tickspeed:
+        #     veerage = abs(left_tickspeed - right_tickspeed)
+        #     max_speed_change = MOTOR_SPEED_BASE - MOTOR_SPEED_MIN
+        #     if veerage > MAX_VEERAGE:
+        #         veerage_pct = 1
+        #     else:
+        #         veerage_pct = veerage/MAX_VEERAGE
+        #     if left_tickspeed > right_tickspeed:
+        #         left_speed = MOTOR_SPEED_BASE - (max_speed_change * veerage_pct)
+        #     elif right_tickspeed > left_tickspeed:
+        #         right_speed = MOTOR_SPEED_BASE - (max_speed_change * veerage_pct)
+        elif current_heading != target_heading: 
             #veering to the right, add more power to right wheel
-            right_speed = MOTOR_SPEED_ACCELERATED
-        elif current_heading < target_heading:
-            #veering to the left, add more power to left wheel
-            left_speed = MOTOR_SPEED_ACCELERATED
+            veerage = abs(target_heading-current_heading)
+            max_speed_change = MOTOR_SPEED_ACCELERATED - MOTOR_SPEED_BASE
+            if veerage > MAX_VEERAGE:
+                veerage_pct = 1
+            else:
+                veerage_pct = veerage/MAX_VEERAGE
+
+            if current_heading > target_heading:              
+                right_speed = MOTOR_SPEED_BASE + (max_speed_change * veerage_pct)
+            elif current_heading < target_heading:
+                #veering to the left, add more power to left wheel
+                left_speed = MOTOR_SPEED_BASE + (max_speed_change * veerage_pct)
         print("move forward: target_heading:{}".format(target_heading))
         stopped = False
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, left_speed)
@@ -135,6 +170,8 @@ if __name__ == '__main__':
     head_angle = 75
     mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
     mqtt_client.subscribe(TOPIC_ORIENTATION_HEADING)
+    mqtt_client.subscribe(TOPIC_ODOMETRY_LEFT_TICKSPEED)
+    mqtt_client.subscribe(TOPIC_ODOMETRY_RIGHT_TICKSPEED)
     mqtt_client.on_message=on_heading_message
     
     #init face expression
@@ -164,14 +201,14 @@ if __name__ == '__main__':
             stopped, target_heading = move_forward(stopped, target_heading)
         elif keys[pygame.K_DOWN]:
             stopped = move_backward(stopped)
-        elif keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT or keys[pygame.K_a]]:
             stopped = turn_left(stopped)
             #look left
             selected_position = (
                     position_left,
                     selected_position[1]
                     )
-        elif keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             stopped = turn_right(stopped)
             #look right
             selected_position = (
