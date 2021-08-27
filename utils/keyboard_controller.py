@@ -71,6 +71,10 @@ if __name__ == '__main__':
             #veering to the right, add more power to right wheel
             veerage = abs(target_heading-current_heading)
             max_speed_change = MOTOR_SPEED_ACCELERATED - MOTOR_SPEED_BASE
+            if veerage > 180: # e.g. 355 & 5
+                veerage = abs(360-veerage)
+                current_heading *= -1
+                target_heading *= -1
             if veerage > MAX_VEERAGE:
                 veerage_pct = 1
             else:
@@ -106,7 +110,7 @@ if __name__ == '__main__':
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, MOTOR_SPEED_BASE)
         return stopped
     def stop(stopped):
-        print("stop")
+        print("stop", target_heading)
         stopped = True
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, 0)
         mqtt_client.publish(TOPIC_MOTOR_RIGHT_THROTTLE, 0)
@@ -201,7 +205,7 @@ if __name__ == '__main__':
             stopped, target_heading = move_forward(stopped, target_heading)
         elif keys[pygame.K_DOWN]:
             stopped = move_backward(stopped)
-        elif keys[pygame.K_LEFT or keys[pygame.K_a]]:
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             stopped = turn_left(stopped)
             #look left
             selected_position = (
