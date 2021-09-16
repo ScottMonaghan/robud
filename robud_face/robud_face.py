@@ -10,7 +10,7 @@ import time
 MQTT_BROKER_ADDRESS = "localhost"
 MQTT_CLIENT_NAME = "robud_face.py"
 TOPIC_ROBUD_VOICE_TEXT_INPUT = 'robud/robud_voice/text_input'
-CAPTION_TIMEOUT = 10
+CAPTION_TIMEOUT = 5
             
 #RobudFace contains both RobudEyes as well as the rotation of the face. It also keeps track of blinking.
 class RobudFace():
