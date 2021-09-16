@@ -5,9 +5,12 @@ import os
 from robud_face_common import *
 import paho.mqtt.client as mqtt
 import numpy as np
+import time
 
 MQTT_BROKER_ADDRESS = "localhost"
 MQTT_CLIENT_NAME = "robud_face.py"
+TOPIC_ROBUD_VOICE_TEXT_INPUT = 'robud/robud_voice/text_input'
+CAPTION_TIMEOUT = 10
             
 #RobudFace contains both RobudEyes as well as the rotation of the face. It also keeps track of blinking.
 class RobudFace():
@@ -132,17 +135,67 @@ def on_message_animation_frame(client, userdata, message):
     #replace face expression with new values
     for i in range(0,FACE_EXPRESSION_ARRAY_SIZE):
         face_expression[i] = new_face_expression[i]
-    
+
+def on_message_tts(client, userdata, message):
+    userdata["tts"] = bytes(message.payload)
+    userdata["tts_time"] = time.monotonic()
+
+
+# draw some text into an area of a surface
+# automatically wraps words
+# returns any text that didn't get blitted
+def drawText(surface, text, color, rect, font, aa=False, bkg=None):
+    rect = pygame.Rect(rect)
+    y = rect.top
+    lineSpacing = -2
+
+    # get the height of the font
+    fontHeight = font.size("Tg")[1]
+
+    while text:
+        i = 1
+
+        # determine if the row of text will be outside our area
+        if y + fontHeight > rect.bottom:
+            break
+
+        # determine maximum width of line
+        while font.size(text[:i])[0] < rect.width and i < len(text):
+            i += 1
+
+        # if we've wrapped the text, then adjust the wrap to the last word      
+        if i < len(text): 
+            i = text.rfind(" ", 0, i) + 1
+
+        # render the line and blit it to the surface
+        if bkg:
+            image = font.render(text[:i], 1, color, bkg)
+            image.set_colorkey(bkg)
+        else:
+            image = font.render(text[:i], aa, color)
+
+        surface.blit(image, (rect.left + ((rect.w - image.get_width())/2 ), y)) #center text
+        y += fontHeight + lineSpacing
+
+        # remove the text we just blitted
+        text = text[i:]
+
+    return text
 
 def main():
     #set initial expression to basic open
     face_expression = np.zeros(shape=FACE_EXPRESSION_ARRAY_SIZE, dtype=np.int16)
     set_expression(face_expression, Expressions[ExpressionId.OPEN])
 
+    tts="" #received text-to-speech
+
     #initialize mqtt client
     client_userdata = {
         "face_expression":face_expression,
+        "tts":"",
+        "tts_time":0
     }
+
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
     mqtt_client.loop_start()
@@ -150,6 +203,8 @@ def main():
     mqtt_client.subscribe(TOPIC_FACE_ANIMATION_FRAME)
     mqtt_client.message_callback_add(TOPIC_FACE_ANIMATION_FRAME,on_message_animation_frame)
     print('Subcribed to', TOPIC_FACE_ANIMATION_FRAME)
+    mqtt_client.subscribe(TOPIC_ROBUD_VOICE_TEXT_INPUT)
+    mqtt_client.message_callback_add(TOPIC_ROBUD_VOICE_TEXT_INPUT, on_message_tts)
     
     #initiaize randomizer
     random.seed()
@@ -180,7 +235,7 @@ def main():
     carry_on = True
 
     #set up text display
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    font = pygame.font.Font('freesansbold.ttf', 24)
     odom = 0
 
     while carry_on:
@@ -218,10 +273,18 @@ def main():
             )
         )
         #get relative mouse positions
-        odom += pygame.mouse.get_rel()[1]
-        text = str(odom)
-        text_surface = font.render(text, True, (0, 255, 0), (0, 0, 128))
-        screen.blit(text_surface, text_surface.get_rect())
+        # odom += pygame.mouse.get_rel()[1]
+        # text = str(odom)
+        # text_surface = font.render(text, True, (0, 255, 0), (0, 0, 128))
+        # screen.blit(text_surface, text_surface.get_rect())
+        if (time.monotonic() - client_userdata["tts_time"] < CAPTION_TIMEOUT):
+            tts = client_userdata["tts"]
+        else: tts = ""
+        margin = 20
+        drawText(screen, tts, (255,255,255), ((margin,margin),(SCREENWIDTH-margin*2,SCREENHEIGHT-margin*2)),font,True)
+        #tts_surface = font.render(tts, True, (255,255,255))
+        
+        #screen.blit(tts_surface, ((SCREENWIDTH-tts_surface.get_width())/2,SCREENHEIGHT-tts_surface.get_height()))
         #update the display and show next frame
         pygame.display.flip()
         
