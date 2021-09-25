@@ -58,12 +58,16 @@ try:
 
     #parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--Output", help="Log Ouput Prefix", default="robud_log_")
+    parser.add_argument("-o", "--Output", help="Log Ouput Prefix", default="logs/robud_log_")
     args = parser.parse_args()
 
     #initialize logger
     logger=logging.getLogger()
-    log_file = open(args.Output + datetime.now().strftime("%Y-%m-%d") + ".txt","a")
+    file_path = args.Output + datetime.now().strftime("%Y-%m-%d") + ".txt"
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    log_file = open(file_path, "a")
     myHandler = MQTTHandler(hostname=MQTT_BROKER_ADDRESS, topic=TOPIC_ROBUD_LOGGING_LOG_SIGNED, qos=2, log_file=log_file)
     myHandler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s: %(filename)s: %(message)s'))
     logger.addHandler(myHandler)

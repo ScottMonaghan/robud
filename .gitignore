@@ -1,3 +1,4 @@
 .vscode
 *.pyc
 robud_log_*.txt
+logs
