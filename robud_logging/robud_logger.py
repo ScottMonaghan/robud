@@ -1,3 +1,25 @@
+"""
+MIT License
+Copyright (c) 2016 Pipat Methavanitpong
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Original code copied from https://gist.github.com/FulcronZ/9948756fea515e6d18b8bc2c7182bdb8
+"""
+
 import logging
 import random
 import argparse
@@ -8,46 +30,7 @@ import os
 import sys
 import typing
 import traceback
-
-class MQTTHandler(logging.Handler):
-    """
-    A handler class which writes logging records, appropriately formatted,
-    to a MQTT server to a topic.
-    """
-    def __init__(self, hostname, topic, qos=0, retain=False,
-            port=1883, client_id='', keepalive=60, will=None, auth=None,
-            tls=None, protocol=mqtt.MQTTv31, transport='tcp', log_file:typing.TextIO =None):
-        logging.Handler.__init__(self)
-        self.topic = topic
-        self.qos = qos
-        self.retain = retain
-        self.hostname = hostname
-        self.port = port
-        self.client_id = client_id
-        self.keepalive = keepalive
-        self.will = will
-        self.auth = auth
-        self.tls = tls
-        self.protocol = protocol
-        self.transport = transport
-        self.log_file = log_file
-
-    def emit(self, record):
-        """
-        Publish a single formatted logging record to a broker, then disconnect
-        cleanly.
-        """
-        msg = self.format(record)
-        publish.single(self.topic, msg, self.qos, self.retain,
-            hostname=self.hostname, port=self.port,
-            client_id=self.client_id, keepalive=self.keepalive,
-            will=self.will, auth=self.auth, tls=self.tls,
-            protocol=self.protocol, transport=self.transport)
-        if self.log_file is not None and not self.log_file.closed:
-            log_file.write(msg + "\n")
-            log_file.flush()
-            
-        print(msg)
+from MQTTHandler import MQTTHandler
 
 try: 
     
@@ -102,7 +85,6 @@ except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
 except KeyboardInterrupt:
     logger.info("Exited with Keyboard Interrupt")
-    #time.sleep(5)
     try:
         sys.exit(0)
     except SystemExit:
