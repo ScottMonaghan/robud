@@ -14,16 +14,6 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 2. ACCESSIBLE - Can be built by anyone following project instructions with readily available parts with a cost at or under $500
 3. AUTONOMOUS - Has it's own goals.
 
-## Project Announcement TikToks
-Ro-Bud Project - Part 1  
-[![Ro-Bud Project - Part 1](https://img.youtube.com/vi/bj4LzYycwYc/0.jpg)](https://www.youtube.com/watch?v=bj4LzYycwYc)  
-Ro-Bud Project - Part 2  
-[![Ro-Bud Project - Part 2](https://img.youtube.com/vi/H4fC_qm8pPo/0.jpg)](https://www.youtube.com/watch?v=H4fC_qm8pPo)  
-Ro-Bud Project - Part 3  
-[![Ro-Bud Project - Part 3](https://img.youtube.com/vi/r7C16MHGqBg/0.jpg)](https://www.youtube.com/watch?v=r7C16MHGqBg)  
-Ro-Bud Project - Part 4  
-[![Ro-Bud Project - Part 4](https://img.youtube.com/vi/n2G9MuK9-XE/0.jpg)](https://www.youtube.com/watch?v=n2G9MuK9-XE)  
-
 ## Build Instructions
 **NOTE: The following build instructions are in-progress and not yet complete**  
 Last updated 26-September 2021  
@@ -222,4 +212,13 @@ Last updated 26-September 2021
 
 <img src="./data/images/build-instructions/IMG_3659.jpg" alt="Head Assembly Step 5" width=600 />
 
+## Project Announcement TikToks
+Ro-Bud Project - Part 1  
+[![Ro-Bud Project - Part 1](https://img.youtube.com/vi/bj4LzYycwYc/0.jpg)](https://www.youtube.com/watch?v=bj4LzYycwYc)  
+Ro-Bud Project - Part 2  
+[![Ro-Bud Project - Part 2](https://img.youtube.com/vi/H4fC_qm8pPo/0.jpg)](https://www.youtube.com/watch?v=H4fC_qm8pPo)  
+Ro-Bud Project - Part 3  
+[![Ro-Bud Project - Part 3](https://img.youtube.com/vi/r7C16MHGqBg/0.jpg)](https://www.youtube.com/watch?v=r7C16MHGqBg)  
+Ro-Bud Project - Part 4  
+[![Ro-Bud Project - Part 4](https://img.youtube.com/vi/n2G9MuK9-XE/0.jpg)](https://www.youtube.com/watch?v=n2G9MuK9-XE)  
 
