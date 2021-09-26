@@ -18,7 +18,7 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 **NOTE: The following build instructions are in-progress and not yet complete**  
 Last updated 26-September 2021  
 
-# Parts Referece
+## Parts Referece
  * A. horizontal braces (3d-printed)
  * B. 3-hole fastener (3d-printed)
  * C. 2x8mm round-head self-tapping screws https://www.amazon.com/gp/product/B07NT5288W  
@@ -43,7 +43,7 @@ Last updated 26-September 2021
  * V. servo horn (included with servo(Q))
  * W. servo screw (included with servo(Q))
  
-# Head Assembly
+## Head Assembly
 <img src="./data/images/build-instructions/IMG_3664.jpg" alt="Head Assembly Step 1" width=600 />
 <img src="./data/images/build-instructions/IMG_3666.jpg" alt="Head Assembly Step 1" width=600 />
 
