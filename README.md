@@ -66,9 +66,9 @@ Last updated 26-September 2021
    * x4 D. 2x8mm pan-head-with-washer self-tapping screws  
    * x1 E. BNO055 orientation sensor  
 
-_**Notes:**_ 
-   * _Make sure Y axis of BNO055(E) points toward picture as shown in image_
-   * _Only fasten one side of the horizontal braces(E)_
+>_**Notes:**_ 
+>   * _Make sure Y axis of BNO055(E) points toward picture as shown in image_
+>   * _Only fasten one side of the horizontal braces(E)_
      
 <img src="./data/images/build-instructions/IMG_3640.jpg" alt="Head Assembly Step 1" width=600 />
 
@@ -98,9 +98,9 @@ _**Notes:**_
   * x1 I. 300mm 15-pin camera ribbon cable
   * x1 J. 100mm Stemma QT JST SH 4-pin cable
 
-_**Notes:**_ 
-   * _Make sure pins of ribbon cable are facing toward contacts and fastened securely_
-   * _Attatch STEMM QT securely to right STEMMA sockets on VL53L0X(G) and BNO055(E)_
+>_**Notes:**_ 
+>   * _Make sure pins of ribbon cable are facing toward contacts and fastened securely_
+>   * _Attatch STEMM QT securely to right STEMMA sockets on VL53L0X(G) and BNO055(E)_
    
 <img src="./data/images/build-instructions/IMG_3646.jpg" alt="Head Assembly Step 4" width=600 />
 
