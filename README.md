@@ -112,10 +112,10 @@ Last updated 26-September 2021
  * x2 K. display fastener
  * x4 D. 2x8mm pan-head-with-washer self-tapping screws
 
-_**Notes:**_
-   * _Make sure fasteners and raised center lip are on opposite sides_
-   * _Make sure servo adapter is oriented as shown in image_
-   * _If servo adapter cannot be popped in, soften with a hair dryer or heat gun_
+>_**Notes:**_
+>   * _Make sure fasteners and raised center lip are on opposite sides_
+>   * _Make sure servo adapter is oriented as shown in image_
+>   * _If servo adapter cannot be popped in, soften with a hair dryer or heat gun_
 <img src="./data/images/build-instructions/IMG_3647.jpg" alt="Head Assembly Step 5" width=600 />
 <img src="./data/images/build-instructions/IMG_3648.jpg" alt="Head Assembly Step 5" width=600 />
 
@@ -125,8 +125,8 @@ _**Notes:**_
    * x1 Q. MG90S 9G micro servo  
    * x2 M. left barrel wall(M) from step 5  
 
-_**Notes:**_
-   * _Body of servo should be on same side as fasteners from step 5_  
+>_**Notes:**_
+>   * _Body of servo should be on same side as fasteners from step 5_  
 [IMAGE MISSING]
 
 ---   
@@ -135,9 +135,8 @@ _**Notes:**_
  * x1 N. head shaft adapter 
  * x1 O. bearing 
 
-_**Notes:**_
-
-   * _If shaft cannot be popped in, soften with a hair dryer or heat gun_
+>_**Notes:**_
+>   * _If shaft cannot be popped in, soften with a hair dryer or heat gun_
 <img src="./data/images/build-instructions/IMG_3650.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
@@ -147,9 +146,8 @@ _**Notes:**_
  * x2 K. display fastener
  * x2 P. balance weights
 
-_**Notes:**_
-
-   * _Make sure fasteners and raised center lip are on opposite sides_
+>_**Notes:**_
+>  * _Make sure fasteners and raised center lip are on opposite sides_
 <img src="./data/images/build-instructions/IMG_3651.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
@@ -158,10 +156,9 @@ _**Notes:**_
  * x1 bearing(O) with shaft(N) from step 6
  * x1 right barrel wall(M) from step 7 
 
-_**Notes:**_
-
-   * _Make sure shaft is on the opposite side of the clips & weights_
-   * _If bearing cannot be popped in, soften with a hair dryer or heat gun_
+>_**Notes:**_
+>   * _Make sure shaft is on the opposite side of the clips & weights_
+>   * _If bearing cannot be popped in, soften with a hair dryer or heat gun_
 <img src="./data/images/build-instructions/IMG_3652.jpg" alt="Head Assembly Step 5" width=600 />
 
 
@@ -171,9 +168,8 @@ _**Notes:**_
    * x2 A. horizontal braces  
    * x2 B. 3-hole fasteners  
 
-_**Notes:**_
-
-   * _Make sure to add 3-hole fastener(B) to both sides_
+>_**Notes:**_
+>  * _Make sure to add 3-hole fastener(B) to both sides_
 <img src="./data/images/build-instructions/IMG_3653.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
@@ -202,9 +198,8 @@ _**Notes:**_
    * x1 R. 7in display  
    * x1 S. 250mm 40pin display ribbon cable  
 
-_**Notes:**_
-
-   * _Make sure pins of ribbon cable are facing toward contacts and fastened securely_
+>_**Notes:**_
+>   * _Make sure pins of ribbon cable are facing toward contacts and fastened securely_
 <img src="./data/images/build-instructions/IMG_3658.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
@@ -213,9 +208,8 @@ _**Notes:**_
    * x1 R. 7in display  
    * x1 left barrel wall with servo (from step 12)  
 
-_**Notes:**_
-
-   * _Make sure the cables are on the bottom (opposite camera) and feed bewtween both horizontal braces_
+>_**Notes:**_
+>   * _Make sure the cables are on the bottom (opposite camera) and feed bewtween both horizontal braces_
 
 [IMAGE MISSING]
 
