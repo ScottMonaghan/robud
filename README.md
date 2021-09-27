@@ -34,6 +34,7 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 Last updated 26-September 2021  
 
 **Documentation To-Do**
+ * [ ] Add 3d-printable models
  * [ ] Jetson Wifi Module Install
  * [ ] SD Card Flashing
  * [x] Head Assembly
