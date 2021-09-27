@@ -145,7 +145,7 @@ Last updated 26-September 2021
 
 >_**Notes:**_
 >   * _Suggested steps:_
->     * _Use pliars to gently turn the servo shaft counter-clockwise until you hit the physical stop
+>     * _Use pliars to gently turn the servo shaft counter-clockwise until you hit the physical stop_
 >     * _Then position your pliars at the top at 12:00 as shown in the picture_
 >     * _Finally, carefully turn the shafter clockwise 90 degrees to 3:00 as shown in the second picture_  
 <img src="./data/images/build-instructions/IMG_3672.jpg" alt="Head Assembly Step 5" width=600 />
