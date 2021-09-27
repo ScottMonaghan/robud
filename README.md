@@ -1,8 +1,21 @@
 # Ro-Bud - Lovable, Accessible, Autonomous Companion
 <img src="./data/images/Ro-Bud-concept-render.jpeg" alt="Ro-bud" width=600 />  
 
+## Table of Contents
+ * [Summary](#summary)
+ * [Description](#description)
+ * [Build Instructions](#build-instructions)
+   * [Parts Reference](#parts-reference)
+   * [Head Assembly](#head-assembly)
+ * [Original Project Announcement Videos](#original-project-announcement-videos)
+   * [Part 1](#part-1)
+   * [Part 2](#part-2)
+   * [Part 3](#part-3)
+   * [Part 4](#part-4)
 ## Summary
-The Ro-Bud project seeks to create a companion bot that is lovable, accessible to all, and autonomous.
+The Ro-Bud project seeks to create a companion bot that is lovable, accessible to all, and autonomous.  
+
+[Return to Table of Contents](#table-of-contents)
 
 ## Description
 Challenge: Despite decades of fictional depiction through popular culture, as of 2021, robotic companion bots that even come close to those of popular imagination are not available at scale.
@@ -12,11 +25,23 @@ While there have been impressive private for-profit attempts at releasing relati
 The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and fulfil the dream of providing a consumer robot that is:
 1. LOVEABLE - Feels just like a family pet
 2. ACCESSIBLE - Can be built by anyone following project instructions with readily available parts with a cost at or under $500
-3. AUTONOMOUS - Has it's own goals.
+3. AUTONOMOUS - Has it's own goals.  
+
+[Return to Table of Contents](#table-of-contents)
 
 # Build Instructions
 **NOTE: The following build instructions are in-progress and not yet complete**  
 Last updated 26-September 2021  
+
+**Documentation To-Do**
+ * [ ] Jetson Wifi Module Install
+ * [ ] SD Card Flashing
+ * [x] Head Assembly
+ * [ ] Base Assembly
+ * [ ] Remote VM setup
+ * [ ] Remote Operation Instructions
+
+[Return to Table of Contents](#table-of-contents)
 
 ## Parts Referece
  * A. horizontal braces (3d-printed)
@@ -41,7 +66,9 @@ Last updated 26-September 2021
  * T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
  * U. head L bracket (3d-printed)
  * V. servo horn (included with servo(Q))
- * W. servo screw (included with servo(Q))
+ * W. servo screw (included with servo(Q))  
+
+[Return to Table of Contents](#table-of-contents)
  
 ## Head Assembly
 <img src="./data/images/build-instructions/IMG_3664.jpg" alt="Head Assembly Step 1" width=600 />
@@ -133,7 +160,6 @@ Last updated 26-September 2021
 >_**Notes:**_
 >   * _Body of servo should be on same side as fasteners from step 5_  
 <img src="./data/images/build-instructions/IMG_3689.jpg" alt="Head Assembly Step 5" width=600 />
-
 
 ---   
 ### 8. Add shaft(N) to bearing(O)
@@ -275,17 +301,26 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_3666.jpg" alt="Head Assembly Step 5" width=600 />
 <img src="./data/images/build-instructions/IMG_3667.jpg" alt="Head Assembly Step 5" width=600 />
 
+[Return to Table of Contents](#table-of-contents)
 
+## Original Project Announcement Videos  
+These videos are the original annoucement and project plan for Ro-Bud uploaded to TikTok on 17-April 2021.  
 
-
-
-## Project Announcement TikToks
-Ro-Bud Project - Part 1  
+[Return to Table of Contents](#table-of-contents)
+### Part 1  
 [![Ro-Bud Project - Part 1](https://img.youtube.com/vi/bj4LzYycwYc/0.jpg)](https://www.youtube.com/watch?v=bj4LzYycwYc)  
-Ro-Bud Project - Part 2  
+
+[Return to Table of Contents](#table-of-contents)
+### Part 2
 [![Ro-Bud Project - Part 2](https://img.youtube.com/vi/H4fC_qm8pPo/0.jpg)](https://www.youtube.com/watch?v=H4fC_qm8pPo)  
-Ro-Bud Project - Part 3  
+
+[Return to Table of Contents](#table-of-contents)
+### Part 3
 [![Ro-Bud Project - Part 3](https://img.youtube.com/vi/r7C16MHGqBg/0.jpg)](https://www.youtube.com/watch?v=r7C16MHGqBg)  
-Ro-Bud Project - Part 4  
+
+[Return to Table of Contents](#table-of-contents)
+### Part 4
 [![Ro-Bud Project - Part 4](https://img.youtube.com/vi/n2G9MuK9-XE/0.jpg)](https://www.youtube.com/watch?v=n2G9MuK9-XE)  
+
+[Return to Table of Contents](#table-of-contents)
 
