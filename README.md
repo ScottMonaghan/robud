@@ -118,7 +118,7 @@ Last updated 26-September 2021
 
 >_**Notes:**_ 
 >   * _Make sure pins of ribbon cable are facing toward contacts and fastened securely_
->   * _Attatch STEMM QT securely to right STEMMA sockets on VL53L0X(G) and BNO055(E)_
+>   * _Attatch STEMMA QT securely to right STEMMA sockets on VL53L0X(G) and BNO055(E)_
    
 <img src="./data/images/build-instructions/IMG_3646.jpg" alt="Head Assembly Step 4" width=600 />
 
