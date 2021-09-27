@@ -14,7 +14,7 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 2. ACCESSIBLE - Can be built by anyone following project instructions with readily available parts with a cost at or under $500
 3. AUTONOMOUS - Has it's own goals.
 
-## Build Instructions
+# Build Instructions
 **NOTE: The following build instructions are in-progress and not yet complete**  
 Last updated 26-September 2021  
 
@@ -110,27 +110,44 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_3648.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 6. Pop servo(Q) into left barrel wall(M)
+### 6. Backdrive servo to 90 degrees
+**Parts:**  
+   * x1 Q. MG90S 9G micro servo  
+
+>_**Notes:**_
+>   * _Suggested steps:_
+>     * _Use pliars to gently turn the servo shaft counter-clockwise until you hit the physical stop
+>     * _Then position your pliars at the top at 12:00 as shown in the picture_
+>     * _Finally, carefully turn the shafter clockwise 90 degrees to 3:00 as shown in the second picture_  
+<img src="./data/images/build-instructions/IMG_3672.jpg" alt="Head Assembly Step 5" width=600 />
+<img src="./data/images/build-instructions/IMG_3684.jpg" alt="Head Assembly Step 5" width=600 />
+
+
+
+---   
+### 7. Pop servo(Q) into left barrel wall(M)
 **Parts:**  
    * x1 Q. MG90S 9G micro servo  
    * x2 M. left barrel wall(M) from step 5  
 
 >_**Notes:**_
 >   * _Body of servo should be on same side as fasteners from step 5_  
-[IMAGE MISSING]
+<img src="./data/images/build-instructions/IMG_3689.jpg" alt="Head Assembly Step 5" width=600 />
+
 
 ---   
-### 7. Add shaft(N) to bearing(O)
+### 8. Add shaft(N) to bearing(O)
 **Parts:**  
  * x1 N. head shaft adapter 
  * x1 O. bearing 
 
 >_**Notes:**_
 >   * _If shaft cannot be popped in, soften with a hair dryer or heat gun_
+>   * _The longer side of the shaft should be in the bearing_
 <img src="./data/images/build-instructions/IMG_3650.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 8. Attach display fasteners(K) and balance weights(L) to right barrel wall(M)
+### 9. Attach display fasteners(K) and balance weights(L) to right barrel wall(M)
 **Parts:**  
  * x1 M. head barrel wall
  * x2 K. display fastener
@@ -141,10 +158,10 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_3651.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 9. Pop bearing(O) into right barrel wall(M)
+### 10. Pop bearing(O) into right barrel wall(M)
 **Parts:**  
- * x1 bearing(O) with shaft(N) from step 6
- * x1 right barrel wall(M) from step 7 
+ * x1 bearing(O) with shaft(N) from step 8
+ * x1 right barrel wall(M) from step 9
 
 >_**Notes:**_
 >   * _Make sure shaft is on the opposite side of the clips & weights_
@@ -153,7 +170,7 @@ Last updated 26-September 2021
 
 
 ---   
-### 10. Attach two horizontal braces(A) with two 3-hole fasteners(B) to create lower head brace
+### 11. Attach two horizontal braces(A) with two 3-hole fasteners(B) to create lower head brace
 **Parts:**  
    * x2 A. horizontal braces  
    * x2 B. 3-hole fasteners  
@@ -163,19 +180,19 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_3653.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 11. Attach bottom head brace to left barrel wall
+### 12. Attach bottom head brace to left barrel wall
 **Parts:**  
-   * x1 Left barrel wall with servo (from step 6)  
-   * x1 Lower horizontal head brace (from step 10)  
+   * x1 Left barrel wall with servo (from step 7)  
+   * x1 Lower horizontal head brace (from step 11)  
    * x2 D. 2x8mm pan-head-with-washer self-tapping screws
   
 <img src="./data/images/build-instructions/IMG_3654.jpg" alt="Head Assembly Step 5" width=600 />
 <img src="./data/images/build-instructions/IMG_3655.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 12. Attach top head brace to left barrel wall
+### 13. Attach top head brace to left barrel wall
 **Parts:**  
-   * x1 Left barrel wall with servo (from step 6)  
+   * x1 Left barrel wall with servo (from step 12)  
    * x1 Top horizontal head brace with camera (from step 1)  
    * x2 D. 2x8mm pan-head-with-washer self-tapping screws
   
@@ -183,7 +200,7 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_3657.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 13. Attach 40-pin display ribbon(S) to display(R)  
+### 14. Attach 40-pin display ribbon(S) to display(R)  
 **Parts:**  
    * x1 R. 7in display  
    * x1 S. 250mm 40pin display ribbon cable  
@@ -193,7 +210,7 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_3658.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 14. Pop display(S) into clips of left barrel wall(M)
+### 15. Pop display(S) into clips of left barrel wall(M)
 **Parts:**  
    * x1 R. 7in display  
    * x1 left barrel wall with servo (from step 12)  
@@ -201,16 +218,66 @@ Last updated 26-September 2021
 >_**Notes:**_
 >   * _Make sure the cables are on the bottom (opposite camera) and feed bewtween both horizontal braces_
 
-[IMAGE MISSING]
+<img src="./data/images/build-instructions/IMG_3690.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 15. Pop right barrel(M) display fastenere(K) onto display and secure to horizontal braces(A) 
+### 16. Pop right barrel(M) display fasteners(K) onto display and secure to horizontal braces(A) 
 **Parts:**  
-   * x1 right barrel wall(M) with bearing and shaft (from step 9)
+   * x1 right barrel wall(M) with bearing and shaft (from step 10)
    * x2 D. 2x8mm pan-head-with-washer self-tapping screws
 
-
 <img src="./data/images/build-instructions/IMG_3659.jpg" alt="Head Assembly Step 5" width=600 />
+
+---   
+### 17. Attach speaker(T)
+**Parts:**  
+   * x1 T. mono enclosed speaker - 3W 4 ohm
+   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
+
+<img src="./data/images/build-instructions/IMG_3660.jpg" alt="Head Assembly Step 5" width=600 />
+
+---   
+### 18. Pop right L bracket(U) on bearing shaft
+**Parts:**  
+   * x1 U. head L bracket
+
+>_**Notes:**_
+>   * _If shaft does not pop onto L bracket, use hair dryer or heat gun to soften_
+
+<img src="./data/images/build-instructions/IMG_3661.jpg" alt="Head Assembly Step 5" width=600 />
+
+---   
+### 19. Attatch servo horn to remaining L bracket(L) and secure with screw(D)
+**Parts:**  
+   * x1 U. head L bracket
+   * x1 V. servo horn
+   * x1 D. 2x8mm pan-head-with-washer self-tapping screw
+
+<img src="./data/images/build-instructions/IMG_3662.jpg" alt="Head Assembly Step 5" width=600 />
+<img src="./data/images/build-instructions/IMG_3663.jpg" alt="Head Assembly Step 5" width=600 />
+
+---   
+### 20. Secure left L bracket to head with servo screw(W)
+**Parts:**  
+   * x1 W. server screw
+
+>_**Notes:**_
+> _IMPORTANT: The servo horn should be pointing straight down attached with screen pointing straight left
+> _Be careful not to turn servo shaft when attaching. If you do, repeat step 6.
+
+<img src="./data/images/build-instructions/IMG_3665.jpg" alt="Head Assembly Step 5" width=600 />
+
+---   
+### 21. The head is now complete and should match the images below:  
+
+<img src="./data/images/build-instructions/IMG_3664.jpg" alt="Head Assembly Step 5" width=600 />
+<img src="./data/images/build-instructions/IMG_3665.jpg" alt="Head Assembly Step 5" width=600 />
+<img src="./data/images/build-instructions/IMG_3666.jpg" alt="Head Assembly Step 5" width=600 />
+<img src="./data/images/build-instructions/IMG_3667.jpg" alt="Head Assembly Step 5" width=600 />
+
+
+
+
 
 ## Project Announcement TikToks
 Ro-Bud Project - Part 1  
