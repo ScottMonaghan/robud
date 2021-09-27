@@ -132,6 +132,7 @@ Last updated 26-September 2021
 
 >_**Notes:**_
 >   * _Make sure fasteners and raised center lip are on opposite sides_
+>   * _Make sure slotted sides of the display fasteners(K) are face up, with open sides pointed inside the circle, and closed ends are pointed out_
 >   * _Make sure servo adapter is oriented as shown in image_
 >   * _If servo adapter cannot be popped in, soften with a hair dryer or heat gun_
 <img src="./data/images/build-instructions/IMG_3647.jpg" alt="Head Assembly Step 5" width=600 />
