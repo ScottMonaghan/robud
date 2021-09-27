@@ -145,13 +145,11 @@ Last updated 26-September 2021
 
 >_**Notes:**_
 >   * _Suggested steps:_
->     * _Use pliars to gently turn the servo shaft counter-clockwise until you hit the physical stop_
->     * _Then position your pliars at the top at 12:00 as shown in the picture_
->     * _Finally, carefully turn the shaft clockwise 90 degrees to 3:00 as shown in the second picture_  
+>     * _Use pliars to gently turn the servo shaft counter-clockwise until you hit the physical stop._
+>     * _Then position your pliars at the top at 12:00 as shown in the first picture._
+>     * _Finally, carefully turn the shaft clockwise 90 degrees to 3:00 as shown in the second picture._  
 <img src="./data/images/build-instructions/IMG_3672.jpg" alt="Head Assembly Step 5" width=600 />
 <img src="./data/images/build-instructions/IMG_3684.jpg" alt="Head Assembly Step 5" width=600 />
-
-
 
 ---   
 ### 7. Pop servo(Q) into left barrel wall(M)
@@ -290,8 +288,8 @@ Last updated 26-September 2021
    * x1 W. server screw
 
 >_**Notes:**_
-> _IMPORTANT: The servo horn should be pointing straight down attached with screen pointing straight left
-> _Be careful not to turn servo shaft when attaching. If you do, repeat step 6.
+>  * _IMPORTANT: The servo horn should be pointing straight down attached with screen pointing straight left_
+>  * _Be careful not to turn servo shaft when attaching. If you do, repeat step 6._
 
 <img src="./data/images/build-instructions/IMG_3665.jpg" alt="Head Assembly Step 5" width=600 />
 
