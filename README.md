@@ -52,7 +52,7 @@ Last updated 3-October 2021
 [Return to Table of Contents](#table-of-contents)
 
 ## Parts Reference
- * A. horizontal braces (3d-printed)
+ * A. horizontal braces [stl](./data/stl/robud-horizontal-brace.stl)
  * B. 3-hole fastener (3d-printed)
  * C. 2x8mm round-head self-tapping screws https://www.amazon.com/gp/product/B07NT5288W  
  * D. 2x8mm pan-head-with-washer self-tapping screws https://www.amazon.com/gp/product/B07NTGRFBF  
