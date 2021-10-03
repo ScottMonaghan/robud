@@ -7,6 +7,8 @@
  * [Build Instructions](#build-instructions)
    * [Parts Reference](#parts-reference)
    * [Head Assembly](#head-assembly)
+   * [Base Assemply](#base-assembly)
+      * [Soldering](#1-soldering)
  * [Original Project Announcement Videos](#original-project-announcement-videos)
    * [Part 1](#part-1)
    * [Part 2](#part-2)
@@ -39,6 +41,9 @@ Last updated 26-September 2021
  * [ ] SD Card Flashing
  * [x] Head Assembly
  * [ ] Base Assembly
+    * [x] Soldering
+    * [ ] Assembly
+    * [ ] Wiring    
  * [ ] Remote VM setup
  * [ ] Remote Operation Instructions
 
@@ -320,6 +325,8 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_4108.jpg" alt="completed base - left view" width=600 />
 <img src="./data/images/build-instructions/IMG_4110.jpg" alt="completed base - right view" width=600 />
 
+[Return to Table of Contents](#table-of-contents)
+
 ### 1. Soldering  
 >_**Notes:**_ 
 >   * _I tried to keep soldering to a minumum, but there are some items that need to be soldered._
@@ -400,6 +407,7 @@ Last updated 26-September 2021
  
 <img src="./data/images/build-instructions/IMG_4080.jpg" alt="solder motors" width=600 />
 
+[Return to Table of Contents](#table-of-contents)
 ---
 ## Original Project Announcement Videos  
 These videos are the original annoucement and project plan for Ro-Bud uploaded to TikTok on 17-April 2021.  
