@@ -394,7 +394,7 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_4071.jpg" alt="solder motors" width=600 />
 
 ---
-#### 1.F. solder 2 black 40cm solid-core wires to each side of toggle switch 
+#### 1.F. Solder 2 black 40cm solid-core wires to each side of toggle switch 
 
 **Parts:**  
    * x4 AA1. solid-core 22AWG wire - Black (40cm)
