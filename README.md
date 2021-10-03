@@ -75,7 +75,7 @@ Last updated 26-September 2021
  * W. servo screw (included with servo(Q))
  * AA1. solid-core 22AWG wire - Black https://www.adafruit.com/product/290
  * AA2. solid-core 22AWG wire - Red https://www.adafruit.com/product/288
- * BB. DC "TT" motors
+ * BB. DC "TT" motors (come with chassis kit)
  * CC. SparkFun Qwiic SHIM for Raspberry Pi https://www.sparkfun.com/products/15794
  * DD. Stacking Header for Pi A+/B+/Pi 2/Pi 3 - 2x20 Extra Tall Header https://www.adafruit.com/product/1979
  * EE. Adafruit DC & Stepper Motor Bonnet for Raspberry Pi https://www.adafruit.com/product/4280
@@ -394,7 +394,7 @@ Last updated 26-September 2021
 <img src="./data/images/build-instructions/IMG_4071.jpg" alt="solder motors" width=600 />
 
 ---
-#### 1.F. Solder 2 black 40cm solid-core wires to each side of toggle switch 
+#### 1.F. Solder 2 black 40cm solid-core wires to each side of toggle switch  
 
 **Parts:**  
    * x4 AA1. solid-core 22AWG wire - Black (40cm)
@@ -407,7 +407,8 @@ Last updated 26-September 2021
  
 <img src="./data/images/build-instructions/IMG_4080.jpg" alt="solder motors" width=600 />
 
-[Return to Table of Contents](#table-of-contents)
+[Return to Table of Contents](#table-of-contents)  
+
 ---
 ## Original Project Announcement Videos  
 These videos are the original annoucement and project plan for Ro-Bud uploaded to TikTok on 17-April 2021.  
