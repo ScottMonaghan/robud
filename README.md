@@ -53,7 +53,7 @@ Last updated 3-October 2021
 
 ## Parts Reference
  * A. horizontal braces [stl](./data/stl/robud-horizontal-brace.stl)
- * B. 3-hole fastener (3d-printed)
+ * B. 3-hole fastener [stl](./data/stl/robud-3-hole-fastener.stl)
  * C. 2x8mm round-head self-tapping screws https://www.amazon.com/gp/product/B07NT5288W  
  * D. 2x8mm pan-head-with-washer self-tapping screws https://www.amazon.com/gp/product/B07NTGRFBF  
  * E. BNO055 orientation sensor https://www.adafruit.com/product/4646  
@@ -62,17 +62,17 @@ Last updated 3-October 2021
  * H. 1-hole 2mm screw fastener (3d-printed)
  * I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
  * J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210
- * K. display fastener (3d-printed)
- * L. servo adapter (3d-printed)
- * M. head barrel wall (3d-printed)
- * N. head shaft adapter (3d-printed)
+ * K. display fastener [stl](./data/stl/display-fastener.stl)
+ * L. servo adapter [stl](./data/stl/robud-servo-adapter.stl)
+ * M. head barrel wall [stl](./data/stl/robud-head-barrel-wall.stl)
+ * N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
  * O. bearing https://www.amazon.com/gp/product/B07S1B3MS6  
  * P. balance weights https://www.amazon.com/gp/product/B00ZMD8SDG  
  * Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5  
  * R. 7in display https://www.adafruit.com/product/1934  
  * S. 250mm 40pin display ribbon cable https://www.amazon.com/gp/product/B00N426GJA  
  * T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
- * U. head L bracket (3d-printed)
+ * U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
  * V. servo horn (included with servo(Q))
  * W. servo screw (included with servo(Q))
  * AA1. solid-core 22AWG wire - Black https://www.adafruit.com/product/290
