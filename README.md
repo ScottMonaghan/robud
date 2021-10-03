@@ -59,10 +59,10 @@ Last updated 3-October 2021
  * E. BNO055 orientation sensor https://www.adafruit.com/product/4646  
  * F. SainSmart IMX219 Camera Module https://www.amazon.com/gp/product/B07VFFRX4C  
  * G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317  
- * H. 1-hole 2mm screw fastener (3d-printed)
+ * H. 1-hole 2mm screw fastener [stl](./data/stl/robud-1-hole-fastener.stl)
  * I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
  * J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210
- * K. display fastener [stl](./data/stl/display-fastener.stl)
+ * K. display fastener [stl](./data/stl/robud-display-fastener.stl)
  * L. servo adapter [stl](./data/stl/robud-servo-adapter.stl)
  * M. head barrel wall [stl](./data/stl/robud-head-barrel-wall.stl)
  * N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
