@@ -33,7 +33,7 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 
 # Pre-Alpha Build Instructions
 **NOTE: The following build instructions are in-progress and not yet complete**  
-Last updated 26-September 2021  
+Last updated 3-October 2021  
 
 **Documentation To-Do**
  * [ ] Add 3d-printable models
