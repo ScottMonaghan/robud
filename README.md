@@ -4,7 +4,7 @@
 ## Table of Contents
  * [Summary](#summary)
  * [Description](#description)
- * [Build Instructions](#build-instructions)
+ * [Pre-Alpha Build Instructions](#pre-alpha-build-instructions)
    * [Parts Reference](#parts-reference)
    * [Head Assembly](#head-assembly)
    * [Base Assemply](#base-assembly)
@@ -31,7 +31,7 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 
 [Return to Table of Contents](#table-of-contents)
 
-# Build Instructions
+# Pre-Alpha Build Instructions
 **NOTE: The following build instructions are in-progress and not yet complete**  
 Last updated 26-September 2021  
 
