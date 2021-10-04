@@ -38,7 +38,7 @@ Last updated 3-October 2021
 <img src="./data/images/build-instructions/IMG_4106.jpg" alt="Pre-Alpha Ro-Bud Build" width=600 />
 
 **Documentation To-Do**
- * [ ] Add 3d-printable models
+ * [x] Add 3d-printable models
  * [ ] Jetson Wifi Module Install
  * [ ] SD Card Flashing
  * [x] Head Assembly
