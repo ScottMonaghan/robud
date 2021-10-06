@@ -1,5 +1,5 @@
 ## Head Assembly
-<img src="./data/images/build-instructions/IMG_3664.jpg" alt="Head Assembly Step 1" width=600 />
+<img src=".../data/images/build-instructions/IMG_3664.jpg" alt="Head Assembly Step 1" width=600 />
 <img src="./data/images/build-instructions/IMG_3666.jpg" alt="Head Assembly Step 1" width=600 />
 
 ### 1. Attach two horizontal braces(A) with 3-hole fastener(B) & attach BNO-055  orientation sensor(E)  
