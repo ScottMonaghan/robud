@@ -56,7 +56,7 @@ try:
         #initilize the face expression to the default open expression
         set_expression(face_expression, Expressions[ExpressionId.OPEN])
         #default head servro to 90 degrees
-        face_expression[HEAD_SERVO_ANGLE] = 90
+        #face_expression[HEAD_SERVO_ANGLE] = 90
 
         #initialize mqtt client
         client_userdata = {
@@ -83,7 +83,7 @@ try:
                     new_right_expression=keyframe.right_expression,
                     new_position=keyframe.position,
                     duration=keyframe.duration,
-                    new_head_servo_angle=keyframe.head_servo_angle
+                    #new_head_servo_angle=keyframe.head_servo_angle
                     )
             sleep(0.01)   
     if __name__ == '__main__':

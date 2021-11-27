@@ -19,7 +19,7 @@ PYTWEENING_S = 3
 
 TOPIC_FACE_ANIMATION_FRAME = 'robud/robud_face/animation_frame'
 TOPIC_FACE_KEYFRAMES = 'robud/robud_face/keyframes'
-TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
+#TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
 
 #Face Expression Array Constants
 LEFT_TOP_FLAT_LID_X         = 0
@@ -176,13 +176,13 @@ class face_keyframe():
         ,right_expression:ExpressionCoordinates
         ,position:tuple
         ,duration:float
-        ,head_servo_angle:int = None
+        #,head_servo_angle:int = None
     ) -> None:
         self.left_expression = left_expression
         self.right_expression = right_expression
         self.position = position
         self.duration = duration
-        self.head_servo_angle = head_servo_angle
+        #self.head_servo_angle = head_servo_angle
 
 #updates face_expression array with new coordinates
 def set_expression(face_expression:np.ndarray, left_expression_coordinates:ExpressionCoordinates, right_expression_coordinates:ExpressionCoordinates = None):
@@ -208,7 +208,7 @@ def run_animation(
     new_left_expression:ExpressionCoordinates,
     new_right_expression:ExpressionCoordinates = None,
     new_position = None,
-    new_head_servo_angle:int = None,
+    #new_head_servo_angle:int = None,
     duration = EXPRESSION_CHANGE_DURATION
     ):
     
@@ -229,8 +229,8 @@ def run_animation(
         face_expression[CENTER_Y_OFFSET] = new_position[1]
     
     #if the head servo angle is changing set that as well in the face expression arrary
-    if new_head_servo_angle is not None:
-        face_expression[HEAD_SERVO_ANGLE] = new_head_servo_angle  
+    #if new_head_servo_angle is not None:
+    #    face_expression[HEAD_SERVO_ANGLE] = new_head_servo_angle  
     
     #get the start time of the entire animation
     animation_start_time = time()
@@ -260,7 +260,7 @@ def run_animation(
     face_expression_animated_values[CENTER_X_OFFSET].animation_function = pytweening.easeOutBack
     
     #head servo movement settings
-    face_expression_animated_values[HEAD_SERVO_ANGLE].animation_function = pytweening.easeOutBack
+    #face_expression_animated_values[HEAD_SERVO_ANGLE].animation_function = pytweening.easeOutBack
 
     while(time()-animation_start_time <= duration):
         loopstart = time()
@@ -268,9 +268,9 @@ def run_animation(
             face_expression[i] = face_expression_animated_values[i].get_updated_value()
         face_expression_bytes = face_expression.tobytes()
         mqtt_client.publish(TOPIC_FACE_ANIMATION_FRAME,face_expression_bytes,qos=2)
-        if face_expression[HEAD_SERVO_ANGLE] != None:
-            print (face_expression[HEAD_SERVO_ANGLE])
-            mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,int(face_expression[HEAD_SERVO_ANGLE]),qos=2)
+        #if face_expression[HEAD_SERVO_ANGLE] != None:
+        #    print (face_expression[HEAD_SERVO_ANGLE])
+        #    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,int(face_expression[HEAD_SERVO_ANGLE]),qos=2)
 
         loop_duration = time() - loopstart
         if loop_duration < 1/ANIMATION_FPS:
