@@ -16,7 +16,7 @@ HEAD_ANGLE_CHANGE = 2
 HEAD_ANGLE_MAX = 180
 HEAD_ANGLE_MIN = 60
 MAX_VEERAGE = 10
-MQTT_BROKER_ADDRESS = "localhost" # "robud.local"
+MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_utils_keyboard_controller.py"
 TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
 TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
@@ -138,7 +138,8 @@ if __name__ == '__main__':
         left_expression:ExpressionCoordinates, 
         right_expression:ExpressionCoordinates, 
         selected_position:tuple,
-        change_expression:bool, 
+        change_expression:bool,
+        #head_angle:int,
         mqtt_client:mqtt.Client):    
         if (
             change_expression
@@ -146,16 +147,20 @@ if __name__ == '__main__':
             face_expression[CENTER_X_OFFSET] != selected_position[0]
             or 
             face_expression[CENTER_Y_OFFSET] != selected_position[1]
+            #or
+            #face_expression[HEAD_SERVO_ANGLE] != head_angle
             ):
             face_expression[CENTER_X_OFFSET] = selected_position[0]
             face_expression[CENTER_Y_OFFSET] = selected_position[1]
+            #face_expression[HEAD_SERVO_ANGLE] = head_angle
             
             #put the animation in a keyframe and send it!
             keyframe = face_keyframe(
                 left_expression=left_expression,
                 right_expression=right_expression,
                 position=selected_position,
-                duration=EXPRESSION_CHANGE_DURATION
+                duration=EXPRESSION_CHANGE_DURATION,
+                head_servo_angle=None
             )
             #add the keyframe to a list
             keyframes = [keyframe]
@@ -282,6 +287,7 @@ if __name__ == '__main__':
                 right_expression = right_expression,
                 selected_position = selected_position,
                 change_expression = change_expression,
+                #head_angle = head_angle,
                 mqtt_client = mqtt_client
                 )
         clock.tick(rate)
