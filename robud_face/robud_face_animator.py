@@ -15,7 +15,7 @@ import traceback
 
 random.seed()
 
-MQTT_BROKER_ADDRESS = "robud.local"
+MQTT_BROKER_ADDRESS = "localhost"
 MQTT_CLIENT_NAME = "robud_face_animator.py" + str(random.randint(0,999999999))
 
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
@@ -55,7 +55,9 @@ try:
         face_expression = np.zeros(shape=FACE_EXPRESSION_ARRAY_SIZE, dtype=np.int16)
         #initilize the face expression to the default open expression
         set_expression(face_expression, Expressions[ExpressionId.OPEN])
-        
+        #default head servro to 90 degrees
+        face_expression[HEAD_SERVO_ANGLE] = 90
+
         #initialize mqtt client
         client_userdata = {
             "keyframes":keyframes,
@@ -80,9 +82,10 @@ try:
                     new_left_expression=keyframe.left_expression,
                     new_right_expression=keyframe.right_expression,
                     new_position=keyframe.position,
-                    duration=keyframe.duration
+                    duration=keyframe.duration,
+                    new_head_servo_angle=keyframe.head_servo_angle
                     )
-            sleep(0.1)   
+            sleep(0.01)   
     if __name__ == '__main__':
         robud_face_animator()
 except Exception as e:
