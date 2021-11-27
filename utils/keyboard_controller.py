@@ -9,14 +9,14 @@ HEAD_SERVO_MAX_ANGLE = 170
 HEAD_SERVO_MIN_ANGLE = 60
 SCREENHEIGHT = 320
 SCREENWIDTH = 640
-MOTOR_SPEED_BASE = 0.5
-MOTOR_SPEED_ACCELERATED = 1
+MOTOR_SPEED_BASE = 0.4
+MOTOR_SPEED_ACCELERATED = 0.6
 MOTOR_SPEED_MIN = 0.2
 HEAD_ANGLE_CHANGE = 2
 HEAD_ANGLE_MAX = 180
 HEAD_ANGLE_MIN = 60
 MAX_VEERAGE = 10
-MQTT_BROKER_ADDRESS = "robud.local"
+MQTT_BROKER_ADDRESS = "localhost" # "robud.local"
 MQTT_CLIENT_NAME = "robud_utils_keyboard_controller.py"
 TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
 TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
@@ -121,7 +121,7 @@ if __name__ == '__main__':
         if new_angle >= HEAD_ANGLE_MAX: 
             new_angle = HEAD_ANGLE_MAX
         head_angle = new_angle
-        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
+        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle,retain=True)
         return head_angle
 
     def look_down(head_angle):
@@ -130,7 +130,7 @@ if __name__ == '__main__':
         if new_angle <= HEAD_ANGLE_MIN:
             new_angle = HEAD_ANGLE_MIN 
         head_angle = new_angle
-        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
+        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle,retain=True)
         return head_angle
     
     def move_eyes(

@@ -18,7 +18,7 @@ import traceback
 
 random.seed()
 
-MQTT_BROKER_ADDRESS = "robud.local"
+MQTT_BROKER_ADDRESS = "localhost" #robud.local
 MQTT_CLIENT_NAME = "robud_face.py" + str(random.randint(0,999999999))
 
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
