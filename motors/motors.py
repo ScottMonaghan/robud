@@ -57,7 +57,7 @@ try:
         
         def stopIfTimeout(self):
             if self.timeout_start != 0 and time() - self.timeout_start > MOTOR_TIMEOUT:
-                logger.debug("motor timeout:", self.name)
+                logger.debug("motor timeout:" +  self.name)
                 self.motor.throttle = 0
                 self.timeout_start = 0 
 
