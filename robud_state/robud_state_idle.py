@@ -170,6 +170,8 @@ try:
                     mqtt_client = mqtt_client
                     )
             mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle,retain=True)
-            sleep(1/rate - (monotonic() - loop_start))
+            loop_time = monotonic() - loop_start
+            if loop_time < 1/rate:
+                sleep(1/rate - loop_time)
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())              
