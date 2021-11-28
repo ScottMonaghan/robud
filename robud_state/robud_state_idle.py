@@ -1,3 +1,4 @@
+from numpy.lib.function_base import angle
 import paho.mqtt.client as mqtt
 from time import sleep, monotonic
 import pickle
@@ -10,6 +11,7 @@ import os
 from datetime import datetime
 import sys
 import traceback
+from robud.robud_head.robud_head_common import head_keyframe, TOPIC_HEAD_KEYFRAMES
 random.seed()
 
 HEAD_SERVO_MAX_ANGLE = 170
@@ -20,11 +22,13 @@ MOTOR_SPEED_BASE = 0.45
 MOTOR_SPEED_ACCELERATED = 0.65
 MOTOR_SPEED_MIN = 0.2
 HEAD_ANGLE_CHANGE = 2
-HEAD_ANGLE_MAX = 180
+HEAD_ANGLE_MAX = 150
 HEAD_ANGLE_MIN = 60
 MAX_VEERAGE = 10
 MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_state_idle.py" + str(random.randint(0,999999999))
+HEAD_SERVO_SPEED = 200 #degrees/sec
+
 
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
 TOPIC_ROBUD_LOGGING_LOG_SIGNED = TOPIC_ROBUD_LOGGING_LOG + "/" + MQTT_CLIENT_NAME
@@ -67,6 +71,8 @@ try:
             right_expression:ExpressionCoordinates, 
             selected_position:tuple,
             change_expression:bool,
+            head_angle:int,
+            new_head_angle:int,
             mqtt_client:mqtt.Client):    
             if (
                 change_expression
@@ -77,23 +83,34 @@ try:
                 ):
                 face_expression[CENTER_X_OFFSET] = selected_position[0]
                 face_expression[CENTER_Y_OFFSET] = selected_position[1]
-                keyframe = face_keyframe(
+                new_face_keyframe = face_keyframe(
                     left_expression=left_expression,
                     right_expression=right_expression,
                     position=selected_position,
                     duration=EXPRESSION_CHANGE_DURATION
                 )
-                #add the keyframe to a list
-                keyframes = [keyframe]
 
-                #publish it!
-                mqtt_client.publish(TOPIC_FACE_KEYFRAMES,pickle.dumps(keyframes),qos=2)
+                #figure out head duration based on HEAD_SERVO_SPEED
+                head_duration = abs(new_head_angle - head_angle) * (1/HEAD_SERVO_SPEED)
+                new_head_keyframe = head_keyframe(
+                    angle = new_head_angle,
+                    duration=head_duration
+                )
+
+                #add the keyframes to lists
+                face_keyframes = [new_face_keyframe]
+                head_keyframes = [new_head_keyframe]
+
+
+                #publish them!
+                mqtt_client.publish(TOPIC_FACE_KEYFRAMES,pickle.dumps(face_keyframes),qos=2)
+                mqtt_client.publish(TOPIC_HEAD_KEYFRAMES,pickle.dumps(head_keyframes),qos=2)
                 change_expression = False
-            return face_expression, change_expression
+            return face_expression, change_expression, new_head_angle
 
         mqtt_client.connect(MQTT_BROKER_ADDRESS)
         mqtt_client.loop_start()
-        head_angle = 75
+        head_angle = 90
         mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
         
         #init face expression
@@ -116,20 +133,21 @@ try:
         while carry_on:
             loop_start = monotonic()
 
+            new_head_angle = head_angle
             #randomize position
             chance = random.random()
             if chance <= (1/(rate*AVG_GAZE_CHANGE)):
                 #print('change gaze')
                 #choose random updown
                 gaze_vertical = position_center
-                head_angle = angle_center
+                new_head_angle = angle_center
                 chance = random.randint(1,3)
                 if chance == 1:
                     gaze_vertical = position_up
-                    head_angle = angle_up
+                    new_head_angle = random.randint(100,160)
                 elif chance == 2:
                     gaze_vertical = position_down
-                    head_angle = angle_down
+                    new_head_angle = random.randint(20,80)
 
                 gaze_horizontal = position_center
                 chance = random.randint(1,3)
@@ -161,15 +179,17 @@ try:
                         left_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
                         right_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
                 change_expression = True
-            face_expression, change_expression = move_eyes(
+            face_expression, change_expression, head_angle = move_eyes(
                     face_expression = face_expression,
                     left_expression = left_expression,
                     right_expression = right_expression,
                     selected_position = selected_position,
                     change_expression = change_expression,
-                    mqtt_client = mqtt_client
+                    mqtt_client = mqtt_client,
+                    head_angle = head_angle,
+                    new_head_angle=new_head_angle
                     )
-            mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle,retain=True)
+            #mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle,retain=True)
             loop_time = monotonic() - loop_start
             if loop_time < 1/rate:
                 sleep(1/rate - loop_time)
