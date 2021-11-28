@@ -1,7 +1,5 @@
-import sys, select, tty, termios
 import paho.mqtt.client as mqtt
-import time
-import pygame
+from time import sleep, monotonic
 import pickle
 from robud.robud_face.robud_face_common import *
 import random
@@ -93,10 +91,6 @@ try:
                 change_expression = False
             return face_expression, change_expression
 
-        pygame.init()
-        clock = pygame.time.Clock()
-        screensize = (SCREENWIDTH, SCREENHEIGHT)
-        screen = pygame.display.set_mode(screensize)
         mqtt_client.connect(MQTT_BROKER_ADDRESS)
         mqtt_client.loop_start()
         head_angle = 75
@@ -120,13 +114,8 @@ try:
         change_expression:bool = False
 
         while carry_on:
-            for event in pygame.event.get():
-                if event.type==pygame.QUIT:
-                    carry_on = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
-                        logger.debug("pressed CTRL-C as an event")
-                        carry_on = False
+            loop_start = monotonic()
+
             #randomize position
             chance = random.random()
             if chance <= (1/(rate*AVG_GAZE_CHANGE)):
@@ -164,8 +153,13 @@ try:
                     left_expression = Expressions[ExpressionId.BORED]
                     right_expression = Expressions[ExpressionId.BORED]
                 if chance == 3:
-                    left_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
-                    right_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
+                    chace = random.randint(1,2)
+                    if chance == 1:
+                        left_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
+                        right_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
+                    else:
+                        left_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
+                        right_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
                 change_expression = True
             face_expression, change_expression = move_eyes(
                     face_expression = face_expression,
@@ -176,9 +170,6 @@ try:
                     mqtt_client = mqtt_client
                     )
             mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle,retain=True)
-            clock.tick(rate)
-    "Exiting"
-    pygame.quit()
-    exit()  
+            sleep(1/rate - (monotonic() - loop_start))
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())              
