@@ -144,10 +144,10 @@ try:
                 chance = random.randint(1,3)
                 if chance == 1:
                     gaze_vertical = position_up
-                    new_head_angle = random.randint(100,160)
+                    new_head_angle = random.randint(100,150)
                 elif chance == 2:
                     gaze_vertical = position_down
-                    new_head_angle = random.randint(20,80)
+                    new_head_angle = random.randint(60,80)
 
                 gaze_horizontal = position_center
                 chance = random.randint(1,3)
