@@ -2,3 +2,5 @@
 *.pyc
 robud_log_*.txt
 logs
+__pycache__
+
