@@ -64,16 +64,21 @@ try:
     #to make this useful, we'll only publish if the sample set are within tolerance of each other
     client.loop_start()
     while True:
-        loop_start = time.time()
-        sample = []
-        for i in range(sample_size-1):
-            sample.append(sensor.range)
-        tof_range = get_range_from_sample(sample)
-        #logger.debug('{} cm'.format(tof_range))
-        client.publish(topic=topic,payload=tof_range,qos=2)
-        loop_time = time.time()-loop_start
-        if (loop_time<1/rate):
-            time.sleep( 1/rate - loop_time)
+        try:
+            loop_start = time.time()
+            sample = []
+            for i in range(sample_size-1):
+                sample.append(sensor.range)
+            tof_range = get_range_from_sample(sample)
+            #logger.debug('{} cm'.format(tof_range))
+            client.publish(topic=topic,payload=tof_range,qos=2)
+            loop_time = time.time()-loop_start
+            if (loop_time<1/rate):
+                time.sleep( 1/rate - loop_time)
+        except KeyboardInterrupt:
+            logger.info("Exited with Keyboard Interrupt")
+        except OSError as e:
+            logger.error(str(e) + "\n" + traceback.format_exc())
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
 except KeyboardInterrupt:
