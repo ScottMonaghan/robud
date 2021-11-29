@@ -12,6 +12,7 @@ from datetime import datetime
 import os
 import sys
 import traceback
+from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
 
 random.seed()
 
@@ -47,7 +48,7 @@ try:
     sample_size = 4
     tolerance = 0.05
     rate = 15 #publish rate in hz
-    topic = "robud/sensors/tof/range"
+    topic = TOPIC_SENSORS_TOF_RANGE
 
     def get_range_from_sample(sample):
         #first get median from sample
