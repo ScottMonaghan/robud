@@ -14,7 +14,6 @@ import os
 import sys
 import traceback
 from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS, TOPIC_OBJECT_DETECTION_VIDEO_FRAME
-from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 
 random.seed()
 
