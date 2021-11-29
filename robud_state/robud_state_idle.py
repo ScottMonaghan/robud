@@ -176,7 +176,31 @@ try:
                 if detection["ClassLabel"] == "person" and detection["Height"] > CAMERA_HEIGHT*0.67:
                     if monotonic()-last_person_detection > 5:
                         #greet the person!
-                        mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello human! Nice to see you!")
+                        #randomize greeting
+                        greetings = [
+                            "Hello human! Nice to see you!"
+                            ,"Well, hello there!"
+                            ,"Fancy meeting you here!"
+                            ,"Howdy partner!"
+                            ,"Hi!"
+                            ,"Good day!"
+                            ,"Top of the morning to you!"
+                            ,"Happy Friday! even if today isn't Friday."
+                            ,"Good day to you sir or madam."
+                            ,"Hello hello hello!"
+                            ,"Oh hi! Have you been here this whole time?"
+                            ,"Hello. Could a human like you, love a robot like me?"
+                            ,"Well, aren't you a sight for sore eyes."
+                            ,"If I knew you were coming, I'd have baked a cake!"
+                            ,"High Low!"
+                            ,"Sup?"
+                            ,"Hello duderino!"
+                            ,"Hey there."
+                            ,"Falicitations!"
+                            ,"Yo."
+                            ,"I like you."
+                        ]
+                        mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, greetings[random.randint(0,len(greetings)-1)])
                         logging.info("Greeted a person! (Height: " + str(detection["Height"]) + ", Center: " +str(detection["Center"])+ ")")
                         new_head_angle = 120
                         gaze_vertical = position_up
