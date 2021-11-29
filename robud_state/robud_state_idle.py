@@ -14,8 +14,8 @@ import traceback
 from robud.robud_head.robud_head_common import head_keyframe, TOPIC_HEAD_KEYFRAMES
 from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS
 from robud.motors.motors_common import TOPIC_HEAD_SERVO_ANGLE
-from robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
-from sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
+from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
+from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
 
 random.seed()
 
