@@ -16,6 +16,7 @@ from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS
 from robud.motors.motors_common import TOPIC_HEAD_SERVO_ANGLE
 from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
+from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
 
 random.seed()
 
@@ -33,6 +34,9 @@ MAX_VEERAGE = 10
 MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_state_idle.py" + str(random.randint(0,999999999))
 HEAD_SERVO_SPEED = 150 #degrees/sec
+PERSON_DETECTION_TIMEOUT = 5 #seconds
+PERSON_DETECTION_RANGE = 80 #centimeters or less
+PERSON_DETECTION_HEIGHT = 0.67 # % of CAMERA_HEIGHT
 
 
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
@@ -72,6 +76,8 @@ try:
         object_detections = []
         client_userdata["object_detections"] = object_detections
         recognized_objects = {}
+        tof_range = -1
+        client_userdata["tof_range"] = tof_range
         def move_eyes(
             face_expression, 
             left_expression:ExpressionCoordinates, 
@@ -120,6 +126,8 @@ try:
             object_detections.clear()
             object_detections.extend(pickle.loads(message.payload))
 
+        def on_message_tof_range(client, userdata, message):
+            userdata["tof_range"] = int(message.payload)
 
         mqtt_client.connect(MQTT_BROKER_ADDRESS)
         mqtt_client.loop_start()
@@ -127,8 +135,11 @@ try:
         mqtt_client.subscribe(TOPIC_OBJECT_DETECTION_DETECTIONS)
         mqtt_client.message_callback_add(TOPIC_OBJECT_DETECTION_DETECTIONS,on_message_object_detections)
         logger.info('Subcribed to ' + TOPIC_OBJECT_DETECTION_DETECTIONS)
+        mqtt_client.subscribe(TOPIC_SENSORS_TOF_RANGE)
+        mqtt_client.message_callback_add(TOPIC_SENSORS_TOF_RANGE,on_message_tof_range)
+        logger.info('Subcribed to ' + TOPIC_SENSORS_TOF_RANGE)
         head_angle = 90
-        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
+        #mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
         
         #init face expression
         face_expression = np.zeros(shape=FACE_EXPRESSION_ARRAY_SIZE, dtype=np.int16)
@@ -148,6 +159,7 @@ try:
         change_expression:bool = False
         last_person_detection = 0
         last_dog_detection = 0
+        tof_range = -1
         while carry_on:
             loop_start = monotonic()
             
@@ -166,58 +178,54 @@ try:
             #         "Center":detection.Center
             #     }
 
-         
+            tof_range = client_userdata["tof_range"]
+
             for detection in object_detections:
-                # if not detection["ClassLabel"] in recognized_objects:
-                #     recognized_objects[detection["ClassLabel"]]=detection
-                #     mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT,detection["ClassLabel"])
-                #     logging.info("Recognized " + str(detection["ClassLabel"]))
-                #     sleep(1)
-                if detection["ClassLabel"] == "person" and detection["Height"] > CAMERA_HEIGHT*0.67:
-                    if monotonic()-last_person_detection > 5:
-                        #greet the person!
-                        #randomize greeting
-                        greetings = [
-                            "Hello human! Nice to see you!"
-                            ,"Well, hello there!"
-                            ,"Fancy meeting you here!"
-                            ,"Howdy partner!"
-                            ,"Hi!"
-                            ,"Good day!"
-                            ,"Top of the morning to you!"
-                            ,"Happy Friday! even if today isn't Friday."
-                            ,"Good day to you sir or madam."
-                            ,"Hello hello hello!"
-                            ,"Oh hi! Have you been here this whole time?"
-                            ,"Hello. Could a human like you, love a robot like me?"
-                            ,"Well, aren't you a sight for sore eyes."
-                            ,"If I knew you were coming, I'd have baked a cake!"
-                            ,"High Low!"
-                            ,"Sup?"
-                            ,"Hello duderino!"
-                            ,"Hey there."
-                            ,"Falicitations!"
-                            ,"Yo."
-                            ,"I like you."
-                        ]
-                        mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, greetings[random.randint(0,len(greetings)-1)])
-                        logging.info("Greeted a person! (Height: " + str(detection["Height"]) + ", Center: " +str(detection["Center"])+ ")")
-                        new_head_angle = 120
+                if (
+                    detection["ClassLabel"] == "person" 
+                    and detection["Height"] > CAMERA_HEIGHT*PERSON_DETECTION_HEIGHT
+                    and tof_range > 30
+                    and tof_range <= PERSON_DETECTION_RANGE
+                    ):
+                    if head_angle >=90:
+                        if monotonic()-last_person_detection > PERSON_DETECTION_TIMEOUT:
+                            #greet the person!
+                            #randomize greeting
+                            greetings = [
+                                "Hello."
+                                ,"Hi!"
+                                ,"Sup?"
+                                ,"Yo."
+                                ,"Howdy."
+                            ]
+                            mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, greetings[random.randint(0,len(greetings)-1)])
+                            logging.info("Greeted a person! (Height: " + str(detection["Height"]) + ", Center: " +str(detection["Center"])+ ")")
+                            new_head_angle = 130
+                            gaze_vertical = position_up
+                            gaze_horizontal = position_center
+                            selected_position = (gaze_horizontal,gaze_vertical)
+                            change_expression = True
+                            left_expression = Expressions[ExpressionId.HAPPY]
+                            right_expression = Expressions[ExpressionId.HAPPY]
+                        last_person_detection = monotonic()
+                    else:
+                        new_head_angle = 130
                         gaze_vertical = position_up
                         gaze_horizontal = position_center
                         selected_position = (gaze_horizontal,gaze_vertical)
                         change_expression = True
-                        left_expression = Expressions[ExpressionId.HAPPY]
-                        right_expression = Expressions[ExpressionId.HAPPY]
-                    last_person_detection = monotonic()
                 elif detection["ClassLabel"] == "dog" and detection["Height"] > CAMERA_HEIGHT*0.25:
-                    if monotonic()-last_dog_detection > 5:
+                    if monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT:
                         #greet the doggie!
                         mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello little doggie. woof woof! Good doggie!")
                         logging.info("Greeted a dog! (Height: " + str(detection["Height"]) + ")")
                     last_person_detection = monotonic()
             
-            if monotonic()-last_person_detection > 5 and monotonic()-last_dog_detection > 5:
+            if (
+                monotonic()-last_person_detection > PERSON_DETECTION_TIMEOUT 
+                and monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT
+                and change_expression == False
+                ):
                 new_head_angle = head_angle
                 #randomize position
                 chance = random.random()
