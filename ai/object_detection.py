@@ -43,7 +43,7 @@ logger.addHandler(myHandler)
 logger.level = LOGGING_LEVEL
 
 
-OBJECT_DETECTION_RATE = 10 #hz
+OBJECT_DETECTION_RATE = 5 #hz
 
 #TOPIC_OBJECT_DETECTION_VIDEO_FRAME = "robud/ai/object_detection/videoframe"
 #TOPIC_OBJECT_DETECTION_DETECTIONS = "robud/ai/object_detection/detections"
