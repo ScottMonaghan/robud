@@ -75,8 +75,6 @@ try:
             loop_time = time.time()-loop_start
             if (loop_time<1/rate):
                 time.sleep( 1/rate - loop_time)
-        except KeyboardInterrupt:
-            logger.info("Exited with Keyboard Interrupt")
         except OSError as e:
             logger.error(str(e) + "\n" + traceback.format_exc())
 except Exception as e:
