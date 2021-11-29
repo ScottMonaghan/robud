@@ -13,6 +13,8 @@ from datetime import datetime
 import os
 import sys
 import traceback
+from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS, TOPIC_OBJECT_DETECTION_VIDEO_FRAME
+from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 
 random.seed()
 
@@ -44,8 +46,8 @@ logger.level = LOGGING_LEVEL
 
 OBJECT_DETECTION_RATE = 10 #hz
 
-TOPIC_OBJECT_DETECTION_VIDEO_FRAME = "robud/ai/object_detection/videoframe"
-TOPIC_OBJECT_DETECTION_DETECTIONS = "robud/ai/object_detection/detections"
+#TOPIC_OBJECT_DETECTION_VIDEO_FRAME = "robud/ai/object_detection/videoframe"
+#TOPIC_OBJECT_DETECTION_DETECTIONS = "robud/ai/object_detection/detections"
 TOPIC_CAMERA_RAW = "robud/sensors/camera/raw"
 try:
     logger.info("starting")
@@ -67,6 +69,7 @@ try:
             for detection in detections:
                 detection_out = {
                     "ClassID":detection.ClassID,
+                    "ClassLabel":net.GetClassDesc(detection.ClassID),
                     "Confidence":detection.Confidence,
                     "Left":detection.Left,
                     "Top":detection.Top,
