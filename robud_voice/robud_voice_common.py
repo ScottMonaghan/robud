@@ -1,0 +1,1 @@
+TOPIC_ROBUD_VOICE_TEXT_INPUT = 'robud/robud_voice/text_input'
