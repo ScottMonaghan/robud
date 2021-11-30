@@ -53,7 +53,6 @@ try:
     while camera.isReady():
         #try:
             # read the camera image
-            camera.exposure_mode = 'off'
             frame = camera.read()
             encoded_frame = cv2.imencode('.jpg',frame, [int(cv2.IMWRITE_JPEG_QUALITY), 75])
             payload=encoded_frame[1].tobytes()
