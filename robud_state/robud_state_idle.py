@@ -170,7 +170,7 @@ try:
         position_center = 0
         position_up = -50
         position_down = 50
-        position_sleep = 200
+        position_sleep = 100
         angle_up = 105
         angle_center = 90
         angle_down = 75
@@ -196,10 +196,10 @@ try:
                     gaze_vertical = position_sleep
                     gaze_horizontal = position_center
                     selected_position = (gaze_horizontal,gaze_vertical)
-                    left_expression = Expressions[ExpressionId.OVERJOYED]
-                    right_expression = Expressions[ExpressionId.OVERJOYED]
-                    duration=5
-                    head_duration=5
+                    left_expression = Expressions[ExpressionId.BLINKING]
+                    right_expression = Expressions[ExpressionId.BLINKING]
+                    duration=4
+                    head_duration=4
                     change_expression = True
                     mqtt_client.publish(TOPIC_FACE_ENABLE_BLINK, int(False))
             elif light_level >= WAKE_LIGHT_LEVEL and sleeping == True and monotonic()-sleep_time > MINIMUM_SLEEP:
@@ -212,8 +212,8 @@ try:
                     selected_position = (gaze_horizontal,gaze_vertical)
                     left_expression = Expressions[ExpressionId.BORED]
                     right_expression = Expressions[ExpressionId.BORED]
-                    duration=5
-                    head_duration=5
+                    duration=4
+                    head_duration=4
                     change_expression = True
                     mqtt_client.publish(TOPIC_FACE_ENABLE_BLINK, int(True))
             elif sleeping == False:
