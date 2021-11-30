@@ -175,7 +175,7 @@ try:
         userdata["tts"] = bytes(message.payload)
         userdata["tts_time"] = time.monotonic()
 
-    def on_message_tts(client, userdata, message):
+    def on_message_enable_blink(client, userdata, message):
         userdata["enable_blink"] = bool(message.payload)
     # draw some text into an area of a surface
     # automatically wraps words
