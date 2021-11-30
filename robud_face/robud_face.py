@@ -175,7 +175,8 @@ try:
         userdata["tts"] = bytes(message.payload)
         userdata["tts_time"] = time.monotonic()
 
-
+    def on_message_tts(client, userdata, message):
+        userdata["enable_blink"] = bool(message.payload)
     # draw some text into an area of a surface
     # automatically wraps words
     # returns any text that didn't get blitted
@@ -240,6 +241,10 @@ try:
         logger.info('Subcribed to' + TOPIC_FACE_ANIMATION_FRAME)
         mqtt_client.subscribe(TOPIC_ROBUD_VOICE_TEXT_INPUT)
         mqtt_client.message_callback_add(TOPIC_ROBUD_VOICE_TEXT_INPUT, on_message_tts)
+        logger.info('Subcribed to' + TOPIC_ROBUD_VOICE_TEXT_INPUT)
+        mqtt_client.subscribe(TOPIC_FACE_ENABLE_BLINK)
+        mqtt_client.message_callback_add(TOPIC_FACE_ENABLE_BLINK, on_message_enable_blink)
+        logger.info('Subcribed to' + TOPIC_FACE_ENABLE_BLINK)
         
         #initiaize randomizer
         random.seed()
@@ -272,8 +277,9 @@ try:
         #set up text display
         font = pygame.font.Font('freesansbold.ttf', 24)
         odom = 0
-
+        client_userdata["enable_blink"]=True
         while carry_on:
+            enable_blink = client_userdata["enable_blink"]
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     carry_on = False
@@ -292,7 +298,8 @@ try:
                 apply_face_expression(robud_face, face_expression)
             
             #fire blink check
-            robud_face.blink()
+            if enable_blink:
+                robud_face.blink()
             
             #clear screen and update the face
             screen.fill((0,0,0))
