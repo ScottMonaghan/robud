@@ -28,6 +28,7 @@ LOGGING_LEVEL = logging.DEBUG
 MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_light_level.py" + str(random.randint(0,999999999))
 LIGHT_LEVEL_SAMPLE_SIZE = 1000
+NUMBER_OF_FRAMES_TO_AVERAGE = 5
 
 #parse arguments
 parser = argparse.ArgumentParser()
@@ -63,16 +64,17 @@ try:
     mqtt_client.message_callback_add(TOPIC_CAMERA_RAW,on_message_camera_raw)
     logger.info('Subcribed to ' + TOPIC_CAMERA_RAW)
     while True:
-        frame = client_userdata["frame"]
-        if frame is not None:
-            #convert to grayscale
-            grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            #get average light level from random sample size LIGHT_LEVEL_SAMPLE_SIZE
-            summed_pixel_values = 0
-            for i in range(LIGHT_LEVEL_SAMPLE_SIZE -1):
-                summed_pixel_values += grayscale_frame[random.randint(0,CAMERA_HEIGHT-1)][random.randint(0,CAMERA_WIDTH)-1]
-            avg_pixel_value = int(summed_pixel_values/LIGHT_LEVEL_SAMPLE_SIZE)
-            mqtt_client.publish(TOPIC_SENSORS_LIGHT_LEVEL,avg_pixel_value)
-        sleep(1/PUBLISH_RATE)
+        summed_pixel_values = 0
+        for frame_count in range(NUMBER_OF_FRAMES_TO_AVERAGE):
+            frame = client_userdata["frame"]
+            if frame is not None:
+                #convert to grayscale
+                grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                #get average light level from random sample size LIGHT_LEVEL_SAMPLE_SIZE
+                for i in range(LIGHT_LEVEL_SAMPLE_SIZE-1):
+                    summed_pixel_values += grayscale_frame[random.randint(0,CAMERA_HEIGHT-1)][random.randint(0,CAMERA_WIDTH)-1]
+                sleep(1/PUBLISH_RATE)
+        avg_pixel_value = int(summed_pixel_values/LIGHT_LEVEL_SAMPLE_SIZE/NUMBER_OF_FRAMES_TO_AVERAGE)
+        mqtt_client.publish(TOPIC_SENSORS_LIGHT_LEVEL,avg_pixel_value)
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())   

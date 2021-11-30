@@ -19,6 +19,7 @@ PYTWEENING_S = 3
 
 TOPIC_FACE_ANIMATION_FRAME = 'robud/robud_face/animation_frame'
 TOPIC_FACE_KEYFRAMES = 'robud/robud_face/keyframes'
+TOPIC_FACE_ENABLE_BLINK = 'robud/robud_face/enable_blink'
 #TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
 
 #Face Expression Array Constants
