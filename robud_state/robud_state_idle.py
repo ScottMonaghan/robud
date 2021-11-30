@@ -201,7 +201,7 @@ try:
                     duration=5
                     head_duration=5
                     change_expression = True
-                    mqtt_client.publish(TOPIC_FACE_ENABLE_BLINK, False)
+                    mqtt_client.publish(TOPIC_FACE_ENABLE_BLINK, int(False))
             elif light_level >= WAKE_LIGHT_LEVEL and sleeping == True and monotonic()-sleep_time > MINIMUM_SLEEP:
                     #wake up!
                     sleeping = False
@@ -215,7 +215,7 @@ try:
                     duration=5
                     head_duration=5
                     change_expression = True
-                    mqtt_client.publish(TOPIC_FACE_ENABLE_BLINK, True)
+                    mqtt_client.publish(TOPIC_FACE_ENABLE_BLINK, int(True))
             elif sleeping == False:
                 #only run if awake
                 #check for recognized objects
