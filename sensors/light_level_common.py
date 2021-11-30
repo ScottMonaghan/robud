@@ -1,0 +1,1 @@
+TOPIC_SENSORS_LIGHT_LEVEL = 'robud/sensors/light_level'

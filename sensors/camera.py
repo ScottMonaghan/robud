@@ -12,11 +12,11 @@ from datetime import datetime
 import os
 import sys
 import traceback
-from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
+from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH, TOPIC_CAMERA_RAW
 
 random.seed()
 
-topic_camera_raw = "robud/sensors/camera/raw"
+topic_camera_raw = TOPIC_CAMERA_RAW
 
 MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "camera.py" + str(random.randint(0,999999999))
@@ -49,10 +49,11 @@ try:
     client.connect(MQTT_BROKER_ADDRESS)
     client.loop_start()
     # Create the Camera instance for 640 by 360
-    camera = nano.Camera(flip=2, width=640, height=360, fps=15)
+    camera = nano.Camera(flip=2, width=CAMERA_WIDTH, height=CAMERA_HEIGHT, fps=15)
     while camera.isReady():
         #try:
             # read the camera image
+            camera.exposure_mode = 'off'
             frame = camera.read()
             encoded_frame = cv2.imencode('.jpg',frame, [int(cv2.IMWRITE_JPEG_QUALITY), 75])
             payload=encoded_frame[1].tobytes()
