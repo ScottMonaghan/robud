@@ -17,7 +17,7 @@ from robud.motors.motors_common import TOPIC_HEAD_SERVO_ANGLE
 from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
 from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
-from sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
+from robud.sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
 
 random.seed()
 
