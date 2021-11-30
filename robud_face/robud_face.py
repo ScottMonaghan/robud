@@ -176,7 +176,8 @@ try:
         userdata["tts_time"] = time.monotonic()
 
     def on_message_enable_blink(client, userdata, message):
-        userdata["enable_blink"] = bool(message.payload)
+        userdata["enable_blink"] = bool(int(message.payload))
+   
     # draw some text into an area of a surface
     # automatically wraps words
     # returns any text that didn't get blitted
