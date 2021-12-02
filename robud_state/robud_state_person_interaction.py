@@ -1,6 +1,5 @@
 import pickle
 import random
-from motors.motors_common import TOPIC_HEAD_SERVO_ANGLE
 from robud.robud_logging.MQTTHandler import MQTTHandler
 import argparse
 import logging
