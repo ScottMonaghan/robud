@@ -7,7 +7,6 @@ import random
 from datetime import datetime
 import os
 from robud.robud_logging.MQTTHandler import MQTTHandler
-from robud_face.robud_face import MQTT_BROKER_ADDRESS
 
 TOPIC_ROBUD_STATE = 'robud/robud_state'
 HEAD_SERVO_SPEED = 150 #degrees/sec
