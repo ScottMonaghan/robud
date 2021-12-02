@@ -9,7 +9,7 @@ import paho.mqtt.client as mqtt
 import random
 from robud.robud_logging.MQTTHandler import MQTTHandler
 from  robud.robud_state.robud_state_idle import robud_state_idle
-from robud_state.robud_state_person_interaction import robud_state_person_interaction
+from robud.robud_state.robud_state_person_interaction import robud_state_person_interaction
 from robud.robud_state.robud_state_common import TOPIC_ROBUD_STATE, logger
 
 
