@@ -65,5 +65,5 @@ def run_head_animation(
         if loop_duration < 1/ANIMATION_FPS:
             sleep(1/ANIMATION_FPS - loop_duration)
     #always publish last frame
-    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,new_angle,qos=2)
+    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,new_angle,qos=2,retain=True)
     return head_angle

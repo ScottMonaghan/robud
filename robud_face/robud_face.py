@@ -2,7 +2,7 @@ import pytweening
 import pygame 
 import random
 import os
-from robud_face_common import *
+from robud.robud_face.robud_face_common import *
 import paho.mqtt.client as mqtt
 import numpy as np
 import time
