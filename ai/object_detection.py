@@ -13,7 +13,8 @@ from datetime import datetime
 import os
 import sys
 import traceback
-from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS, TOPIC_OBJECT_DETECTION_VIDEO_FRAME
+from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS, TOPIC_OBJECT_DETECTION_REQUEST, TOPIC_OBJECT_DETECTION_VIDEO_FRAME
+from robud.sensors.camera_common import TOPIC_CAMERA_RAW
 
 random.seed()
 
@@ -24,6 +25,7 @@ TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
 TOPIC_ROBUD_LOGGING_LOG_SIGNED = TOPIC_ROBUD_LOGGING_LOG + "/" + MQTT_CLIENT_NAME
 TOPIC_ROBUD_LOGGING_LOG_ALL = TOPIC_ROBUD_LOGGING_LOG + "/#"
 LOGGING_LEVEL = logging.DEBUG
+FRAME_TIMEOUT = 2
 
 #parse arguments
 parser = argparse.ArgumentParser()
@@ -45,9 +47,6 @@ logger.level = LOGGING_LEVEL
 
 OBJECT_DETECTION_RATE = 5 #hz
 
-#TOPIC_OBJECT_DETECTION_VIDEO_FRAME = "robud/ai/object_detection/videoframe"
-#TOPIC_OBJECT_DETECTION_DETECTIONS = "robud/ai/object_detection/detections"
-TOPIC_CAMERA_RAW = "robud/sensors/camera/raw"
 try:
     logger.info("starting")
     def on_message(client:mqtt.Client,userdata,message):
@@ -89,18 +88,64 @@ try:
             client.publish(TOPIC_OBJECT_DETECTION_DETECTIONS, payload=pickle.dumps(detections_out))
             client.publish(TOPIC_OBJECT_DETECTION_VIDEO_FRAME, payload=detection_video_frame_payload)
             processor['is_processing'] = False
+    
+    def on_message_frame(client,message,userdata):
+        #grab the raw frame messages but perform no processing here to not waste resources
+        userdata["last_frame_message"] = message
+        userdata["last_frame_time"] = time.now()
+        pass
+    
+    def on_message_object_detection_request(client:mqtt.Client,message,userdata):
+        object_detection_request = bool(int(message.payload))
+        if object_detection_request == True:
+            client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST, message=int(False), retain=True)
+            if "last_frame_time" in userdata and time.now() - userdata["last_frame_time"]<=FRAME_TIMEOUT:
+                np_bytes = np.frombuffer(userdata["last_frame_message"], np.uint8)
+                cv_image = cv2.imdecode(np_bytes, cv2.IMREAD_COLOR)
+                cv_image = cv2.cvtColor(cv_image,cv2.COLOR_BGR2RGB)
+                #convert to cuda image
+                img_input = jetson.utils.cudaFromNumpy(cv_image)
+
+                detections = net.Detect(img_input)
+                detections_out = [] * len(detections)
+                for detection in detections:
+                    detection_out = {
+                        "ClassID":detection.ClassID,
+                        "ClassLabel":net.GetClassDesc(detection.ClassID),
+                        "Confidence":detection.Confidence,
+                        "Left":detection.Left,
+                        "Top":detection.Top,
+                        "Right":detection.Right,
+                        "Bottom":detection.Bottom,
+                        "Width":detection.Width,
+                        "Height":detection.Height,
+                        "Area":detection.Area,
+                        "Center":detection.Center
+                    }
+                    detections_out.append(detection_out)
+                #I *think* the above actually changes the image as well
+                cv_image = jetson.utils.cudaToNumpy(img_input)
+                cv_image = cv2.cvtColor(cv_image, cv2.COLOR_RGB2BGR)
+                jpg_image = cv2.imencode('.jpg',cv_image, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
+                detection_video_frame_payload=jpg_image[1].tobytes()
+
+                client.publish(TOPIC_OBJECT_DETECTION_DETECTIONS, payload=pickle.dumps(detections_out))
+                client.publish(TOPIC_OBJECT_DETECTION_VIDEO_FRAME, payload=detection_video_frame_payload)
 
     #load model
     net = jetson.inference.detectNet("ssd-mobilenet-v2", threshold=0.5)
 
-    processor = {'is_processing':False,'last_frame_start':0}
-    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=processor) #create new instance
-    mqtt_client.on_message=on_message 
+    #processor = {'is_processing':False,'last_frame_start':0}
+    client_userdata = {}
+    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata) #create new instance
+    #mqtt_client.on_message=on_message 
     logger.info("connecting to broker")
     mqtt_client.connect(MQTT_BROKER_ADDRESS) #connect to broker
 
     logger.info("Subscribing to topic" + TOPIC_CAMERA_RAW)
     mqtt_client.subscribe(TOPIC_CAMERA_RAW)
+    logger.info("Subscribing to topic" + TOPIC_OBJECT_DETECTION_REQUEST)
+    mqtt_client.subscribe(TOPIC_OBJECT_DETECTION_REQUEST)    
     mqtt_client.loop_forever()
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
