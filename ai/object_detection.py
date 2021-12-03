@@ -98,6 +98,7 @@ try:
     def on_message_object_detection_request(client:mqtt.Client,message,userdata):
         object_detection_request = bool(int(message.payload))
         if object_detection_request == True:
+            logger.info("Object detection request reveived")
             client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST, message=int(False), retain=True)
             if "last_frame_time" in userdata and time.now() - userdata["last_frame_time"]<=FRAME_TIMEOUT:
                 np_bytes = np.frombuffer(userdata["last_frame_message"], np.uint8)
@@ -138,7 +139,8 @@ try:
     #processor = {'is_processing':False,'last_frame_start':0}
     client_userdata = {}
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata) #create new instance
-    #mqtt_client.on_message=on_message 
+    #mqtt_client.on_message=on_message
+    mqtt_client.message_callback_add(TOPIC_OBJECT_DETECTION_REQUEST,on_message_object_detection_request)
     logger.info("connecting to broker")
     mqtt_client.connect(MQTT_BROKER_ADDRESS) #connect to broker
 
