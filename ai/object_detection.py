@@ -89,13 +89,13 @@ try:
             client.publish(TOPIC_OBJECT_DETECTION_VIDEO_FRAME, payload=detection_video_frame_payload)
             processor['is_processing'] = False
     
-    def on_message_camera_raw(client,message,userdata):
+    def on_message_camera_raw(client,userdata,message):
         #grab the raw frame messages but perform no processing here to not waste resources
         userdata["last_frame_message"] = message.payload
         userdata["last_frame_time"] = time.now()
         pass
     
-    def on_message_object_detection_request(client:mqtt.Client,message,userdata):
+    def on_message_object_detection_request(client:mqtt.Client,userdata,message):
         object_detection_request = bool(int(message.payload))
         if object_detection_request == True:
             logger.info("Object detection request reveived")
