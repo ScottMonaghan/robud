@@ -56,7 +56,7 @@ def run_head_animation(
     while(time()-animation_start_time <= duration):
         loopstart = time()
         head_angle = head_animated_value.get_updated_value()
-        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,head_angle,qos=2)
+        mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,head_angle,qos=2, retain=True)
         #if face_expression[HEAD_SERVO_ANGLE] != None:
         #    print (face_expression[HEAD_SERVO_ANGLE])
         #    mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE,int(face_expression[HEAD_SERVO_ANGLE]),qos=2)
