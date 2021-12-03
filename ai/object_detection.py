@@ -92,7 +92,7 @@ try:
     def on_message_camera_raw(client,userdata,message):
         #grab the raw frame messages but perform no processing here to not waste resources
         userdata["last_frame_message"] = message.payload
-        userdata["last_frame_time"] = time.now()
+        userdata["last_frame_time"] = time.time()
         pass
     
     def on_message_object_detection_request(client:mqtt.Client,userdata,message):
@@ -100,7 +100,7 @@ try:
         if object_detection_request == True:
             logger.info("Object detection request reveived")
             client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST, message=int(False), retain=True)
-            if "last_frame_time" in userdata and time.now() - userdata["last_frame_time"]<=FRAME_TIMEOUT:
+            if "last_frame_time" in userdata and time.time() - userdata["last_frame_time"]<=FRAME_TIMEOUT:
                 np_bytes = np.frombuffer(userdata["last_frame_message"], np.uint8)
                 cv_image = cv2.imdecode(np_bytes, cv2.IMREAD_COLOR)
                 cv_image = cv2.cvtColor(cv_image,cv2.COLOR_BGR2RGB)
