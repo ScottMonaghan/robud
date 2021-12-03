@@ -91,7 +91,7 @@ try:
     
     def on_message_camera_raw(client,message,userdata):
         #grab the raw frame messages but perform no processing here to not waste resources
-        userdata["last_frame_message"] = message
+        userdata["last_frame_message"] = message.payload
         userdata["last_frame_time"] = time.now()
         pass
     
