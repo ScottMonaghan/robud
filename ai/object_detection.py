@@ -89,7 +89,7 @@ try:
             client.publish(TOPIC_OBJECT_DETECTION_VIDEO_FRAME, payload=detection_video_frame_payload)
             processor['is_processing'] = False
     
-    def on_message_frame(client,message,userdata):
+    def on_message_camera_raw(client,message,userdata):
         #grab the raw frame messages but perform no processing here to not waste resources
         userdata["last_frame_message"] = message
         userdata["last_frame_time"] = time.now()
@@ -141,6 +141,7 @@ try:
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata) #create new instance
     #mqtt_client.on_message=on_message
     mqtt_client.message_callback_add(TOPIC_OBJECT_DETECTION_REQUEST,on_message_object_detection_request)
+    mqtt_client.message_callback_add(TOPIC_CAMERA_RAW,on_message_camera_raw)
     logger.info("connecting to broker")
     mqtt_client.connect(MQTT_BROKER_ADDRESS) #connect to broker
 
