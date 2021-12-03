@@ -99,7 +99,7 @@ try:
         object_detection_request = bool(int(message.payload))
         if object_detection_request == True:
             logger.info("Object detection request reveived")
-            client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST, message=int(False), retain=True)
+            client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST, payload=int(False), retain=True)
             if "last_frame_time" in userdata and time.time() - userdata["last_frame_time"]<=FRAME_TIMEOUT:
                 np_bytes = np.frombuffer(userdata["last_frame_message"], np.uint8)
                 cv_image = cv2.imdecode(np_bytes, cv2.IMREAD_COLOR)
