@@ -16,6 +16,16 @@ PERSON_DETECTION_HEIGHT = 0.67 # % of CAMERA_HEIGHT
 PERSON_DETECTION_WIDTH = 0.33 # % of CAMERA_WIDTH
 MQTT_BROKER_ADDRESS = "robud.local"
 
+SLEEP_LIGHT_LEVEL = 85
+WAKE_LIGHT_LEVEL = 105
+MINIMUM_SLEEP = 30 #seconds
+MINIMUM_WAKE = 30 #seconds
+SLEEP_ANIMATION_DURATION = 4
+WAKE_ANIMATION_DURATION = 4
+VERTICAL_POSITION_SLEEP = 100 
+POSITION_CENTER = 0
+
+
 def move_eyes(
             face_expression, 
             left_expression:ExpressionCoordinates, 

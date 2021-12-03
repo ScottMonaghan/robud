@@ -1,5 +1,6 @@
 import pickle
 import random
+from typing import Dict
 from robud.robud_logging.MQTTHandler import MQTTHandler
 import argparse
 import logging
@@ -23,51 +24,16 @@ from robud.motors.motors_common import TOPIC_HEAD_SERVO_ANGLE
 from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
 from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
+from robud.sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
 from time import monotonic
 
-def robud_state_person_interaction():
-    MQTT_BROKER_ADDRESS = "robud.local"
-    MQTT_CLIENT_NAME = "robud_state_person_interaction.py" + str(random.randint(0,999999999))
-    # TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
-    # TOPIC_ROBUD_LOGGING_LOG_SIGNED = TOPIC_ROBUD_LOGGING_LOG + "/" + MQTT_CLIENT_NAME
-    # TOPIC_ROBUD_LOGGING_LOG_ALL = TOPIC_ROBUD_LOGGING_LOG + "/#"
-    
-    # LOGGING_LEVEL = logging.DEBUG
-
-    # #parse arguments
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("-o", "--Output", help="Log Ouput Prefix", default="logs/robud_state_person_interaction_log_")
-    # args = parser.parse_args()
-
-    # #initialize logger
-    # logger=logging.getLogger()
-    # file_path = args.Output + datetime.now().strftime("%Y-%m-%d") + ".txt"
-    # directory = os.path.dirname(file_path)
-    # if not os.path.exists(directory):
-    #     os.makedirs(directory)
-    # log_file = open(file_path, "a")
-    # myHandler = MQTTHandler(hostname=MQTT_BROKER_ADDRESS, topic=TOPIC_ROBUD_LOGGING_LOG_SIGNED, qos=2, log_file=log_file)
-    # myHandler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s: %(filename)s: %(message)s'))
-    # logger.addHandler(myHandler)
-    # logger.level = LOGGING_LEVEL
+def robud_state_person_interaction(mqtt_client:mqtt.Client, client_userdata:Dict):
     try:
-        client_userdata = {}
-        mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata)
-        mqtt_client.connect(MQTT_BROKER_ADDRESS)
-        mqtt_client.loop_start()
-        logger.info('MQTT Client Connected')
+        logger.info("Starting ROBUD_STATE_PERSON_INTERACTION")
 
-        def on_message_robud_state(client, userdata, message):
-            userdata["published_state"] = message.payload.decode()
-        client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
-        mqtt_client.subscribe(TOPIC_ROBUD_STATE)
-        mqtt_client.message_callback_add(TOPIC_ROBUD_STATE,on_message_robud_state)
-        logger.info('Subcribed to ' + TOPIC_ROBUD_STATE)
-        mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_PERSON_INTERACTION", retain=True)
-        
         def on_message_head_angle(client, userdata, message):
             userdata["head_angle"] = int(message.payload)
-        client_userdata["head_angle"] = 90
+        #client_userdata["head_angle"] = 90
         mqtt_client.subscribe(TOPIC_HEAD_SERVO_ANGLE)
         mqtt_client.message_callback_add(TOPIC_HEAD_SERVO_ANGLE,on_message_head_angle)
         logger.info('Subcribed to ' + TOPIC_HEAD_SERVO_ANGLE)
@@ -157,9 +123,33 @@ def robud_state_person_interaction():
             if monotonic() - last_person_detection > PERSON_DETECTION_TIMEOUT:
                 logger.info("PERSON_DETECTION_TIMEOUT reached. Returning to ROBUD_STATE_IDLE")
                 mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_IDLE", retain=True)
-            sleep(0.1)
+        
+        logger.info("Finishing up of ROBUD_STATE_PERSON_INTERACTION")
+        mqtt_client.unsubscribe(TOPIC_OBJECT_DETECTION_DETECTIONS)
+        logger.info("Unsubscribed from " + TOPIC_OBJECT_DETECTION_DETECTIONS)
+        mqtt_client.unsubscribe(TOPIC_SENSORS_TOF_RANGE)
+        logger.info("Unsubscribed from " + TOPIC_OBJECT_DETECTION_DETECTIONS)
+        mqtt_client.unsubscribe(TOPIC_FACE_ANIMATION_FRAME)
+        logger.info("Unsubscribed from " + TOPIC_FACE_ANIMATION_FRAME)
+        mqtt_client.unsubscribe(TOPIC_HEAD_SERVO_ANGLE)
+        logger.info("Unsubscribed from " + TOPIC_HEAD_SERVO_ANGLE)
+        logger.info("Exiting ROBUD_STATE_PERSON_INTERACTION")
     except Exception as e:
         logger.critical(str(e) + "\n" + traceback.format_exc())     
 
 if __name__ == "__main__":
-    robud_state_person_interaction()
+    MQTT_BROKER_ADDRESS = "robud.local"
+    MQTT_CLIENT_NAME = "robud_state_person_interaction.py" + str(random.randint(0,999999999))
+    client_userdata = {}
+    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata)
+    mqtt_client.connect(MQTT_BROKER_ADDRESS)
+    mqtt_client.loop_start()
+    logger.info('MQTT Client Connected')
+    def on_message_robud_state(client, userdata, message):
+        userdata["published_state"] = message.payload.decode()
+    client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
+    mqtt_client.subscribe(TOPIC_ROBUD_STATE)
+    mqtt_client.message_callback_add(TOPIC_ROBUD_STATE,on_message_robud_state)
+    logger.info('Subcribed to ' + TOPIC_ROBUD_STATE)
+    mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_PERSON_INTERACTION", retain=True)
+    robud_state_person_interaction(mqtt_client, client_userdata)
