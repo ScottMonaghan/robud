@@ -18,7 +18,7 @@ import traceback
 
 random.seed()
 
-MQTT_BROKER_ADDRESS = "localhost" #robud.local
+MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_face.py" + str(random.randint(0,999999999))
 
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
@@ -27,7 +27,7 @@ TOPIC_ROBUD_LOGGING_LOG_ALL = TOPIC_ROBUD_LOGGING_LOG + "/#"
 LOGGING_LEVEL = logging.DEBUG
 
 TOPIC_ROBUD_VOICE_TEXT_INPUT = 'robud/robud_voice/text_input'
-CAPTION_TIMEOUT = 5
+CAPTION_TIMEOUT = 20
 
 #parse arguments
 parser = argparse.ArgumentParser()
@@ -172,7 +172,7 @@ try:
             face_expression[i] = new_face_expression[i]
 
     def on_message_tts(client, userdata, message):
-        userdata["tts"] = bytes(message.payload)
+        userdata["tts"] = message.payload.decode()
         userdata["tts_time"] = time.monotonic()
 
     def on_message_enable_blink(client, userdata, message):

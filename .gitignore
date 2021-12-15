@@ -3,4 +3,4 @@
 robud_log_*.txt
 logs
 __pycache__
-
+*config.py
