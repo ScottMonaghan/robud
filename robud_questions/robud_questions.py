@@ -19,6 +19,7 @@ import os
 import traceback
 import sys
 import paho.mqtt.client as mqtt
+import time
 
 
 random.seed()
@@ -61,7 +62,7 @@ try:
             logger.info("Sending request to Wolfram Alpha API...")
             answer = ""
             with urlopen(url) as f:
-                answer = f.read().decode('utf-8')
+                answer = f.read().decode('utf-8').replace('Wolfram Alpha','Ro-Bud').replace('Stephen Wolfram', 'Scott Monaghan')
             logger.info("Answer recieved: " + answer)
             logger.info("Sending TOPIC_VOICE_TEXT_INPUT")
             client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, payload=answer)
