@@ -4,3 +4,5 @@ robud_log_*.txt
 logs
 __pycache__
 *config.py
+ai/stt/models/coqui-stt-0.9.3-models.scorer
+ai/stt/models/model.tflite

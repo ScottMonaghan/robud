@@ -4,8 +4,8 @@
 #
 # To-Do
 # []Audio Input
-#   []Enable/Disable
-#   []Publish input
+#   [x]Enable/Disable   -- 18-Jan 2022
+#   [x]Publish input    -- 18-Jan 2022 
 #   []Update wakeword & stt to receieve audio via messages
 #   []Update robud_state with wake word prompt & question prompt
 #
@@ -19,8 +19,19 @@
 #       []Split into separate sentences
 #       []Sync with captions
 
-from robud.robud_audio.robud_audio_common import *
-from robud.robud_audio.robud_audio_config import *
+from robud.robud_audio.robud_audio_common import (
+    TOPIC_AUDIO_INPUT_COMMAND
+    , TOPIC_AUDIO_INPUT_DATA
+    , AUDIO_INPUT_COMMAND_START
+    , AUDIO_INPUT_COMMAND_STOP
+)
+from robud.robud_audio.robud_audio_config import (
+    LOGGING_LEVEL
+    , MQTT_BROKER_ADDRESS
+    , SAMPLE_RATE
+    , AUDIO_INPUT_INDEX
+    , CHUNK
+)
 
 import random
 import logging
@@ -31,18 +42,9 @@ import os
 import traceback
 import sys
 import paho.mqtt.client as mqtt
-import time
-import stt
-import numpy as np
-from pyaudio import PyAudio, paInt16
-import wave
-import webrtcvad
-from halo import Halo
-from scipy import signal
-import threading, collections, queue, os.path
-from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
-from robud.robud_questions.robud_questions_common import TOPIC_QUESTIONS
-import re #regular expressions
+import pickle
+from time import sleep
+from pyaudio import PyAudio, paInt16, paContinue, Stream
 
 random.seed()
 
@@ -72,8 +74,59 @@ logger.level = LOGGING_LEVEL
 
 try:
     #initialize audio
+    logging.info("Initializing audio...")
+    
+    def stream_callback(in_data, frame_count, time_info, status):
+        #Receive each chunk of audio captured, pickle it, and publish it
+        payload = pickle.dumps(in_data)
+        mqtt_client.publish(TOPIC_AUDIO_INPUT_DATA,payload=payload,qos=2)
+        return (in_data, status)
 
-    pass
+    pa = PyAudio()
+    stream = pa.open(
+        rate=SAMPLE_RATE
+        ,channels=1
+        ,format = paInt16
+        ,input=True
+        ,frames_per_buffer=CHUNK
+        ,input_device_index=AUDIO_INPUT_INDEX
+        ,stream_callback=stream_callback
+        ,output=False # keep output false until we integrate output
+        ,start=False
+    )
+
+    def on_message_audio_input_command(client:mqtt.Client, userdata, message):
+        command = message.payload.decode()
+        logger.info('Audio Input Command Recieved: ' + command)
+        userdata["command"]=command
+
+    client_userdata = {"command":""}
+    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
+    mqtt_client.connect(MQTT_BROKER_ADDRESS)
+    logger.info('MQTT Client Connected')
+    mqtt_client.subscribe(TOPIC_AUDIO_INPUT_COMMAND)
+    mqtt_client.message_callback_add(TOPIC_AUDIO_INPUT_COMMAND, on_message_audio_input_command)   
+    logger.info('Subscribed to ' + TOPIC_AUDIO_INPUT_COMMAND)
+    #stream.start_stream()
+    logger.info('Waiting for messages...')
+    mqtt_client.loop_start()
+
+    #When I tried to put the below in the mqtt callback, it would never fully stop the stream and would never compelte the callback
+    while True:
+        if len(client_userdata["command"]) > 0:
+            command = client_userdata["command"]
+            if command == AUDIO_INPUT_COMMAND_START and stream.is_stopped():
+                logger.info("Starting Stream")
+                stream.start_stream()
+                logger.info("Stream Started")
+            elif command == AUDIO_INPUT_COMMAND_STOP and not(stream.is_stopped()):
+                logger.info("Stopping Stream")
+                stream.stop_stream()
+                logger.info("Stream Stopped")
+            client_userdata["command"] = ""
+        else:
+            sleep(0.1)
+       
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
 except KeyboardInterrupt:
