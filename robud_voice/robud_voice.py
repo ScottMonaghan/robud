@@ -42,7 +42,7 @@ try:
     def on_message_robud_voice_text_input(client, userdata, message):
         tts = message.payload.decode()
         logger.debug(tts)
-        subprocess.Popen('espeak-ng -m -v us-mbrola-1 -s 140 "'+ tts +'" --stdout | aplay -Dplug:ladspa -', shell=True)
+        subprocess.Popen('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts +'" --stdout | aplay -Dplug:ladspa -', shell=True)
 
     client_userdata = {}
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
