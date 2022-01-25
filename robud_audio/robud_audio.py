@@ -7,6 +7,14 @@
 #   [x]Enable/Disable   -- 18-Jan 2022
 #   [x]Publish input    -- 18-Jan 2022 
 #   []Update wakeword & stt to receieve audio via messages
+#       Note: I have not been able to get precise wakeword detection to work except with a direct reference to a pyaudio Stream.
+#           The problem is, that when an pyaudio Stream object takes over a sound device.
+#           Open questions to mycroft community:
+#               - https://github.com/MycroftAI/mycroft-precise/issues/221
+#               -  https://community.mycroft.ai/t/how-to-pass-python-bytesio-stream-to-precise-runner/11811
+#           To deal with above:
+#           []Integrate wake-word detection directly into robud_audio
+#  
 #   []Update robud_state with wake word prompt & question prompt
 #
 # []Audio Output
@@ -45,6 +53,8 @@ import paho.mqtt.client as mqtt
 import pickle
 from time import sleep
 from pyaudio import PyAudio, paInt16, paContinue, Stream
+from precise_runner import PreciseEngine, PreciseRunner
+import struct 
 
 random.seed()
 
@@ -78,8 +88,9 @@ try:
     
     def stream_callback(in_data, frame_count, time_info, status):
         #Receive each chunk of audio captured, pickle it, and publish it
-        payload = pickle.dumps(in_data)
-        mqtt_client.publish(TOPIC_AUDIO_INPUT_DATA,payload=payload,qos=2)
+        #packed_in_data = struct.pack("Q", in_data) # Q, C Type:unsigned long long, python Type: Integer
+        #payload = pickle.dumps(packed_in_data)
+        mqtt_client.publish(TOPIC_AUDIO_INPUT_DATA,payload=in_data,qos=2)
         return (in_data, status)
 
     pa = PyAudio()
@@ -95,6 +106,7 @@ try:
         ,start=False
     )
 
+    #initialize mqtt
     def on_message_audio_input_command(client:mqtt.Client, userdata, message):
         command = message.payload.decode()
         logger.info('Audio Input Command Recieved: ' + command)

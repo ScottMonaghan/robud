@@ -1,0 +1,1 @@
+TOPIC_WAKEWORD_DETECTED = "robud/ai/wakeword_detection/detected"
