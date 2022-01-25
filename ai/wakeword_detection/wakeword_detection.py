@@ -23,11 +23,6 @@ from robud.robud_audio.robud_audio_common import (
     TOPIC_AUDIO_INPUT_DATA
 )
 
-AUDIO_INPUT_INDEX = 11 #Respeaker v2 4-mic array, plugged into Jetson Nano 
-SAMPLE_RATE = 16000
-AUDIO_INPUT_INDEX = 11 #Respeaker v2 4-mic array, plugged into Jetson Nano 
-CHUNK = 2048
-
 import random
 import logging
 import argparse
