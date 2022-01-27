@@ -67,7 +67,7 @@ LOGGING_LEVEL = logging.DEBUG
 
 #parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-o", "--Output", help="Log Ouput Prefix", default="logs/robud_stt_log_")
+parser.add_argument("-o", "--Output", help="Log Ouput Prefix", default="logs/robud_audio_log_")
 args = parser.parse_args()
 
 #initialize logger

@@ -187,24 +187,32 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
                 mqtt_client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST,payload=int(True))    
                 logger.info("object detection requested")
                 logger.info("waiting for object detection response...")
-                while client_userdata["object_detections"] is None:
+                start_wait = monotonic()
+                while (
+                    client_userdata["object_detections"] is None
+                    and monotonic() - start_wait < 1
+                ):
                     sleep(0.01)
-                logger.info("object detection response receieved")
-                for detection in client_userdata["object_detections"]:               
-                    if (
-                        detection["ClassLabel"] == "person" 
-                        and detection["Height"] > CAMERA_HEIGHT*PERSON_DETECTION_HEIGHT
-                        and detection["Width"] > CAMERA_WIDTH*PERSON_DETECTION_WIDTH
-                        ):
-                        logging.info("PERSON DETECTED, changing to ROBUD_STATE_PERSON_INTERACTION")
-                        mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_PERSON_INTERACTION", retain=True)
-                        client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
-                    elif detection["ClassLabel"] == "dog" and detection["Height"] > CAMERA_HEIGHT*0.25:
-                        if monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT:
-                            #greet the doggie!
-                            mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello little doggie. woof woof! Good doggie!")
-                            logging.info("Greeted a dog! (Height: " + str(detection["Height"]) + ")")
-                        last_person_detection = monotonic()
+                if client_userdata["object_detections"] is None:
+                    logger.info("object detection timeout")
+                    mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_IDLE", retain=True)
+                else:
+                    logger.info("object detection response receieved")
+                    for detection in client_userdata["object_detections"]:               
+                        if (
+                            detection["ClassLabel"] == "person" 
+                            and detection["Height"] > CAMERA_HEIGHT*PERSON_DETECTION_HEIGHT
+                            and detection["Width"] > CAMERA_WIDTH*PERSON_DETECTION_WIDTH
+                            ):
+                            logging.info("PERSON DETECTED, changing to ROBUD_STATE_PERSON_INTERACTION")
+                            mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_PERSON_INTERACTION", retain=True)
+                            client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
+                        elif detection["ClassLabel"] == "dog" and detection["Height"] > CAMERA_HEIGHT*0.25:
+                            if monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT:
+                                #greet the doggie!
+                                mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello little doggie. woof woof! Good doggie!")
+                                logging.info("Greeted a dog! (Height: " + str(detection["Height"]) + ")")
+                            last_person_detection = monotonic()
                 
             else:
                 new_head_angle = head_angle
