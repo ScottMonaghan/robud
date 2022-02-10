@@ -87,9 +87,8 @@ try:
     logging.info("Initializing audio...")
     
     def stream_callback(in_data, frame_count, time_info, status):
-        #Receive each chunk of audio captured, pickle it, and publish it
-        #packed_in_data = struct.pack("Q", in_data) # Q, C Type:unsigned long long, python Type: Integer
-        #payload = pickle.dumps(packed_in_data)
+        #Receive each chunk of audio captured, and publish it
+
         mqtt_client.publish(TOPIC_AUDIO_INPUT_DATA,payload=in_data,qos=2)
         return (in_data, status)
 
