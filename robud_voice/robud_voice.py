@@ -14,7 +14,6 @@ random.seed()
 
 MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_voice.py" + str(random.randint(0,999999999))
-#TOPIC_ROBUD_VOICE_TEXT_INPUT = 'robud/robud_voice/text_input'
 
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
 TOPIC_ROBUD_LOGGING_LOG_SIGNED = TOPIC_ROBUD_LOGGING_LOG + "/" + MQTT_CLIENT_NAME
