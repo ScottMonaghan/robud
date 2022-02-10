@@ -6,20 +6,12 @@
 # []Audio Input
 #   [x]Enable/Disable   -- 18-Jan 2022
 #   [x]Publish input    -- 18-Jan 2022 
-#   []Update wakeword & stt to receieve audio via messages
-#       Note: I have not been able to get precise wakeword detection to work except with a direct reference to a pyaudio Stream.
-#           The problem is, that when an pyaudio Stream object takes over a sound device.
-#           Open questions to mycroft community:
-#               - https://github.com/MycroftAI/mycroft-precise/issues/221
-#               -  https://community.mycroft.ai/t/how-to-pass-python-bytesio-stream-to-precise-runner/11811
-#           To deal with above:
-#           []Integrate wake-word detection directly into robud_audio
-#  
+#   [x]Update wakeword & stt to receieve audio via messages
 #   []Update robud_state with wake word prompt & question prompt
 #
 # []Audio Output
 #   []Enable/Disable
-#   []Add pitch shifter helper class
+#   [x]Add pitch shifter helper class -- in robud_voice
 #   []Receive Messages
 #   []Callbacks for when audio is complete
 #   []Update robud_voice to publish messages to audio out 
