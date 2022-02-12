@@ -17,6 +17,7 @@ from robud.robud_voice.robud_voice_config import (
     , LARYNX_VOCODER_QUALITY
     , LARYNX_NOISE_SCALE
     , LARYNX_VOICE
+    , LARYNX_LENGTH_SCALE
 )
 from robud.robud_audio.robud_audio_common import TOPIC_AUDIO_OUTPUT_DATA
 
@@ -100,6 +101,7 @@ try:
             ,vocoder_or_quality = LARYNX_VOCODER_QUALITY
             ,tts_settings={
                     "noise_scale":LARYNX_NOISE_SCALE
+                    ,"length_scale":LARYNX_LENGTH_SCALE
             }
         )
         #[x]send the speech to the output stream
