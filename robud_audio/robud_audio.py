@@ -3,21 +3,13 @@
 #Records from microphone and publishes audio-input-related messages
 #
 # To-Do
-# []Audio Input
-#   [x]Enable/Disable   -- 18-Jan 2022
-#   [x]Publish input    -- 18-Jan 2022 
-#   [x]Update wakeword & stt to receieve audio via messages
-#   []Update robud_state with wake word prompt & question prompt
-#
-# []Audio Output
-#   []Enable/Disable
-#   [x]Add pitch shifter helper class -- in robud_voice
-#   []Receive Messages
-#   []Callbacks for when audio is complete
-#   []Update robud_voice to publish messages to audio out 
-#       []Use pitch shifter helper class instead of LASPA plugin
-#       []Split into separate sentences
-#       []Sync with captions
+#[x]Publish audio direction detection
+#   [x] Read direction directly from respeaker hardware
+#   [x] Publish audio direction
+#[]Create Detected Speech Audio Stream
+#   [x] Read speech detection directly from respeaker hardware
+#   [] Process speech detection to smooth it out and provide padding 
+#   [] Publish Speech Detection Audio Stream
 
 from email.mime import audio
 from io import BytesIO
@@ -29,6 +21,8 @@ from robud.robud_audio.robud_audio_common import (
     , TOPIC_AUDIO_OUTPUT_DATA
     , AUDIO_INPUT_COMMAND_START
     , AUDIO_INPUT_COMMAND_STOP
+    , TOPIC_AUDIO_INPUT_DIRECTION
+    , TOPIC_SPEECH_INPUT_DATA
 )
 from robud.robud_audio.robud_audio_config import (
     LOGGING_LEVEL
@@ -36,6 +30,8 @@ from robud.robud_audio.robud_audio_config import (
     , SAMPLE_RATE
     , AUDIO_INPUT_INDEX
     , CHUNK
+    , SPEECH_DETECTION_PADDING_SEC
+    , SPEECH_DETECTION_RATIO
 )
 
 import random
@@ -53,6 +49,8 @@ from pyaudio import PyAudio, paInt16, paContinue, Stream
 import pyaudio
 #from precise_runner import PreciseEngine, PreciseRunner
 import struct 
+from robud.robud_audio.respeaker_v2 import Tuning, find
+import collections, queue
 
 random.seed()
 
@@ -80,6 +78,15 @@ myHandler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s: %(filenam
 logger.addHandler(myHandler)
 logger.level = LOGGING_LEVEL
 
+#initialize respeaker
+respeaker = find()
+
+#speech detection (based on https://github.com/coqui-ai/STT-examples/blob/r1.0/mic_vad_streaming/mic_vad_streaming.py)
+num_padding_chunks = int((SAMPLE_RATE / CHUNK) * SPEECH_DETECTION_PADDING_SEC)
+speech_ring_buffer = collections.deque(maxlen=num_padding_chunks)
+speech_detection_triggered = False
+
+
 try:
     #initialize audio
     logging.info("Initializing audio...")
@@ -88,9 +95,35 @@ try:
    
     def stream_callback(in_data, frame_count, time_info, status):
         global audio_output_buffer
+        global speech_ring_buffer
+        global speech_detection_triggered
+
         FRAME_BYTES = frame_count * 2
-        #Receive each chunk of audio captured, and publish it
+        #Publish raw audio input stream
         mqtt_client.publish(TOPIC_AUDIO_INPUT_DATA,payload=in_data,qos=2)
+        #Publichs audio input direction
+        mqtt_client.publish(TOPIC_AUDIO_INPUT_DIRECTION, payload=respeaker.direction, qos=0, retain=True)
+        #Detect and publish speech stream (based on https://github.com/coqui-ai/STT-examples/blob/r1.0/mic_vad_streaming/mic_vad_streaming.py)
+        is_speech = respeaker.is_speech()
+        if not speech_detection_triggered:
+            speech_ring_buffer.append((in_data,is_speech))
+            num_voiced = len([chunk for chunk, speech in speech_ring_buffer if speech])
+            if num_voiced > SPEECH_DETECTION_RATIO * speech_ring_buffer.maxlen:
+                speech_detection_triggered = True
+                logger.debug("Speech Detected")
+                speechchunks = bytes()
+                for chunk, s in speech_ring_buffer:
+                    mqtt_client.publish(TOPIC_SPEECH_INPUT_DATA,payload=chunk,qos=2)
+                speech_ring_buffer.clear()
+        else:
+            #keep publishing audio until speech stops
+            mqtt_client.publish(TOPIC_SPEECH_INPUT_DATA,payload=in_data,qos=2)
+            speech_ring_buffer.append((in_data, is_speech))
+            num_unvoiced = len([chunk for chunk, speech in speech_ring_buffer if not speech])
+            if num_unvoiced > SPEECH_DETECTION_RATIO * speech_ring_buffer.maxlen:
+                speech_detection_triggered = False
+                speech_ring_buffer.clear()
+        #Play received audio output
         if audio_output_buffer and len(audio_output_buffer) > FRAME_BYTES:
             out_data = audio_output_buffer[:FRAME_BYTES]
             audio_output_buffer = audio_output_buffer[FRAME_BYTES:]
@@ -111,16 +144,6 @@ try:
         ,start=True
     )
 
-    # output_stream = pa.open(
-    #     rate=SAMPLE_RATE
-    #     ,channels=1
-    #     ,format = paInt16
-    #     ,input=True
-    #     ,frames_per_buffer=CHUNK
-    #     ,input_device_index=AUDIO_INPUT_INDEX
-    #     ,output=True 
-    #     ,start=True
-    # )
 
     #initialize mqtt
     def on_message_audio_input_command(client:mqtt.Client, userdata, message):
@@ -149,6 +172,8 @@ try:
     logger.info('Waiting for messages...')
     mqtt_client.loop_start()
 
+    #
+
     #When I tried to put the below in the mqtt callback, it would never fully stop the stream and would never compelte the callback
     while True:
         if len(client_userdata["command"]) > 0:
@@ -170,6 +195,12 @@ except Exception as e:
 except KeyboardInterrupt:
     logger.info("Exited with Keyboard Interrupt")
     try:
+        stream.stop_stream()
+        stream.close()
+        respeaker.close()
         sys.exit(0)
     except SystemExit:
+        stream.stop_stream()
+        stream.close()
+        respeaker.close()
         os._exit(0)

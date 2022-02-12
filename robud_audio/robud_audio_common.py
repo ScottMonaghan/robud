@@ -1,5 +1,7 @@
 TOPIC_AUDIO_INPUT_DATA = "robud/robud_audio/audio_input/data"
+TOPIC_SPEECH_INPUT_DATA = "robud/robud_audio/speech_input/data"
 TOPIC_AUDIO_INPUT_COMMAND = "robud/robud_audio/audio_input/command"
+TOPIC_AUDIO_INPUT_DIRECTION = "robud/robud_audio/audio_input/direction"
 TOPIC_AUDIO_OUTPUT_DATA = "robud/robud_audio/audio_output/data"
 AUDIO_INPUT_COMMAND_START = "start" 
 AUDIO_INPUT_COMMAND_STOP = "stop"
