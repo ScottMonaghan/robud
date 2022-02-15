@@ -52,6 +52,15 @@ try:
     def on_message_questions(client:mqtt.Client, userdata, message):
         try:
             logger.info("Question Recieved")
+            pre_answers = [
+                "Let me look that up for you."
+                ,"Let's see."
+                ,"Good question. Just a moment."
+                ,"Let's find out."
+            ]
+
+            client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, payload=pre_answers[random.randint(0,len(pre_answers)-1)])
+            
             question = message.payload.decode()
             logger.info("Question: " + question)
             data = urlencode({
@@ -65,6 +74,8 @@ try:
                 answer = f.read().decode('utf-8').replace('Wolfram Alpha','Ro-Bud').replace('Stephen Wolfram', 'Scott Monaghan')
             logger.info("Answer recieved: " + answer)
             logger.info("Sending TOPIC_VOICE_TEXT_INPUT")
+            #add period to answer
+            answer = answer + "."
             client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, payload=answer)
         except urllib.error.HTTPError as e:
             if e.code == 501:

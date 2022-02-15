@@ -12,7 +12,7 @@ from robud.ai.stt.stt_common import(
     TOPIC_STT_OUTPUT,
     TOPIC_STT_REQUEST
 )
-from robud.ai.stt.vadaudio import Audio, VADAudio
+#from robud.ai.stt.vadaudio import Audio, VADAudio
 import random
 import logging
 import argparse
@@ -25,7 +25,7 @@ import paho.mqtt.client as mqtt
 import time
 import stt
 import numpy as np
-import pyaudio
+#import pyaudio
 import wave
 import webrtcvad
 from halo import Halo
@@ -34,6 +34,10 @@ import threading, collections, queue, os.path
 from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.robud_questions.robud_questions_common import TOPIC_QUESTIONS
 import re #regular expressions
+from robud.robud_audio.robud_audio_common import (
+    TOPIC_SPEECH_INPUT_DATA
+    ,TOPIC_SPEECH_INPUT_COMPLETE
+)
 
 random.seed()
 
@@ -62,34 +66,42 @@ logger.addHandler(myHandler)
 logger.level = LOGGING_LEVEL
 
 try:
-    def on_message_stt_request(client:mqtt.Client, userdata, message):
-        logger.info("STT request received")
-        #handle stt_request
+    # ToDo:
+    #   [] change on_message_stt_request to basic trigger
+    #   [] Respond to speech input messages, but only process if triggered 
+    #       [] Subscribe to speech input   
+        
+    def on_message_stt_request(client:mqtt.Client, userdata,message):
+        logger.info("stt request received")
+        userdata["stt_triggered"] = True
         model:stt.Model = userdata["model"]
-        vad_audio:VADAudio = userdata["vad_audio"]
-        vad_audio.stream.start_stream()
-        # Start audio with VAD
-        stream_context = model.createStream()
-        frames = vad_audio.vad_collector(padding_ms=500)
-        for frame in frames:
-            if frame is not None:
-                logging.debug("streaming frame")
-                stream_context.feedAudioContent(np.frombuffer(frame, np.int16))
-            else:
-                logging.debug("end utterence")
-                vad_audio.stream.stop_stream()
-                text = stream_context.finishStream()
-                #there is a hotword bug that puts junk single characters after hotwords
-                #this is a quick and dirty replacement
-                #TODO: actually traverse list of hotwords and remove singel characters that fall after specific hotwords
-                print("\"" + text + "\"")
-                text=re.sub('(\s[a-z]){2,}\s',' ',text) #at least two occurence of single letters surrounded by spaces
-                #trim trailing spaces
-                text = text.strip()
-                logging.info("Recognized: %s" % text)
-                #if len(text) > 0:
-                client.publish(TOPIC_QUESTIONS,qos=2, payload=text)
-                return
+        userdata["stream_context"] = model.createStream()
+        return
+    
+    def on_message_speech_input_data(client:mqtt.Client, userdata, message:mqtt.MQTTMessage):
+        if userdata["stt_triggered"] and userdata["stream_context"]:
+            logger.debug("Speech input received")
+            stream_context:stt.Stream = userdata["stream_context"]
+            stream_context.feedAudioContent(np.frombuffer(message.payload, np.int16))
+        return
+
+    def on_message_speech_input_complete(client:mqtt.Client, userdata, message:mqtt.MQTTMessage):
+        if userdata["stt_triggered"] and userdata["stream_context"]:
+            logger.info("Speech input Complete. Processing...")
+            stream_context:stt.Stream = userdata["stream_context"]
+            userdata["stt_triggered"] = False 
+            text = stream_context.finishStream()
+            #there is a hotword bug that puts junk single characters after hotwords
+            #this is a quick and dirty replacement
+            #TODO: actually traverse list of hotwords and remove singel characters that fall after specific hotwords
+            #logger.info("\"" + text + "\"")
+            text=re.sub('(\s[a-z]){2,}\s',' ',text) #at least two occurence of single letters surrounded by spaces
+            #trim trailing spaces
+            text = text.strip()
+            logging.info("Recognized: %s" % text)
+            if len(text) > 0:
+                client.publish(TOPIC_QUESTIONS,qos=2, payload=text)   
+        return
 
     # Load STT model
 
@@ -106,21 +118,19 @@ try:
     model.addHotWord("tomorrow", 25.0) #STT "tomorrow" often interprets as "to morrow"
     model.addHotWord("weather", 15.0) #STT "weather" often interprets as "whether"
 
-    # Start audio with VAD
-    vad_audio = VADAudio(aggressiveness=VAD_AGGRESSIVENESS
-                         ,device=AUDIO_INPUT_INDEX
-                         ,input_rate=SAMPLE_RATE)
-    vad_audio.stream.stop_stream()
-
     client_userdata = {
         "model":model
-        ,"vad_audio":vad_audio
+        ,"stt_triggered":False
     }
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
     logger.info('MQTT Client Connected')
     mqtt_client.subscribe(TOPIC_STT_REQUEST)
     mqtt_client.message_callback_add(TOPIC_STT_REQUEST,on_message_stt_request)
+    mqtt_client.subscribe(TOPIC_SPEECH_INPUT_DATA)
+    mqtt_client.message_callback_add(TOPIC_SPEECH_INPUT_DATA,on_message_speech_input_data)
+    mqtt_client.subscribe(TOPIC_SPEECH_INPUT_COMPLETE)
+    mqtt_client.message_callback_add(TOPIC_SPEECH_INPUT_COMPLETE,on_message_speech_input_complete)
     logger.info('Waiting for messages...')
     mqtt_client.loop_forever()
 except Exception as e:
