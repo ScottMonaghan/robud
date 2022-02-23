@@ -59,7 +59,7 @@ try:
                 ,"Let's find out."
             ]
 
-            client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, payload=pre_answers[random.randint(0,len(pre_answers)-1)])
+            #client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, payload=pre_answers[random.randint(0,len(pre_answers)-1)])
             
             question = message.payload.decode()
             logger.info("Question: " + question)
@@ -71,7 +71,9 @@ try:
             logger.info("Sending request to Wolfram Alpha API...")
             answer = ""
             with urlopen(url) as f:
-                answer = f.read().decode('utf-8').replace('Wolfram Alpha','Ro-Bud').replace('Stephen Wolfram', 'Scott Monaghan')
+                answer = (pre_answers[random.randint(0,len(pre_answers)-1)] 
+                 + " " + f.read().decode('utf-8').replace('Wolfram Alpha','Ro-Bud').replace('Stephen Wolfram', 'Scott Monaghan')
+                )
             logger.info("Answer recieved: " + answer)
             logger.info("Sending TOPIC_VOICE_TEXT_INPUT")
             #add period to answer
