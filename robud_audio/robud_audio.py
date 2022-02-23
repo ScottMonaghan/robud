@@ -110,12 +110,12 @@ try:
         audio_input_buffer.append((in_data,respeaker.direction,respeaker.is_speech()))
 
         #prepare output
-        if audio_output_buffer and len(audio_output_buffer) > 0: #FRAME_BYTES:
-            out_data = audio_output_buffer.popleft()
-            out_data += bytes(BYTES_PER_CHUNK - len(out_data)) # make sure the size is always correct
-        else:
-            out_data = bytes(BYTES_PER_CHUNK)
-        return (out_data, pyaudio.paContinue)
+        # if audio_output_buffer and len(audio_output_buffer) > 0: #FRAME_BYTES:
+        #     out_data = audio_output_buffer.popleft()
+        #     out_data += bytes(BYTES_PER_CHUNK - len(out_data)) # make sure the size is always correct
+        # else:
+        #     out_data = bytes(BYTES_PER_CHUNK)
+        return (None, pyaudio.paContinue)
     pa = PyAudio()
     stream = pa.open(
         rate=SAMPLE_RATE
@@ -125,7 +125,7 @@ try:
         ,frames_per_buffer=CHUNK
         ,input_device_index=AUDIO_INPUT_INDEX
         ,stream_callback=stream_callback
-        ,output=True 
+        ,output=False 
         ,start=True
     )
 
