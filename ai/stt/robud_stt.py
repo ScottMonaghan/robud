@@ -115,7 +115,7 @@ try:
     
     #Add hotwords
     #TODO: move to external configuration
-    model.addHotWord("tomorrow", 25.0) #STT "tomorrow" often interprets as "to morrow"
+    model.addHotWord("tomorrow", 50.0) #STT "tomorrow" often interprets as "to morrow"
     model.addHotWord("weather", 15.0) #STT "weather" often interprets as "whether"
 
     client_userdata = {
