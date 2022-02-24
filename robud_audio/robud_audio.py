@@ -54,6 +54,8 @@ import struct
 from robud.robud_audio.respeaker_v2 import Tuning, find
 import collections, queue
 
+
+
 random.seed()
 
 MQTT_CLIENT_NAME = "robud_audio.py" + str(random.randint(0,999999999))
@@ -117,7 +119,7 @@ try:
         #     out_data = bytes(BYTES_PER_CHUNK)
         return (None, pyaudio.paContinue)
     pa = PyAudio()
-    stream = pa.open(
+    stream_in = pa.open(
         rate=SAMPLE_RATE
         ,channels=1
         ,format = paInt16
@@ -129,6 +131,16 @@ try:
         ,start=True
     )
 
+    stream_out = pa.open(
+        rate=SAMPLE_RATE
+        ,channels=1
+        ,format = paInt16
+        ,input=False
+        ,frames_per_buffer=CHUNK
+        ,input_device_index=AUDIO_INPUT_INDEX
+        ,output=True 
+        ,start=True
+    )
 
     #initialize mqtt
     def on_message_audio_input_command(client:mqtt.Client, userdata, message):
@@ -137,17 +149,18 @@ try:
         userdata["command"]=command
 
     def on_message_audio_output_data(client:mqtt.Client, userdata, message):
-        global audio_output_buffer
-        audio = message.payload
-        bytes_per_chunk = CHUNK * BYTES_PER_FRAME
-        #logger.info('Audio Output Command Recieved: ' + command)
-        while len(audio) > 0:
-            if len(audio) > bytes_per_chunk:
-                audio_output_buffer.append(audio[:bytes_per_chunk])
-                audio =  audio[bytes_per_chunk:]
-            else:
-                audio_output_buffer.append(audio)
-                audio = ""
+        stream_out.write(message.payload)
+        #global audio_output_buffer
+        # audio = message.payload
+        # bytes_per_chunk = CHUNK * BYTES_PER_FRAME
+        # #logger.info('Audio Output Command Recieved: ' + command)
+        # while len(audio) > 0:
+        #     if len(audio) > bytes_per_chunk:
+        #         audio_output_buffer.append(audio[:bytes_per_chunk])
+        #         audio =  audio[bytes_per_chunk:]
+        #     else:
+        #         audio_output_buffer.append(audio)
+        #         audio = ""
         return
 
     client_userdata = {"command":""}
@@ -170,11 +183,11 @@ try:
     while True:
         if len(client_userdata["command"]) > 0:
             command = client_userdata["command"]
-            if command == AUDIO_INPUT_COMMAND_START and stream.is_stopped():
+            if command == AUDIO_INPUT_COMMAND_START and stream_in.is_stopped():
                 logger.info("Starting Stream")
                 #stream.start_stream()
                 logger.info("Stream Started")
-            elif command == AUDIO_INPUT_COMMAND_STOP and not(stream.is_stopped()):
+            elif command == AUDIO_INPUT_COMMAND_STOP and not(stream_in.is_stopped()):
                 logger.info("Stopping Stream")
                 #stream.stop_stream()
                 logger.info("Stream Stopped")
@@ -217,12 +230,12 @@ except Exception as e:
 except KeyboardInterrupt:
     logger.info("Exited with Keyboard Interrupt")
     try:
-        stream.stop_stream()
-        stream.close()
+        stream_in.stop_stream()
+        stream_in.close()
         respeaker.close()
         sys.exit(0)
     except SystemExit:
-        stream.stop_stream()
-        stream.close()
+        stream_in.stop_stream()
+        stream_in.close()
         respeaker.close()
         os._exit(0)

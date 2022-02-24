@@ -9,6 +9,11 @@ import os
 import sys
 import traceback
 from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
+from robud.robud_audio.robud_audio_common import TOPIC_AUDIO_OUTPUT_DATA
+import numpy as np
+import librosa.effects
+from scipy import signal
+
 
 random.seed()
 
@@ -18,7 +23,7 @@ MQTT_CLIENT_NAME = "robud_voice.py" + str(random.randint(0,999999999))
 TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
 TOPIC_ROBUD_LOGGING_LOG_SIGNED = TOPIC_ROBUD_LOGGING_LOG + "/" + MQTT_CLIENT_NAME
 TOPIC_ROBUD_LOGGING_LOG_ALL = TOPIC_ROBUD_LOGGING_LOG + "/#"
-LOGGING_LEVEL = logging.DEBUG
+LOGGING_LEVEL = logging.INFO
 
 #parse arguments
 parser = argparse.ArgumentParser()
@@ -38,10 +43,44 @@ logger.addHandler(myHandler)
 logger.level = LOGGING_LEVEL
 
 try:
-    def on_message_robud_voice_text_input(client, userdata, message):
+    def resample(data, input_rate, output_rate):
+        """
+        Args:
+            data (binary): Input audio stream
+            input_rate (int): Input audio rate to resample from
+            output_rate (int): Output audio rate to resample to
+        """
+        data16 = np.frombuffer(buffer=data, dtype=np.int16)
+        resample_size = int(len(data16) / input_rate * output_rate)
+        resample = signal.resample(data16, resample_size)
+        resample16 = np.array(resample, dtype=np.int16)
+        return resample16.tobytes()
+
+    def pitch_shift(data,sample_rate,semitones):
+        """
+        Args:
+            data (binary): Input audio stream
+            sample_rate (int): sample_rate of data
+            output_rate (int): number of semitones to shift pitch of data
+        """
+        data16 = np.frombuffer(buffer=data, dtype=np.int16)
+        data64 = np.array(data16, dtype=np.float64)
+        resample = librosa.effects.pitch_shift(
+            y=data64
+            ,sr=sample_rate
+            ,n_steps=semitones
+            ,bins_per_octave=12      
+        )
+        resample16 = np.array(resample, dtype=np.int16) 
+        return resample16.tobytes()
+
+    def on_message_robud_voice_text_input(client:mqtt.Client, userdata, message):
         tts = message.payload.decode()
         logger.debug(tts)
-        subprocess.Popen('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts +'" --stdout | aplay -Dplug:ladspa -', shell=True)
+        #subprocess.Popen('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts +'" --stdout | aplay -Dplug:ladspa -', shell=True)
+        result = subprocess.run('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts + '" --stdout', stdout=subprocess.PIPE, shell=True)
+        #logger.debug(result.stdout)
+        client.publish(topic=TOPIC_AUDIO_OUTPUT_DATA,payload=resample(pitch_shift(result.stdout,22050,6),22050,16000))
 
     client_userdata = {}
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
