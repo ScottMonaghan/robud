@@ -1,8 +1,6 @@
 [Unit]
 Description=PulseAudio system server
 # DO NOT ADD ConditionUser=!root
-After=graphical.target
-Requires=graphical.target
 
 [Service]
 Type=notify
@@ -11,4 +9,4 @@ Restart=on-failure
 
 
 [Install]
-WantedBy=graphical.target
+WantedBy=multi-user.target
