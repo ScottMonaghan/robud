@@ -252,7 +252,7 @@ try:
         #initialize pygame
         pygame.init()
         #remove cursor from screen
-        pygame.event.set_grab(True)
+        #pygame.event.set_grab(True)
         pygame.mouse.set_visible(False) #set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
 
         #set screensize
