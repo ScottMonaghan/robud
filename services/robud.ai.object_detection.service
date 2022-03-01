@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud Object Detection Service - publishes on sub-topics of robud/ai/object_detection
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/ai/object_detection.py -o '/home/robud/robud/logs/object_dectection_log_' 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+

@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud Logger Service
+After=graphical.target
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/robud_logging/robud_logger.py -o '/home/robud/robud/logs/robud_log_' 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+

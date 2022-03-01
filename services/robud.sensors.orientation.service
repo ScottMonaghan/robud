@@ -1,0 +1,16 @@
+[Unit]
+Description=Robud Orientation Service - Publishing on sub-topics of robud/sensors/orientation
+After=graphical.target
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/sensors/orientation.py -o '/home/robud/robud/logs/orientation_log_'
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+

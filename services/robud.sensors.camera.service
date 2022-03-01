@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud Camera Service
+After=graphical.target
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/sensors/camera.py -o '/home/robud/robud/logs/camera_log_' 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target

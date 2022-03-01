@@ -1,0 +1,16 @@
+[Unit]
+Description=Robud Audio Service
+After=pulseaudio.service
+Requires=pulseaudio.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/robud_audio/robud_audio.py
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+

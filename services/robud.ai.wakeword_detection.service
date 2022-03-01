@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud Wakeword Detection  Service
+After=graphical.target
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/ai/wakeword_detection/wakeword_detection.py
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target

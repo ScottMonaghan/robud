@@ -1,0 +1,14 @@
+[Unit]
+Description=Robud Head Animator Service - subscribes to keyframes on robud/robud_face/keyframes and outputs frames on robud/robud_face/animation_frae 
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/robud_head/robud_head_animator.py -o '/home/robud/robud/logs/robud_head_animator_log_' 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=Robud Voice Text Input service. Subscribes to robud/robud_voice/text_input
+Requires=pulseaudio.service
+After=pulseaudio.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Environment=ESPEAK_DATA_PATH=/usr/share/espeak-ng-data
+Environment=LD_LIBRARY_PATH=/usr/lib/
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3.7 /home/robud/robud/robud_voice/robud_voice.py -o '/home/robud/robud/logs/robud_voice_' 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+

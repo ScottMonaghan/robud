@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud motors service. 
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/motors/motors.py -o /home/robud/robud/logs/motors_log_ 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+

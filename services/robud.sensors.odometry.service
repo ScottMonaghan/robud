@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud Odometry Service - publishs wheel ticks and speed on sub-topics of robud/sensors/odometry 
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/sensors/odometry.py -o '/home/robud/robud/logs/odometry_log_'
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
+
