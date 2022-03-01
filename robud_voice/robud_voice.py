@@ -79,22 +79,13 @@ try:
     def on_message_robud_voice_text_input(client:mqtt.Client, userdata, message):
         tts = message.payload.decode()
         logger.debug(tts)
-        #subprocess.Popen('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts +'" --stdout | aplay -Dplug:ladspa -', shell=True)
         result = subprocess.run('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts + '" --stdout', stdout=subprocess.PIPE, shell=True)
-        #logger.debug(result.stdout)
-        #start_time = monotonic()
-
+ 
         resampled_audio = resample(result.stdout,22050,16000)
-        #resampled_time = monotonic()
-        #print(resampled_time-start_time)
-
-
+ 
         pitch_shifted_audio = pitch_shift(resampled_audio,16000,6)
-        #pitch_shift_time = monotonic()
-        #print(pitch_shift_time - resampled_time)
         client.publish(topic=TOPIC_AUDIO_OUTPUT_DATA,payload=pitch_shifted_audio)
-        #print(monotonic() - start_time)
-
+ 
     client_userdata = {}
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
