@@ -14,7 +14,8 @@ from robud.robud_audio.robud_audio_common import TOPIC_AUDIO_OUTPUT_DATA
 import numpy as np
 import librosa.effects
 from scipy import signal
-from time import monotonic
+from time import monotonic, sleep
+from collections import deque
 
 
 random.seed()
@@ -76,15 +77,23 @@ try:
         resample16 = np.array(resample, dtype=np.int16) 
         return resample16.tobytes()
 
+    sentence_queue = deque()
+
     def on_message_robud_voice_text_input(client:mqtt.Client, userdata, message):
         tts = message.payload.decode()
         logger.debug(tts)
-        result = subprocess.run('espeak-ng -m -v en-us-1 -s 155 -p 100 "'+ tts + '" --stdout', stdout=subprocess.PIPE, shell=True)
- 
-        resampled_audio = resample(result.stdout,22050,16000)
- 
-        pitch_shifted_audio = pitch_shift(resampled_audio,16000,6)
-        client.publish(topic=TOPIC_AUDIO_OUTPUT_DATA,payload=pitch_shifted_audio)
+
+        #split tts out by sentences
+        sentences = tts.split(". ")
+        sentence_queue.extend(sentences)
+        # for sentence in sentences:
+        #     result = subprocess.run(args=['espeak-ng', '-m', '-v', 'en-us-1', '-s', '155', '-p', '100', sentence, '--stdout'], stdout=subprocess.PIPE) #, shell=True)
+        #     speech = result.stdout[result.stdout.find(b'data')+8:]
+        #     speech = resample(speech,22050,16000)
+    
+        #     speech = pitch_shift(speech,16000,6)
+        #     client.publish(topic=TOPIC_AUDIO_OUTPUT_DATA,payload=speech)
+        #     sleep(2)
  
     client_userdata = {}
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
@@ -93,7 +102,18 @@ try:
     mqtt_client.subscribe(TOPIC_ROBUD_VOICE_TEXT_INPUT)
     mqtt_client.message_callback_add(TOPIC_ROBUD_VOICE_TEXT_INPUT,on_message_robud_voice_text_input)
     logger.info('Waiting for messages...')
-    mqtt_client.loop_forever()
+    mqtt_client.loop_start()
+
+    while True:
+        while len(sentence_queue) > 0:
+            sentence = sentence_queue.popleft()
+            result = subprocess.run(args=['espeak-ng', '-m', '-v', 'en-us-1', '-s', '155', '-p', '100', sentence, '--stdout'], stdout=subprocess.PIPE) #, shell=True)
+            speech = result.stdout[result.stdout.find(b'data')+8:]
+            speech = resample(speech,22050,16000)
+    
+            speech = pitch_shift(speech,16000,6)
+            mqtt_client.publish(topic=TOPIC_AUDIO_OUTPUT_DATA,payload=speech)
+            #sleep(2)
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
 except KeyboardInterrupt:
