@@ -35,9 +35,12 @@ from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.robud_questions.robud_questions_common import TOPIC_QUESTIONS
 import re #regular expressions
 from robud.robud_audio.robud_audio_common import (
+    TOPIC_AUDIO_INPUT_DATA,
     TOPIC_SPEECH_INPUT_DATA
     ,TOPIC_SPEECH_INPUT_COMPLETE
+    ,TOPIC_AUDIO_OUTPUT_DATA
 )
+from robud.robud_state.robud_state_common import TOPIC_ROBUD_STATE
 
 random.seed()
 
@@ -70,19 +73,23 @@ try:
     #   [] change on_message_stt_request to basic trigger
     #   [] Respond to speech input messages, but only process if triggered 
     #       [] Subscribe to speech input   
-        
+
+    input_audio = b''
+
     def on_message_stt_request(client:mqtt.Client, userdata,message):
         logger.info("stt request received")
         userdata["stt_triggered"] = True
         model:stt.Model = userdata["model"]
         userdata["stream_context"] = model.createStream()
+        userdata["input_audio"] = b''
         return
     
     def on_message_speech_input_data(client:mqtt.Client, userdata, message:mqtt.MQTTMessage):
         if userdata["stt_triggered"] and userdata["stream_context"]:
-            logger.debug("Speech input received")
+            #logger.debug("Speech input received")
             stream_context:stt.Stream = userdata["stream_context"]
             stream_context.feedAudioContent(np.frombuffer(message.payload, np.int16))
+            userdata["input_audio"] = userdata["input_audio"] + message.payload
         return
 
     def on_message_speech_input_complete(client:mqtt.Client, userdata, message:mqtt.MQTTMessage):
@@ -99,8 +106,13 @@ try:
             #trim trailing spaces
             text = text.strip()
             logging.info("Recognized: %s" % text)
-            if len(text) > 0:
-                client.publish(TOPIC_QUESTIONS,qos=2, payload=text)   
+            # if len(text) > 0:
+            #     if text == "go to sleep":
+            #         client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_SLEEPING")
+            #     else:
+            #         client.publish(TOPIC_QUESTIONS,qos=2, payload=text) 
+            client.publish(TOPIC_STT_OUTPUT, text)  
+            #client.publish(TOPIC_AUDIO_OUTPUT_DATA, userdata["input_audio"])
         return
 
     # Load STT model
@@ -115,20 +127,21 @@ try:
     
     #Add hotwords
     #TODO: move to external configuration
-    model.addHotWord("tomorrow", 50.0) #STT "tomorrow" often interprets as "to morrow"
+    model.addHotWord("tomorrow", 15.0) #STT "tomorrow" often interprets as "to morrow"
     model.addHotWord("weather", 15.0) #STT "weather" often interprets as "whether"
 
     client_userdata = {
         "model":model
         ,"stt_triggered":False
+        ,"input_audio":b''
     }
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME,userdata=client_userdata)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
     logger.info('MQTT Client Connected')
     mqtt_client.subscribe(TOPIC_STT_REQUEST)
     mqtt_client.message_callback_add(TOPIC_STT_REQUEST,on_message_stt_request)
-    mqtt_client.subscribe(TOPIC_SPEECH_INPUT_DATA)
-    mqtt_client.message_callback_add(TOPIC_SPEECH_INPUT_DATA,on_message_speech_input_data)
+    mqtt_client.subscribe(TOPIC_AUDIO_INPUT_DATA)
+    mqtt_client.message_callback_add(TOPIC_AUDIO_INPUT_DATA,on_message_speech_input_data)
     mqtt_client.subscribe(TOPIC_SPEECH_INPUT_COMPLETE)
     mqtt_client.message_callback_add(TOPIC_SPEECH_INPUT_COMPLETE,on_message_speech_input_complete)
     logger.info('Waiting for messages...')

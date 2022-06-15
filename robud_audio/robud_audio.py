@@ -97,7 +97,7 @@ try:
 
     audio_output_buffer = collections.deque(maxlen=300) #2048 per chunk @ 16khz 
     audio_input_buffer = collections.deque(maxlen=300)
-    speech_output_buffer = collections.deque(maxlen=6)
+    speech_output_buffer = collections.deque(maxlen=num_padding_chunks)
 
     BYTES_PER_CHUNK = CHUNK * BYTES_PER_FRAME
     def stream_callback(in_data, frame_count, time_info, status):
@@ -149,7 +149,7 @@ try:
         userdata["command"]=command
 
     def on_message_audio_output_data(client:mqtt.Client, userdata, message):
-        stream_out.write(message.payload)
+        stream_out.write(message.payload)    
         #global audio_output_buffer
         # audio = message.payload
         # bytes_per_chunk = CHUNK * BYTES_PER_FRAME

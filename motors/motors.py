@@ -1,6 +1,7 @@
 from math import e
 from time import sleep, time
 from adafruit_motorkit import MotorKit
+from adafruit_servokit import ServoKit
 from adafruit_motor import servo
 import paho.mqtt.client as mqtt
 from robud.robud_logging.MQTTHandler import MQTTHandler
@@ -11,6 +12,8 @@ from datetime import datetime
 import os
 import traceback
 import sys
+
+import board
 
 random.seed()
 
@@ -96,9 +99,10 @@ try:
 
 
 
-    kit = MotorKit(pwm_frequency = 50) #need frequency of 50hz for servo
-    pca = kit._pca
-    head_servo = servo.Servo(pca.channels[15])
+    kit = MotorKit() #need frequency of 50hz for servo
+    servokit = ServoKit(channels=16, address = 0x41)
+    head_servo = servokit.servo[15]
+    #kit = None
     motor_right = RobudMotorWapper(kit.motor1, "motor_right")
     motor_left = RobudMotorWapper(kit.motor2, "motor_left")
     #add anything that needs to be handled by mqtt callbacks to 
