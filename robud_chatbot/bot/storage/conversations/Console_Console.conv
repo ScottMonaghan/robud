@@ -545,6 +545,679 @@
             ],
             "current_sentence_no": 0,
             "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "Hello"
+                    ],
+                    "response": "Hello my name is RoBud. RoBud is a lovable, accessible, autonomous robot. RoBud wants to be your friend. Will you be RoBud's friend?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:15",
+                        "sentence": "Hello",
+                        "response": "Hello my name is RoBud. RoBud is a lovable, accessible, autonomous robot. RoBud wants to be your friend. Will you be RoBud's friend?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "WORD [HELLO]",
+                                "words": [
+                                    "Hello"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "Word",
+                                "node": "ZEROORMORE [#]",
+                                "words": [],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "*"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "That",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "Hello",
+                                    "friend",
+                                    "Scott",
+                                    "Robud",
+                                    "is",
+                                    "so",
+                                    "happy",
+                                    "to",
+                                    "meet",
+                                    "you"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "i",
+                        "am",
+                        "not",
+                        "sure"
+                    ],
+                    "response": "Robud is not sure what you mean. Will you be RoBud's friend?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:18",
+                        "sentence": "i am not sure",
+                        "response": "Robud is not sure what you mean. Will you be RoBud's friend?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "i",
+                                    "am",
+                                    "not",
+                                    "sure"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ZEROORMORE [^]",
+                                "words": [],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Word",
+                                "node": "WORD [Will]",
+                                "words": [
+                                    "Will"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [you]",
+                                "words": [
+                                    "you"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [be]",
+                                "words": [
+                                    "be"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [RoBud]",
+                                "words": [
+                                    "RoBud"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [s]",
+                                "words": [
+                                    "s"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [friend]",
+                                "words": [
+                                    "friend"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "Maybe"
+                    ],
+                    "response": "Robud is not sure what you mean. Will you be RoBud's friend?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:21",
+                        "sentence": "Maybe",
+                        "response": "Robud is not sure what you mean. Will you be RoBud's friend?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "Maybe"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ZEROORMORE [^]",
+                                "words": [],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Word",
+                                "node": "WORD [Will]",
+                                "words": [
+                                    "Will"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [you]",
+                                "words": [
+                                    "you"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [be]",
+                                "words": [
+                                    "be"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [RoBud]",
+                                "words": [
+                                    "RoBud"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [s]",
+                                "words": [
+                                    "s"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [friend]",
+                                "words": [
+                                    "friend"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "ok"
+                    ],
+                    "response": "RoBud is so glad! What's your name?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:25",
+                        "sentence": "ok",
+                        "response": "RoBud is so glad! What's your name?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "WORD [OK]",
+                                "words": [
+                                    "ok"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "Word",
+                                "node": "ZEROORMORE [#]",
+                                "words": [],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "Will",
+                                    "you",
+                                    "be",
+                                    "RoBud",
+                                    "s",
+                                    "friend"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "lkasjdfaf"
+                    ],
+                    "response": "Is Robud correct that your name is lkasjdfaf ?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:29",
+                        "sentence": "lkasjdfaf",
+                        "response": "Is Robud correct that your name is lkasjdfaf ?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "lkasjdfaf"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ZEROORMORE [#]",
+                                "words": [
+                                    "RoBud",
+                                    "is",
+                                    "so",
+                                    "glad"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [What]",
+                                "words": [
+                                    "What"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [s]",
+                                "words": [
+                                    "s"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [your]",
+                                "words": [
+                                    "your"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [name]",
+                                "words": [
+                                    "name"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "No"
+                    ],
+                    "response": "Robud is so sorry! What's your name?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:33",
+                        "sentence": "No",
+                        "response": "Robud is so sorry! What's your name?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "WORD [NO]",
+                                "words": [
+                                    "No"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "Word",
+                                "node": "ZEROORMORE [#]",
+                                "words": [],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "Is",
+                                    "Robud",
+                                    "correct",
+                                    "that",
+                                    "your",
+                                    "name",
+                                    "is",
+                                    "lkasjdfaf"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "Scott"
+                    ],
+                    "response": "Is Robud correct that your name is Scott ?",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:35",
+                        "sentence": "Scott",
+                        "response": "Is Robud correct that your name is Scott ?",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "Scott"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ZEROORMORE [#]",
+                                "words": [
+                                    "Robud",
+                                    "is",
+                                    "so",
+                                    "sorry"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [What]",
+                                "words": [
+                                    "What"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [s]",
+                                "words": [
+                                    "s"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [your]",
+                                "words": [
+                                    "your"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "WORD [name]",
+                                "words": [
+                                    "name"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "Yes"
+                    ],
+                    "response": "Hello friend Scott ! Robud is so happy to meet you!",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5,
+                    "matched_context": {
+                        "max_search_depth": 100,
+                        "max_search_timeout": 60,
+                        "total_search_start": "31/07/2022, 14:36:38",
+                        "sentence": "Yes",
+                        "response": "Hello friend Scott ! Robud is so happy to meet you!",
+                        "matched_nodes": [
+                            {
+                                "type": "Word",
+                                "node": "WORD [YES]",
+                                "words": [
+                                    "Yes"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "Word",
+                                "node": "ZEROORMORE [#]",
+                                "words": [],
+                                "multi_word": true,
+                                "wild_card": true
+                            },
+                            {
+                                "type": "Topic",
+                                "node": "WORD [GREET_AND_MEET]",
+                                "words": [
+                                    "GREET_AND_MEET"
+                                ],
+                                "multi_word": false,
+                                "wild_card": false
+                            },
+                            {
+                                "type": "That",
+                                "node": "ONEORMORE [*]",
+                                "words": [
+                                    "Is",
+                                    "Robud",
+                                    "correct",
+                                    "that",
+                                    "your",
+                                    "name",
+                                    "is",
+                                    "Scott"
+                                ],
+                                "multi_word": true,
+                                "wild_card": true
+                            }
+                        ]
+                    }
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
+        },
+        {
+            "srai": false,
+            "sentences": [
+                {
+                    "words": [
+                        "i",
+                        "am",
+                        "happy",
+                        "to",
+                        "meet",
+                        "you",
+                        "too"
+                    ],
+                    "response": "Sorry, RoBud doesn't have an answer for that!",
+                    "positivity": 0.0,
+                    "subjectivity": 0.5
+                }
+            ],
+            "current_sentence_no": 0,
+            "properties": {}
         }
     ],
     "max_histories": 100,
