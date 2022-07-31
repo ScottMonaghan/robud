@@ -1,13 +1,13 @@
 [Unit]
-Description=Robud Audio Service
-After=pulseaudio.service
+Description=Robud Speech to Text Service
+Requires=robud.robud_logging.robud_logger.service
 
 [Service]
 Environment=PYTHONPATH=/home/robud
 Type=simple
 WorkingDirectory=/home/robud/
 User=robud
-ExecStart=/usr/bin/python3 /home/robud/robud/robud_audio/robud_audio.py
+ExecStart=/usr/bin/python3 /home/robud/robud/ai/stt/robud_stt.py 
 Restart=on-failure
 
 [Install]

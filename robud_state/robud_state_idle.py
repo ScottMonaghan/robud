@@ -18,6 +18,7 @@ from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
 from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
 from robud.sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
+from robud.ai.wakeword_detection.wakeword_detection_common import TOPIC_WAKEWORD_DETECTED
 from robud.robud_state.robud_state_common import TOPIC_ROBUD_STATE, logger
 
 def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
@@ -132,6 +133,9 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         def on_message_head_angle(client, userdata, message):
             userdata["head_angle"] = int(message.payload)
 
+        def on_message_wakeword_detected(client:mqtt.Client, userdata,message):
+             client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_WAKEWORD_DETECTED")
+
         # mqtt_client.connect(MQTT_BROKER_ADDRESS)
         # mqtt_client.loop_start()
         # logger.info('MQTT Client Connected')
@@ -147,6 +151,9 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         mqtt_client.subscribe(TOPIC_HEAD_SERVO_ANGLE)
         mqtt_client.message_callback_add(TOPIC_HEAD_SERVO_ANGLE,on_message_head_angle)
         logger.info('Subcribed to ' + TOPIC_HEAD_SERVO_ANGLE)
+        mqtt_client.subscribe(TOPIC_WAKEWORD_DETECTED)
+        mqtt_client.message_callback_add(TOPIC_WAKEWORD_DETECTED,on_message_wakeword_detected)
+        logger.info('Subcribed to ' + TOPIC_WAKEWORD_DETECTED)
 
         #init face expression
         face_expression = np.zeros(shape=FACE_EXPRESSION_ARRAY_SIZE, dtype=np.int16)
@@ -182,97 +189,97 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
                 #fall asleep
                 mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_SLEEPING", retain=True)
             
-            elif tof_range > 30 and tof_range <= PERSON_DETECTION_RANGE:
-                client_userdata["object_detections"] = None
-                mqtt_client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST,payload=int(True))    
-                logger.info("object detection requested")
-                logger.info("waiting for object detection response...")
-                start_wait = monotonic()
-                while (
-                    client_userdata["object_detections"] is None
-                    and monotonic() - start_wait < 1
-                ):
-                    sleep(0.01)
-                if client_userdata["object_detections"] is None:
-                    logger.info("object detection timeout")
-                    mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_IDLE", retain=True)
-                else:
-                    logger.info("object detection response receieved")
-                    for detection in client_userdata["object_detections"]:               
-                        if (
-                            detection["ClassLabel"] == "person" 
-                            and detection["Height"] > CAMERA_HEIGHT*PERSON_DETECTION_HEIGHT
-                            and detection["Width"] > CAMERA_WIDTH*PERSON_DETECTION_WIDTH
-                            ):
-                            logging.info("PERSON DETECTED, changing to ROBUD_STATE_PERSON_INTERACTION")
-                            mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_PERSON_INTERACTION", retain=True)
-                            client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
-                        elif detection["ClassLabel"] == "dog" and detection["Height"] > CAMERA_HEIGHT*0.25:
-                            if monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT:
-                                #greet the doggie!
-                                mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello little doggie. woof woof! Good doggie!")
-                                logging.info("Greeted a dog! (Height: " + str(detection["Height"]) + ")")
-                            last_person_detection = monotonic()
+            # elif tof_range > 30 and tof_range <= PERSON_DETECTION_RANGE:
+            #     client_userdata["object_detections"] = None
+            #     mqtt_client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST,payload=int(True))    
+            #     logger.info("object detection requested")
+            #     logger.info("waiting for object detection response...")
+            #     start_wait = monotonic()
+            #     while (
+            #         client_userdata["object_detections"] is None
+            #         and monotonic() - start_wait < 1
+            #     ):
+            #         sleep(0.01)
+            #     if client_userdata["object_detections"] is None:
+            #         logger.info("object detection timeout")
+            #         mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_IDLE", retain=True)
+            #     else:
+            #         logger.info("object detection response receieved")
+            #         for detection in client_userdata["object_detections"]:               
+            #             if (
+            #                 detection["ClassLabel"] == "person" 
+            #                 and detection["Height"] > CAMERA_HEIGHT*PERSON_DETECTION_HEIGHT
+            #                 and detection["Width"] > CAMERA_WIDTH*PERSON_DETECTION_WIDTH
+            #                 ):
+            #                 logging.info("PERSON DETECTED, changing to ROBUD_STATE_PERSON_INTERACTION")
+            #                 mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_PERSON_INTERACTION", retain=True)
+            #                 client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
+            #             elif detection["ClassLabel"] == "dog" and detection["Height"] > CAMERA_HEIGHT*0.25:
+            #                 if monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT:
+            #                     #greet the doggie!
+            #                     mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello little doggie. woof woof! Good doggie!")
+            #                     logging.info("Greeted a dog! (Height: " + str(detection["Height"]) + ")")
+            #                 last_person_detection = monotonic()
                 
-            else:
-                new_head_angle = head_angle
-                #randomize position
-                chance = random.random()
-                if chance <= (1/(rate*AVG_GAZE_CHANGE)):
-                    #print('change gaze')
-                    #choose random updown
-                    gaze_vertical = position_center
-                    new_head_angle = angle_center
-                    chance = random.randint(1,3)
-                    if chance == 1:
-                        gaze_vertical = position_up
-                        new_head_angle = random.randint(100,150)
-                    elif chance == 2:
-                        gaze_vertical = position_down
-                        new_head_angle = random.randint(60,80)
+            # else:
+            new_head_angle = head_angle
+            #randomize position
+            chance = random.random()
+            if chance <= (1/(rate*AVG_GAZE_CHANGE)):
+                #print('change gaze')
+                #choose random updown
+                gaze_vertical = position_center
+                new_head_angle = angle_center
+                chance = random.randint(1,3)
+                if chance == 1:
+                    gaze_vertical = position_up
+                    new_head_angle = random.randint(100,150)
+                elif chance == 2:
+                    gaze_vertical = position_down
+                    new_head_angle = random.randint(60,80)
 
-                    gaze_horizontal = position_center
-                    chance = random.randint(1,3)
-                    if chance == 1:
-                        gaze_horizontal = position_left
-                    elif chance ==2:
-                        gaze_horizontal = position_right
+                gaze_horizontal = position_center
+                chance = random.randint(1,3)
+                if chance == 1:
+                    gaze_horizontal = position_left
+                elif chance ==2:
+                    gaze_horizontal = position_right
 
-                    selected_position = (gaze_horizontal,gaze_vertical)
+                selected_position = (gaze_horizontal,gaze_vertical)
 
-                chance = random.random()
-                if chance <= (1/(rate*AVG_EXPRESSION_CHANGE)):
-                    #print('change expression')
-                    chance = random.randint(1,4)
-                    left_expression = Expressions[ExpressionId.OPEN]
-                    right_expression = Expressions[ExpressionId.OPEN]
+            chance = random.random()
+            if chance <= (1/(rate*AVG_EXPRESSION_CHANGE)):
+                #print('change expression')
+                chance = random.randint(1,4)
+                left_expression = Expressions[ExpressionId.OPEN]
+                right_expression = Expressions[ExpressionId.OPEN]
+                if chance == 1:
+                    left_expression = Expressions[ExpressionId.HAPPY]
+                    right_expression = Expressions[ExpressionId.HAPPY]
+                if chance == 2:
+                    left_expression = Expressions[ExpressionId.BORED]
+                    right_expression = Expressions[ExpressionId.BORED]
+                if chance == 3:
+                    chace = random.randint(1,2)
                     if chance == 1:
-                        left_expression = Expressions[ExpressionId.HAPPY]
-                        right_expression = Expressions[ExpressionId.HAPPY]
-                    if chance == 2:
-                        left_expression = Expressions[ExpressionId.BORED]
-                        right_expression = Expressions[ExpressionId.BORED]
-                    if chance == 3:
-                        chace = random.randint(1,2)
-                        if chance == 1:
-                            left_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
-                            right_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
-                        else:
-                            left_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
-                            right_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
-                    change_expression = True
-                face_expression, change_expression, new_head_angle = move_eyes(
-                        face_expression = face_expression,
-                        left_expression = left_expression,
-                        right_expression = right_expression,
-                        selected_position = selected_position,
-                        change_expression = change_expression,
-                        mqtt_client = mqtt_client,
-                        head_angle = head_angle,
-                        new_head_angle=new_head_angle,
-                        duration=duration,
-                        head_duration=head_duration
-                        )
+                        left_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
+                        right_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
+                    else:
+                        left_expression = Expressions[ExpressionId.SKEPTICAL_RIGHT]
+                        right_expression = Expressions[ExpressionId.SKEPTICAL_LEFT]
+                change_expression = True
+            face_expression, change_expression, new_head_angle = move_eyes(
+                    face_expression = face_expression,
+                    left_expression = left_expression,
+                    right_expression = right_expression,
+                    selected_position = selected_position,
+                    change_expression = change_expression,
+                    mqtt_client = mqtt_client,
+                    head_angle = head_angle,
+                    new_head_angle=new_head_angle,
+                    duration=duration,
+                    head_duration=head_duration
+                    )
             loop_time = monotonic() - loop_start
             if loop_time < 1/rate:
                 sleep(1/rate - loop_time)
@@ -288,6 +295,8 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         logger.info("Unsubscribed from " + TOPIC_SENSORS_LIGHT_LEVEL)
         mqtt_client.unsubscribe(TOPIC_HEAD_SERVO_ANGLE)
         logger.info("Unsubscribed from " + TOPIC_HEAD_SERVO_ANGLE)
+        mqtt_client.unsubscribe(TOPIC_WAKEWORD_DETECTED)
+        logger.info('Unsubscribed from' + TOPIC_WAKEWORD_DETECTED)
         logger.info("Exiting ROBUD_STATE_IDLE")
     except Exception as e:
         logger.critical(str(e) + "\n" + traceback.format_exc())              

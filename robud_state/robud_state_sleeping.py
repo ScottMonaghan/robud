@@ -24,11 +24,11 @@ from robud.robud_face.robud_face_common import *
 def robud_state_sleeping(mqtt_client:mqtt.Client, client_userdata:Dict):
     try:
         logger.info("Starting ROBUD_STATE_SLEEPING")
-        def on_message_light_level(client, userdata, message):
-            userdata["light_level"] = int(message.payload)
-        mqtt_client.subscribe(TOPIC_SENSORS_LIGHT_LEVEL)
-        mqtt_client.message_callback_add(TOPIC_SENSORS_LIGHT_LEVEL,on_message_light_level)
-        logger.info('Subcribed to ' + TOPIC_SENSORS_LIGHT_LEVEL)
+        # def on_message_light_level(client, userdata, message):
+        #     userdata["light_level"] = int(message.payload)
+        # mqtt_client.subscribe(TOPIC_SENSORS_LIGHT_LEVEL)
+        # mqtt_client.message_callback_add(TOPIC_SENSORS_LIGHT_LEVEL,on_message_light_level)
+        # logger.info('Subcribed to ' + TOPIC_SENSORS_LIGHT_LEVEL)
 
         def on_message_head_angle(client, userdata, message):
             userdata["head_angle"] = int(message.payload)

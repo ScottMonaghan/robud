@@ -1,0 +1,15 @@
+[Unit]
+Description=Robud Light Level Service
+After=graphical.target
+Requires=robud.robud_logging.robud_logger.service
+
+[Service]
+Environment=PYTHONPATH=/home/robud
+Type=simple
+WorkingDirectory=/home/robud/
+User=robud
+ExecStart=/usr/bin/python3 /home/robud/robud/sensors/light_level.py 
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target
