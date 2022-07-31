@@ -9,12 +9,12 @@ HEAD_SERVO_MAX_ANGLE = 170
 HEAD_SERVO_MIN_ANGLE = 60
 SCREENHEIGHT = 320
 SCREENWIDTH = 640
-MOTOR_SPEED_BASE = 0.4
-MOTOR_SPEED_ACCELERATED = 0.6
+MOTOR_SPEED_BASE = 1
+MOTOR_SPEED_ACCELERATED = 0.8
 MOTOR_SPEED_MIN = 0.2
 HEAD_ANGLE_CHANGE = 2
 HEAD_ANGLE_MAX = 180
-HEAD_ANGLE_MIN = 60
+HEAD_ANGLE_MIN = 10
 MAX_VEERAGE = 10
 MQTT_BROKER_ADDRESS = "robud.local"
 MQTT_CLIENT_NAME = "robud_utils_keyboard_controller.py"
@@ -22,22 +22,22 @@ TOPIC_MOTOR_LEFT_THROTTLE = 'robud/motors/motor_left/throttle'
 TOPIC_MOTOR_RIGHT_THROTTLE = 'robud/motors/motor_right/throttle'
 TOPIC_HEAD_SERVO_ANGLE = 'robud/motors/head_servo/angle'
 TOPIC_ORIENTATION_HEADING = 'robud/sensors/orientation/heading'
-TOPIC_ODOMETRY_LEFT_TICKS = "robud/sensors/odometry/left/ticks"
-TOPIC_ODOMETRY_LEFT_TICKSPEED = "robud/sensors/odometry/left/tickspeed"
-TOPIC_ODOMETRY_RIGHT_TICKS = "robud/sensors/odometry/right/ticks"
-TOPIC_ODOMETRY_RIGHT_TICKSPEED = "robud/sensors/odometry/right/tickspeed"
+#TOPIC_ODOMETRY_LEFT_TICKS = "robud/sensors/odometry/left/ticks"
+#TOPIC_ODOMETRY_LEFT_TICKSPEED = "robud/sensors/odometry/left/tickspeed"
+#TOPIC_ODOMETRY_RIGHT_TICKS = "robud/sensors/odometry/right/ticks"
+#TOPIC_ODOMETRY_RIGHT_TICKSPEED = "robud/sensors/odometry/right/tickspeed"
 
 def on_heading_message(client, userdata, message):
         if message.topic == TOPIC_ORIENTATION_HEADING:
             userdata["heading"] = int(float(message.payload))
-        elif message.topic == TOPIC_ODOMETRY_LEFT_TICKSPEED:
-            userdata["left_tickspeed"] = float(message.payload)
-        elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKSPEED:
-            userdata["right_tickspeed"] = float(message.payload)
-        elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKS:
-            userdata["right_ticks"] = int(message.payload)
-        elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKS:
-            userdata["left_ticks"] = int(message.payload)
+        # elif message.topic == TOPIC_ODOMETRY_LEFT_TICKSPEED:
+        #     userdata["left_tickspeed"] = float(message.payload)
+        # elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKSPEED:
+        #     userdata["right_tickspeed"] = float(message.payload)
+        # elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKS:
+        #     userdata["right_ticks"] = int(message.payload)
+        # elif message.topic == TOPIC_ODOMETRY_RIGHT_TICKS:
+        #     userdata["left_ticks"] = int(message.payload)
 
 
 if __name__ == '__main__':
@@ -52,39 +52,39 @@ if __name__ == '__main__':
         left_speed = MOTOR_SPEED_BASE
         right_speed = MOTOR_SPEED_BASE
         current_heading = int(client_userdata["heading"])
-        right_tickspeed = float(client_userdata["left_tickspeed"])
-        left_tickspeed = float(client_userdata["right_tickspeed"])
-        if stopped:
-            target_heading = current_heading
-        # elif left_tickspeed != right_tickspeed:
-        #     veerage = abs(left_tickspeed - right_tickspeed)
-        #     max_speed_change = MOTOR_SPEED_BASE - MOTOR_SPEED_MIN
+        #right_tickspeed = float(client_userdata["left_tickspeed"])
+        #left_tickspeed = float(client_userdata["right_tickspeed"])
+        # if stopped:
+        #     target_heading = current_heading
+        # # elif left_tickspeed != right_tickspeed:
+        # #     veerage = abs(left_tickspeed - right_tickspeed)
+        # #     max_speed_change = MOTOR_SPEED_BASE - MOTOR_SPEED_MIN
+        # #     if veerage > MAX_VEERAGE:
+        # #         veerage_pct = 1
+        # #     else:
+        # #         veerage_pct = veerage/MAX_VEERAGE
+        # #     if left_tickspeed > right_tickspeed:
+        # #         left_speed = MOTOR_SPEED_BASE - (max_speed_change * veerage_pct)
+        # #     elif right_tickspeed > left_tickspeed:
+        # #         right_speed = MOTOR_SPEED_BASE - (max_speed_change * veerage_pct)
+        # elif current_heading != target_heading: 
+        #     #veering to the right, add more power to right wheel
+        #     veerage = abs(target_heading-current_heading)
+        #     max_speed_change = MOTOR_SPEED_ACCELERATED - MOTOR_SPEED_BASE
+        #     if veerage > 180: # e.g. 355 & 5
+        #         veerage = abs(360-veerage)
+        #         current_heading *= -1
+        #         target_heading *= -1
         #     if veerage > MAX_VEERAGE:
         #         veerage_pct = 1
         #     else:
         #         veerage_pct = veerage/MAX_VEERAGE
-        #     if left_tickspeed > right_tickspeed:
-        #         left_speed = MOTOR_SPEED_BASE - (max_speed_change * veerage_pct)
-        #     elif right_tickspeed > left_tickspeed:
-        #         right_speed = MOTOR_SPEED_BASE - (max_speed_change * veerage_pct)
-        elif current_heading != target_heading: 
-            #veering to the right, add more power to right wheel
-            veerage = abs(target_heading-current_heading)
-            max_speed_change = MOTOR_SPEED_ACCELERATED - MOTOR_SPEED_BASE
-            if veerage > 180: # e.g. 355 & 5
-                veerage = abs(360-veerage)
-                current_heading *= -1
-                target_heading *= -1
-            if veerage > MAX_VEERAGE:
-                veerage_pct = 1
-            else:
-                veerage_pct = veerage/MAX_VEERAGE
 
-            if current_heading > target_heading:              
-                right_speed = MOTOR_SPEED_BASE + (max_speed_change * veerage_pct)
-            elif current_heading < target_heading:
-                #veering to the left, add more power to left wheel
-                left_speed = MOTOR_SPEED_BASE + (max_speed_change * veerage_pct)
+        #     if current_heading > target_heading:              
+        #         right_speed = MOTOR_SPEED_BASE + (max_speed_change * veerage_pct)
+        #     elif current_heading < target_heading:
+        #         #veering to the left, add more power to left wheel
+        #         left_speed = MOTOR_SPEED_BASE + (max_speed_change * veerage_pct)
         print("move forward: target_heading:{}".format(target_heading))
         stopped = False
         mqtt_client.publish(TOPIC_MOTOR_LEFT_THROTTLE, left_speed)
@@ -159,8 +159,8 @@ if __name__ == '__main__':
                 left_expression=left_expression,
                 right_expression=right_expression,
                 position=selected_position,
-                duration=EXPRESSION_CHANGE_DURATION,
-                head_servo_angle=None
+                duration=EXPRESSION_CHANGE_DURATION
+                #head_servo_angle=None
             )
             #add the keyframe to a list
             keyframes = [keyframe]
@@ -179,8 +179,8 @@ if __name__ == '__main__':
     head_angle = 75
     mqtt_client.publish(TOPIC_HEAD_SERVO_ANGLE, head_angle)
     mqtt_client.subscribe(TOPIC_ORIENTATION_HEADING)
-    mqtt_client.subscribe(TOPIC_ODOMETRY_LEFT_TICKSPEED)
-    mqtt_client.subscribe(TOPIC_ODOMETRY_RIGHT_TICKSPEED)
+    #mqtt_client.subscribe(TOPIC_ODOMETRY_LEFT_TICKSPEED)
+    #mqtt_client.subscribe(TOPIC_ODOMETRY_RIGHT_TICKSPEED)
     mqtt_client.on_message=on_heading_message
     
     #init face expression

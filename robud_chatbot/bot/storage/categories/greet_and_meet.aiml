@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+    <category>
+        <pattern>WHO AM I</pattern>
+        <template>
+            <condition> 
+                <li name="name" value="unknown">
+                    RoBud does not know. What's your name?
+                    <think><set name="topic">GREET_AND_MEET</set></think>
+                </li>
+                <li name="name" value="">
+                    RoBud does not know. What's your name?
+                    <think><set name="topic">GREET_AND_MEET</set></think>
+                </li>
+                <li>You are <get name="name"/>, right?</li>
+            </condition>
+       </template>
+    </category>
+    <category>
+        <pattern>WHAT IS MY NAME</pattern>
+        <template>
+            <srai>WHO AM I</srai>
+       </template>
+    </category>
+    <category>
+        <pattern>DO YOU KNOW MY NAME</pattern>
+        <template>
+            <srai>WHO AM I</srai>
+       </template>
+    </category>
+    <category>
+        <pattern>DO YOU KNOW WHO I AM</pattern>
+        <template>
+            <srai>WHO AM I</srai>
+       </template>
+    </category>
+    <category>
+        <pattern>DO YOU RECOGNIZE ME</pattern>
+        <template>
+            <srai>WHO AM I</srai>
+       </template>
+    </category>
+
+    <category>
+        <pattern>HELLO #</pattern>
+        <template>
+            <srai>SRAI INITIAL GREETING <star/></srai>
+       </template>
+    </category>
+    
+    <category>
+        <pattern>HI #</pattern>
+        <template>
+            <srai>SRAI INITIAL GREETING <star/></srai>
+       </template>
+    </category>
+    
+    <category>
+        <pattern>HEY #</pattern>
+        <template>
+            <srai>SRAI INITIAL GREETING <star/></srai>
+       </template>
+    </category>
+    
+    <category>
+        <pattern>WHAT IS UP #</pattern>
+        <template>
+            <srai>SRAI INITIAL GREETING <star/></srai>
+       </template>
+    </category>
+
+    <category>
+        <pattern>SRAI INITIAL GREETING #</pattern>
+        <template>
+            Hello my name is RoBud. RoBud is a lovable, accessible, autonomous robot. RoBud wants to be your friend.
+            Will you be RoBud's friend?
+           <think><set name="topic">GREET_AND_MEET</set></think>
+       </template>
+    </category>
+
+    <category>
+        <pattern># $HOW ARE YOU #</pattern>
+        <template>
+            Robud is well, thank you. RoBud is a lovable, accessible, autonomous robot. RoBud wants to be your friend.
+            Will you be RoBud's friend?
+           <think><set name="topic">GREET_AND_MEET</set></think>
+       </template>
+    </category>
+
+    <topic name="GREET_AND_MEET">    
+        <category>
+            <pattern>AFFIRM</pattern>
+            <that>^ Will you be RoBud s friend</that>
+            <template>
+                RoBud is so glad!
+                What's your name?
+            </template>
+        </category>
+        <category>
+            <pattern>DENY</pattern>
+            <that>^ Will you be RoBud s friend</that>
+            <template>
+                Oh. Okay. Robud is sad.
+                Good bye.
+            </template>
+        </category>
+        <category>
+            <pattern>*</pattern>
+            <that>^ Will you be RoBud s friend</that>
+            <template>
+                Robud is not sure what you mean. 
+                Will you be RoBud's friend?
+            </template>
+        </category>
+        <category>
+            <pattern>My name is *</pattern>
+            <template>
+                <srai>SHARE NAME <star/></srai>
+            </template>
+        </category>
+        <category>
+            <that># What s your name</that>
+            <pattern>*</pattern>
+            <template>
+                <srai>SHARE NAME <star/></srai>
+            </template>
+        </category>
+        <category>
+            <that># What s your name</that>
+            <pattern>I AM *</pattern>
+            <template>
+                <srai>SHARE NAME <star/></srai>
+            </template>
+        </category>
+        <category>
+            <pattern>SHARE NAME *</pattern>
+            <template>
+                Is Robud correct that your name is <set name = "name"><star/></set>?
+            </template>
+        </category>
+        <category>
+            <pattern>AFFIRM</pattern>
+            <that>Is Robud correct that your name is *</that>
+            <template>
+                Hello friend <get name="name"/>! Robud is so happy to meet you!
+                <think><set name="topic"></set></think>
+            </template>
+        </category>
+            <category>
+            <pattern>DENY</pattern>
+            <that>Is Robud correct that your name is *</that>
+            <template>
+                <random>
+                    <li>Robud is so sorry!</li> 
+                    <li>Robud's mistake!</li> 
+                    <li>Oops!</li> 
+                    <li>Please forgive Robud!</li> 
+                    <li>Yikes! Let's try again!</li> 
+                </random>
+                What's your name?
+            </template>
+        </category>
+        <category>
+            <pattern>*</pattern>
+            <that>Is Robud correct that your name is *</that>
+            <template>
+                <random>
+                    <li>Robud is not sure what you mean.</li>
+                    <li>Robud didn't quite get that.</li>
+                    <li>Sorry, Robud is confused.</li>
+                    <li>Robud didn't understand.</li>
+                </random>
+                Is Robud correct that your name is <get name="name"/>?
+            </template>
+        </category>
+        
+        <!-- AFFIRM / DENY -->
+        <category>
+            <pattern>YES #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>SURE #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>YA #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>YEP #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>YUP #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>OKAY #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>OK #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>OF COURSE #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>I WILL #</pattern>
+            <template>
+                <srai>AFFIRM</srai>
+        </template>
+        </category>
+
+        <category>
+            <pattern>NO #</pattern>
+            <template>
+                <srai>DENY</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>NOPE #</pattern>
+            <template>
+                <srai>DENY</srai>
+        </template>
+        </category>
+        <category>
+            <pattern>I WILL $NOT #</pattern>
+            <template>
+                <srai>DENY</srai>
+        </template>
+        </category>
+    </topic>
+</aiml>
