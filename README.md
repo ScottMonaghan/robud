@@ -63,7 +63,6 @@ Last updated 17-August 2022
  * O. bearing https://www.amazon.com/gp/product/B07S1B3MS6  
  * Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5  
  * R. 7in display https://www.adafruit.com/product/1934  
- * S. 250mm 40pin display ribbon cable https://www.amazon.com/gp/product/B00N426GJA  
  * T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
  * U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
  * V. servo horn (included with servo(Q))
@@ -99,11 +98,13 @@ Last updated 17-August 2022
      * x4 A. horizontal braces [stl](./data/stl/robud-horizontal-brace.stl)
      * x3 B. 3-hole fastener  [stl](./data/stl/robud-3-hole-fastener.stl)
      * x2 H. 1-hole 2mm screw fastener [stl](./data/stl/robud-1-hole-fastener.stl)
+     * x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
      * x4 K. display fastener [stl](./data/stl/robud-display-fastener.stl)
      * x1 L. servo adapter [stl](./data/stl/robud-servo-adapter.stl)
      * x2 M. head barrel wall [stl](./data/stl/robud-head-barrel-wall.stl)
      * x1 N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
      * x2 U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
+     
    
    * Adafruit (recommend sourcing from DigiKey for best US price/shipping)
      * x1 E. BNO055 orientation sensor https://www.adafruit.com/product/4646, https://www.digikey.com/en/products/detail/adafruit-industries-llc/4646/12609996 (often out of stock due to chip shortage. Check DigiKey, Adafruit, Mouser & Amazon)
