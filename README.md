@@ -62,8 +62,8 @@ Last updated 17-August 2022
  * N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
  * O. bearing https://www.amazon.com/gp/product/B07S1B3MS6  
  * Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5  
- * R. 5in display https://www.adafruit.com/product/1678, https://www.digikey.com/en/products/detail/adafruit-industries-llc/1678/10670051
- * S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
+ * R. ~~5in display https://www.adafruit.com/product/1678, https://www.digikey.com/en/products/detail/adafruit-industries-llc/1678/10670051
+ * S. ~~40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
  * T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
  * U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
  * V. servo horn (included with servo(Q))
@@ -86,6 +86,9 @@ Last updated 17-August 2022
  * RR. 22AWG Silicone Hook Up Wire (stranded) https://www.amazon.com/gp/product/B07T4SYVYG/ (or equivalent, you want not-too-stiff wire than can handle 4 amps)
  * SS. STEMMA QT / Qwiic JST SH 4-Pin Cable - 400mm long https://www.adafruit.com/product/5385, https://www.digikey.com/en/products/detail/adafruit-industries-llc/5385/16546436
  * TT. Heat Shrink Tubing https://www.amazon.com/gp/product/B01MFA3OFA (can be subbed with electrical tape, or equivalent)
+ * UU. 5.0" 40-pin 800x480 TFT Display without Touchscreen https://www.adafruit.com/product/1680
+ * VV. TFP401 HDMI/DVI Decoder to 40-Pin TTL Breakout - Without Touch https://www.adafruit.com/product/2218
+ * WW. 40-pin FPC Extension Board + 200mm Cable https://www.adafruit.com/product/2098
  
 
 [Return to Table of Contents](#table-of-contents)
@@ -111,7 +114,7 @@ Last updated 17-August 2022
      * x1 G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317, https://www.digikey.com/en/products/detail/adafruit-industries-llc/3317/6569762
      * x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648, https://www.digikey.com/en/products/detail/adafruit-industries-llc/1648/7035020
      * x1 J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210, https://www.digikey.com/en/products/detail/adafruit-industries-llc/4210/10230021
-     * x1 R. 5in display https://www.adafruit.com/product/1678
+     * ~~x1 R. 5in display https://www.adafruit.com/product/1678
      * x1 T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
 
    * Amazon
@@ -120,11 +123,14 @@ Last updated 17-August 2022
      * x1 F. SainSmart IMX219 Camera Module https://www.amazon.com/gp/product/B07VFFRX4C  
      * x1 O. bearing https://www.amazon.com/gp/product/B07S1B3MS6 
      * x1 Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5
-     * x1 S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
+     * x1 ~~S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
      * x1 V. servo horn (packaged with Q MG90S 9G micro servo)
      * x1 W. server screw (packaged with Q MG90S 9G micro servo)
      * x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
      * x1 MM. PCA9685 16 Channel 12 Bit PWM Servo Driver https://www.amazon.com/gp/product/B07RMTN4NZ
+     * x1 UU. 5.0" 40-pin 800x480 TFT Display without Touchscreen https://www.adafruit.com/product/1680
+     * x1 VV. TFP401 HDMI/DVI Decoder to 40-Pin TTL Breakout - Without Touch https://www.adafruit.com/product/2218
+     * x1 WW. 40-pin FPC Extension Board + 200mm Cable https://www.adafruit.com/product/2098
    
 ### 1. Attach two horizontal braces(A) with 3-hole fastener(B) & attach BNO-055  orientation sensor(E)  
 
