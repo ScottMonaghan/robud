@@ -50,7 +50,7 @@ Last updated 17-August 2022
  * B. 3-hole fastener [stl](./data/stl/robud-3-hole-fastener.stl)
  * C. 2x8mm round-head self-tapping screws https://www.amazon.com/gp/product/B07NT5288W  
  * D. 2x8mm pan-head-with-washer self-tapping screws https://www.amazon.com/gp/product/B07NTGRFBF  
- * E. BNO055 orientation sensor https://www.adafruit.com/product/4646  
+ * E. BNO055 orientation sensor https://www.adafruit.com/product/4646, https://www.digikey.com/en/products/detail/adafruit-industries-llc/4646/12609996
  * F. SainSmart IMX219 Camera Module https://www.amazon.com/gp/product/B07VFFRX4C  
  * G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317  
  * H. 1-hole 2mm screw fastener [stl](./data/stl/robud-1-hole-fastener.stl)
@@ -79,7 +79,7 @@ Last updated 17-August 2022
  * KK. Rocker toggle switch (comes with chassis kit)
  * LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
  * MM. PCA9685 16 Channel 12 Bit PWM Servo Driver https://www.amazon.com/gp/product/B07RMTN4NZ
-
+ * NN. Baseus Power Bank, 65W 20000mAh Laptop Portable Charger https://www.amazon.com/gp/product/B08THCNNCS
  
 
 [Return to Table of Contents](#table-of-contents)
@@ -100,7 +100,7 @@ Last updated 17-August 2022
      * x2 U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
    
    * Adafruit (recommend sourcing from DigiKey for best US price/shipping)
-     * x1 E. BNO055 orientation sensor https://www.adafruit.com/product/4646 (often out of stock due to chip shortage. Check DigiKey, Adafruit, Mouser & Amazon)
+     * x1 E. BNO055 orientation sensor https://www.adafruit.com/product/4646, https://www.digikey.com/en/products/detail/adafruit-industries-llc/4646/12609996 (often out of stock due to chip shortage. Check DigiKey, Adafruit, Mouser & Amazon)
      * x1 G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317 
      * x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
      * x1 J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210
