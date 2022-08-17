@@ -85,6 +85,7 @@ Last updated 17-August 2022
  * QQ. M2.5 brass stand-off kit https://www.amazon.com/gp/product/B075K3QBMX/ (or equivalent)
  * RR. 22AWG Silicone Hook Up Wire (stranded) https://www.amazon.com/gp/product/B07T4SYVYG/ (or equivalent, you want not-too-stiff wire than can handle 4 amps)
  * SS. STEMMA QT / Qwiic JST SH 4-Pin Cable - 400mm long https://www.adafruit.com/product/5385, https://www.digikey.com/en/products/detail/adafruit-industries-llc/5385/16546436
+ * TT. Heat Shrink Tubing https://www.amazon.com/gp/product/B01MFA3OFA (can be subbed with electrical tape, or equivalent)
  
 
 [Return to Table of Contents](#table-of-contents)
