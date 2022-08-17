@@ -7,8 +7,6 @@
  * [Pre-Alpha Build Instructions](#pre-alpha-build-instructions)
    * [Parts Reference](#parts-reference)
    * [Head Assembly](#head-assembly)
-   * [Base Assemply](#base-assembly)
-      * [Soldering](#1-soldering)
  * [Original Project Announcement Videos](#original-project-announcement-videos)
    * [Part 1](#part-1)
    * [Part 2](#part-2)
@@ -41,11 +39,7 @@ Last updated 3-October 2021
  * [x] Add 3d-printable models
  * [ ] Jetson Wifi Module Install
  * [ ] SD Card Flashing
- * [x] Head Assembly
- * [ ] Base Assembly
-    * [x] Soldering
-    * [ ] Assembly
-    * [ ] Wiring    
+ * [x] Head Assembly  
  * [ ] Remote VM setup
  * [ ] Remote Operation Instructions
 
@@ -67,7 +61,6 @@ Last updated 3-October 2021
  * M. head barrel wall [stl](./data/stl/robud-head-barrel-wall.stl)
  * N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
  * O. bearing https://www.amazon.com/gp/product/B07S1B3MS6  
- * P. balance weights https://www.amazon.com/gp/product/B00ZMD8SDG  
  * Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5  
  * R. 7in display https://www.adafruit.com/product/1934  
  * S. 250mm 40pin display ribbon cable https://www.amazon.com/gp/product/B00N426GJA  
@@ -75,9 +68,6 @@ Last updated 3-October 2021
  * U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
  * V. servo horn (included with servo(Q))
  * W. servo screw (included with servo(Q))
- * AA1. solid-core 22AWG wire - Black https://www.adafruit.com/product/290
- * AA2. solid-core 22AWG wire - Red https://www.adafruit.com/product/288
- * BB. DC "TT" motors (come with chassis kit)
  * CC. SparkFun Qwiic SHIM for Raspberry Pi https://www.sparkfun.com/products/15794
  * DD. Stacking Header for Pi A+/B+/Pi 2/Pi 3 - 2x20 Extra Tall Header https://www.adafruit.com/product/1979
  * EE. Adafruit DC & Stepper Motor Bonnet for Raspberry Pi https://www.adafruit.com/product/4280
@@ -87,6 +77,13 @@ Last updated 3-October 2021
  * II. Heat shrink tubing https://www.adafruit.com/product/1649
  * JJ. 3.5mm (1/8") Stereo Audio Plug Terminal Block https://www.adafruit.com/product/2790
  * KK. Rocker toggle switch (comes with chassis kit)
+ * LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
+ * x1 U. head L bracket
+ * x1 U. head L bracket
+ * x1 V. servo horn
+ * x1 D. 2x8mm pan-head-with-washer self-tapping screw
+ * x1 W. server screw
+ 
 
 [Return to Table of Contents](#table-of-contents)
  
@@ -94,6 +91,47 @@ Last updated 3-October 2021
 <img src="./data/images/build-instructions/IMG_3664.jpg" alt="Head Assembly Step 1" width=600 />
 <img src="./data/images/build-instructions/IMG_3666.jpg" alt="Head Assembly Step 1" width=600 />
 
+**Full list of Head Assembly Parts**
+   * x2 A. horizontal braces  
+   * x1 B. 3-hole fastener  
+   * x3 C. 2x8mm round-head self-tapping screws  
+   * x4 D. 2x8mm pan-head-with-washer self-tapping screws  
+   * x1 E. BNO055 orientation sensor  
+   * x1 F. SainSmart IMX219 Camera Module
+   * x2 C. 2x8mm round-head self-tapping screws
+   * x2 H. 1-hole 2mm screw fastener  
+   * x2 C. 2x8mm round-head self-tapping screws  
+   * x1 G. VL53L0X time-of-flight distance sensor
+   * x1 I. 300mm 15-pin camera ribbon cable
+   * x1 J. 100mm Stemma QT JST SH 4-pin cable
+   * x1 M. head barrel wall
+   * x1 L. servo adapter
+   * x2 K. display fastener
+   * x4 D. 2x8mm pan-head-with-washer self-tapping screws
+   * x1 Q. MG90S 9G micro servo  
+   * x2 M. left barrel wall(M) from step 5
+   * x1 Q. MG90S 9G micro servo
+   * x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
+   * x1 N. head shaft adapter 
+   * x1 O. bearing
+   * x1 M. head barrel wall
+   * x2 K. display fastener
+   * x2 A. horizontal braces  
+   * x2 B. 3-hole fasteners  
+   * x1 Left barrel wall with servo (from step 7)  
+   * x1 Lower horizontal head brace (from step 11)  
+   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
+   * x1 Left barrel wall with servo (from step 12)  
+   * x1 Top horizontal head brace with camera (from step 1)  
+   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
+   * x1 R. 7in display  
+   * x1 S. 250mm 40pin display ribbon cable
+   * x1 right barrel wall(M) with bearing and shaft (from step 10)
+   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
+   * x1 T. mono enclosed speaker - 3W 4 ohm
+   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
+   
+   
 ### 1. Attach two horizontal braces(A) with 3-hole fastener(B) & attach BNO-055  orientation sensor(E)  
 
 **Parts:**  
@@ -101,7 +139,8 @@ Last updated 3-October 2021
    * x1 B. 3-hole fastener  
    * x3 C. 2x8mm round-head self-tapping screws  
    * x4 D. 2x8mm pan-head-with-washer self-tapping screws  
-   * x1 E. BNO055 orientation sensor  
+   * x1 E. BNO055 orientation sensor
+   
 
 >_**Notes:**_ 
 >   * _Make sure Y axis of BNO055(E) points toward picture as shown in image_
@@ -196,7 +235,6 @@ Last updated 3-October 2021
 **Parts:**  
  * x1 M. head barrel wall
  * x2 K. display fastener
- * x2 P. balance weights
 
 >_**Notes:**_
 >  * _Make sure fasteners and raised center lip are on opposite sides_
@@ -322,94 +360,6 @@ Last updated 3-October 2021
 
 [Return to Table of Contents](#table-of-contents)
 
-## Base Assembly
-<img src="./data/images/build-instructions/IMG_4109.jpg" alt="completed base - front view" width=600 />
-<img src="./data/images/build-instructions/IMG_4108.jpg" alt="completed base - left view" width=600 />
-<img src="./data/images/build-instructions/IMG_4110.jpg" alt="completed base - right view" width=600 />
-
-[Return to Table of Contents](#table-of-contents)
-
-### 1. Soldering  
->_**Notes:**_ 
->   * _I tried to keep soldering to a minumum, but there are some items that need to be soldered._
-
-#### 1.A. Solder 40 cm of red(AA1) & black(AA2) solid-core wire to DC motors(BB) as shown below.
-
-**Parts:**  
-   * x2 AA1. solid-core 22AWG wire - Black (40cm)
-   * x2 AA2. solid-core 22AWG wire - Red (40cm)
-   * x2 BB. DC "TT" motors
- 
->_**Notes:**_ 
->   * _It is helpful to lable the left & right motors(BB)_
->   * _Be sure to keep wires(AA) on outside of motors(BB)_
->   * _Red wire(AA) on top on left motor(BB)_
->   * _Black wire(AA) on top on right motor(BB)_
-
-     
-<img src="./data/images/build-instructions/IMG_3691.jpg" alt="solder motors" width=600 />
-
----
-#### 1.B. Solder SparkFun Qwiic SHIM(BB) to 2x20 Extra Tall Header(CC) as shown below.
-
-**Parts:**  
-   * x1 CC. SparkFun Qwiic SHIM for Raspberry Pi
-   * x1 DD. Stacking Header for Pi A+/B+/Pi 2/Pi 3 - 2x20 Extra Tall Header 
- 
->_**Notes:**_ 
->   * _The Qwicc SHIM is designed to NOT have to be soldered, but I've found that it is necessary to keep good i2c connection as Ro-Bud moves around._
-   
-<img src="./data/images/build-instructions/IMG_4057.jpg" alt="solder motors" width=600 />
-
----
-#### 1.D. Solder male header(FF) to 4 extra PWM pins on Stepper Motor Bonnet(EE)
-
-**Parts:**  
-   * x1 EE. Adafruit DC & Stepper Motor Bonnet for Raspberry Pi
-   * x1 FF. Break-away 0.1" male header (4 pins)
- 
->_**Notes:**_ 
->   * _These extra PWM pins allow us to use the PCA9685-based motor bonnet to drive Ro-Bud's head servo in addition to the motors_
->   * _I forgot to take a photo of the soldering step but the second image below shows me connecting the servo to the 4 soldered pins at the bottom of the motor bonnet_
-
-<img src="./data/images/build-instructions/motor-bonnet-extra-pwm.png" alt="solder motors" width=600 />
-<img src="./data/images/build-instructions/IMG_4093.jpg" alt="solder motors" width=600 />
-
----
-#### 1.E. Splice orange male jumper wire(GG) to red male jumper wire(GG) and plug in red/orange/brown wires(GG) into 3.5mm audio plug terminal block(JJ)
-
-**Parts:**  
-   * x1 GG. Male/Male Jumper Wires - 20 x 6" (150mm) (red)
-   * x1 GG. Male/Male Jumper Wires - 20 x 6" (150mm) (orange)
-   * x1 GG. Male/Male Jumper Wires - 20 x 6" (150mm) (brown) 
-   * II. Heat shrink tubing (as needed) 
-   * x1 JJ. JJ. 3.5mm (1/8") Stereo Audio Plug Terminal Block
-
->_**Notes:**_ 
->   * _After splicing connect to audio plug as follows:_
->      * _orange to L_
->      * _red to R_
->      * _brown to Ground_
->   * _This allows us to merge the left & right audio channels from the ReSepaker board to send to the speaker. With both channels it's enough to drive the speaker without an additional amp!_
- 
-<img src="./data/images/build-instructions/IMG_4070.jpg" alt="solder motors" width=600 />
-<img src="./data/images/build-instructions/IMG_4071.jpg" alt="solder motors" width=600 />
-
----
-#### 1.F. Solder 2 black 40cm solid-core wires to each side of toggle switch  
-
-**Parts:**  
-   * x4 AA1. solid-core 22AWG wire - Black (40cm)
-   * x1 KK. Rocker toggle switch 
-   * II. Heat shrink tubing (as needed) 
-
->_**Notes:**_ 
->   * _This switch will break the cirucuit of the shared ground of Ro-bud to allow both power supplies to be switched on-and-off together._
->   * _**IMPORTANT:** Be sure to make sure that there is no short between the two sides of the switch (otherwise, Ro-Bud won't be able turn off)_
- 
-<img src="./data/images/build-instructions/IMG_4080.jpg" alt="solder motors" width=600 />
-
-[Return to Table of Contents](#table-of-contents)  
 
 ---
 ## Original Project Announcement Videos  
