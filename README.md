@@ -99,7 +99,6 @@ Last updated 17-August 2022
      * x4 A. horizontal braces [stl](./data/stl/robud-horizontal-brace.stl)
      * x3 B. 3-hole fastener  [stl](./data/stl/robud-3-hole-fastener.stl)
      * x2 H. 1-hole 2mm screw fastener [stl](./data/stl/robud-1-hole-fastener.stl)
-     * x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
      * x4 K. display fastener [stl](./data/stl/robud-display-fastener.stl)
      * x1 L. servo adapter [stl](./data/stl/robud-servo-adapter.stl)
      * x2 M. head barrel wall [stl](./data/stl/robud-head-barrel-wall.stl)
