@@ -62,7 +62,7 @@ Last updated 17-August 2022
  * N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
  * O. bearing https://www.amazon.com/gp/product/B07S1B3MS6  
  * Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5  
- * R. 7in display https://www.adafruit.com/product/1934  
+ * R. 5in display https://www.adafruit.com/product/1678, https://www.digikey.com/en/products/detail/adafruit-industries-llc/1678/10670051
  * S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
  * T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
  * U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
@@ -108,10 +108,10 @@ Last updated 17-August 2022
    
    * Adafruit (recommend sourcing from DigiKey for best US price/shipping)
      * x1 E. BNO055 orientation sensor https://www.adafruit.com/product/4646, https://www.digikey.com/en/products/detail/adafruit-industries-llc/4646/12609996 (often out of stock due to chip shortage. Check DigiKey, Adafruit, Mouser & Amazon)
-     * x1 G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317 
-     * x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
-     * x1 J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210
-     * x1 R. 7in display https://www.adafruit.com/product/1934 
+     * x1 G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317, https://www.digikey.com/en/products/detail/adafruit-industries-llc/3317/6569762
+     * x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648, https://www.digikey.com/en/products/detail/adafruit-industries-llc/1648/7035020
+     * x1 J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210, https://www.digikey.com/en/products/detail/adafruit-industries-llc/4210/10230021
+     * x1 R. 5in display https://www.adafruit.com/product/1678
      * x1 T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
 
    * Amazon
