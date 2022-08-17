@@ -121,7 +121,6 @@ Last updated 17-August 2022
      * x1 O. bearing https://www.amazon.com/gp/product/B07S1B3MS6 
      * x1 Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5
      * x1 S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
-     * x1 T. mono enclosed speaker - 3W 4 ohm https://www.adafruit.com/product/3351
      * x1 V. servo horn (packaged with Q MG90S 9G micro servo)
      * x1 W. server screw (packaged with Q MG90S 9G micro servo)
      * x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
