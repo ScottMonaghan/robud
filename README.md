@@ -29,9 +29,9 @@ The Ro-Bud project is an attempt to pick up where Jibo and Ankni left off, and f
 
 [Return to Table of Contents](#table-of-contents)
 
-# Pre-Alpha Build Instructions
+# Alpha Build Instructions
 **NOTE: The following build instructions are in-progress and not yet complete**  
-Last updated 3-October 2021  
+Last updated 17-August 2022
 
 <img src="./data/images/build-instructions/IMG_4106.jpg" alt="Pre-Alpha Ro-Bud Build" width=600 />
 
@@ -185,18 +185,10 @@ Last updated 3-October 2021
 <img src="./data/images/build-instructions/IMG_3648.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 6. Backdrive servo to 90 degrees
+### 6. Use the servo tester to set servo to neutral position (90 degrees)
 **Parts:**  
-   * x1 Q. MG90S 9G micro servo  
-
->_**Notes:**_
->   * _Suggested steps:_
->     * _Use pliars to gently turn the servo shaft counter-clockwise until you hit the physical stop._
->     * _Then position your pliars at the top at 12:00 as shown in the first picture._
->     * _Finally, carefully turn the shaft clockwise 90 degrees to 3:00 as shown in the second picture._  
-<img src="./data/images/build-instructions/IMG_3672.jpg" alt="Head Assembly Step 5" width=600 />
-<img src="./data/images/build-instructions/IMG_3684.jpg" alt="Head Assembly Step 5" width=600 />
-
+   * x1 Q. MG90S 9G micro servo
+   * x1 LL. Servo Tester
 ---   
 ### 7. Pop servo(Q) into left barrel wall(M)
 **Parts:**  
