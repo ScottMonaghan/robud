@@ -45,7 +45,7 @@ Last updated 3-October 2021
 
 [Return to Table of Contents](#table-of-contents)
 
-## Parts Reference
+## Master Parts Reference
  * A. horizontal braces [stl](./data/stl/robud-horizontal-brace.stl)
  * B. 3-hole fastener [stl](./data/stl/robud-3-hole-fastener.stl)
  * C. 2x8mm round-head self-tapping screws https://www.amazon.com/gp/product/B07NT5288W  
@@ -78,11 +78,8 @@ Last updated 3-October 2021
  * JJ. 3.5mm (1/8") Stereo Audio Plug Terminal Block https://www.adafruit.com/product/2790
  * KK. Rocker toggle switch (comes with chassis kit)
  * LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
- * x1 U. head L bracket
- * x1 U. head L bracket
- * x1 V. servo horn
- * x1 D. 2x8mm pan-head-with-washer self-tapping screw
- * x1 W. server screw
+ * MM. PCA9685 16 Channel 12 Bit PWM Servo Driver https://www.amazon.com/gp/product/B07RMTN4NZ
+
  
 
 [Return to Table of Contents](#table-of-contents)
@@ -92,45 +89,35 @@ Last updated 3-October 2021
 <img src="./data/images/build-instructions/IMG_3666.jpg" alt="Head Assembly Step 1" width=600 />
 
 **Full list of Head Assembly Parts**
-   * x2 A. horizontal braces  
-   * x1 B. 3-hole fastener  
-   * x3 C. 2x8mm round-head self-tapping screws  
-   * x4 D. 2x8mm pan-head-with-washer self-tapping screws  
-   * x1 E. BNO055 orientation sensor  
-   * x1 F. SainSmart IMX219 Camera Module
-   * x2 C. 2x8mm round-head self-tapping screws
-   * x2 H. 1-hole 2mm screw fastener  
-   * x2 C. 2x8mm round-head self-tapping screws  
-   * x1 G. VL53L0X time-of-flight distance sensor
-   * x1 I. 300mm 15-pin camera ribbon cable
-   * x1 J. 100mm Stemma QT JST SH 4-pin cable
-   * x1 M. head barrel wall
-   * x1 L. servo adapter
-   * x2 K. display fastener
-   * x4 D. 2x8mm pan-head-with-washer self-tapping screws
-   * x1 Q. MG90S 9G micro servo  
-   * x2 M. left barrel wall(M) from step 5
-   * x1 Q. MG90S 9G micro servo
-   * x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
-   * x1 N. head shaft adapter 
-   * x1 O. bearing
-   * x1 M. head barrel wall
-   * x2 K. display fastener
-   * x2 A. horizontal braces  
-   * x2 B. 3-hole fasteners  
-   * x1 Left barrel wall with servo (from step 7)  
-   * x1 Lower horizontal head brace (from step 11)  
-   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
-   * x1 Left barrel wall with servo (from step 12)  
-   * x1 Top horizontal head brace with camera (from step 1)  
-   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
-   * x1 R. 7in display  
-   * x1 S. 250mm 40pin display ribbon cable
-   * x1 right barrel wall(M) with bearing and shaft (from step 10)
-   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
-   * x1 T. mono enclosed speaker - 3W 4 ohm
-   * x2 D. 2x8mm pan-head-with-washer self-tapping screws
+   * 3d Printed Parts (Ender 3 settings - PLA, Raft recommended, defaults otherwise) 
+   ** x4 A. horizontal braces [stl](./data/stl/robud-horizontal-brace.stl)
+   ** x3 B. 3-hole fastener  [stl](./data/stl/robud-3-hole-fastener.stl)
+   ** x2 H. 1-hole 2mm screw fastener [stl](./data/stl/robud-1-hole-fastener.stl)
+   ** x4 K. display fastener [stl](./data/stl/robud-display-fastener.stl)
+   ** x1 L. servo adapter [stl](./data/stl/robud-servo-adapter.stl)
+   ** x2 M. head barrel wall [stl](./data/stl/robud-head-barrel-wall.stl)
+   ** x1 N. head shaft adapter [stl](./data/stl/robud-head-shaft-adapter.stl)
+   ** x2 U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
    
+   * Adafruit (recommend sourcing from DigiKey for best US price/shipping)
+   ** x1 E. BNO055 orientation sensor https://www.adafruit.com/product/4646 (often out of stock due to chip shortage. Check DigiKey, Adafruit, Mouser & Amazon)
+   ** x1 G. VL53L0X time-of-flight distance sensor https://www.adafruit.com/product/3317 
+   ** x1 I. 300mm 15-pin camera ribbon cable https://www.adafruit.com/product/1648
+   ** x1 J. 100mm Stemma QT JST SH 4-pin cable https://www.adafruit.com/product/4210
+   ** x1 R. 7in display https://www.adafruit.com/product/1934 
+
+   * Amazon
+   ** x7 C. 2x8mm round-head self-tapping screws https://www.amazon.com/gp/product/B07NT5288W  
+   ** x17 D. 2x8mm pan-head-with-washer self-tapping screws https://www.amazon.com/gp/product/B07NTGRFBF 
+   ** x1 F. SainSmart IMX219 Camera Module https://www.amazon.com/gp/product/B07VFFRX4C  
+   ** x1 O. bearing https://www.amazon.com/gp/product/B07S1B3MS6 
+   ** x1 Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5
+   ** x1 S. 250mm 40pin display ribbon cable https://www.amazon.com/gp/product/B00N426GJA  
+   ** x1 T. mono enclosed speaker - 3W 4 ohm https://www.adafruit.com/product/3351  
+   ** x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
+   ** x1 V. servo horn (packaged with Q MG90S 9G micro servo)
+   ** x1 W. server screw (packaged with Q MG90S 9G micro servo)
+   ** x1 MM. PCA9685 16 Channel 12 Bit PWM Servo Driver https://www.amazon.com/gp/product/B07RMTN4NZ
    
 ### 1. Attach two horizontal braces(A) with 3-hole fastener(B) & attach BNO-055  orientation sensor(E)  
 
