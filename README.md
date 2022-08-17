@@ -211,13 +211,14 @@ Last updated 17-August 2022
 <img src="./data/images/build-instructions/IMG_3650.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
-### 9. Attach display fasteners(K) and balance weights(L) to right barrel wall(M)
+### 9. Attach display fasteners(K) to right barrel wall(M)
 **Parts:**  
  * x1 M. head barrel wall
  * x2 K. display fastener
 
 >_**Notes:**_
 >  * _Make sure fasteners and raised center lip are on opposite sides_
+>  *_Balance weights shown in photo are no-longer used. Please ignore_
 <img src="./data/images/build-instructions/IMG_3651.jpg" alt="Head Assembly Step 5" width=600 />
 
 ---   
