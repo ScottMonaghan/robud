@@ -82,7 +82,8 @@ Last updated 17-August 2022
  * NN. Baseus Power Bank, 65W 20000mAh Laptop Portable Charger https://www.amazon.com/gp/product/B08THCNNCS
  * OO. x2 USB-A Male Plug to 5-pin Terminal Block https://www.amazon.com/gp/product/B07H53X194 (2-pack), https://www.digikey.com/en/products/detail/adafruit-industries-llc/3628/7931507 (1-pack)
  * PP. x2 Stacking Header for Pi https://www.adafruit.com/product/1979, https://www.digikey.com/en/products/detail/adafruit-industries-llc/1979/6238003, https://www.amazon.com/gp/product/B071XCHZNB/(4 pack)
- * QQ M2.5 brass stand-off kit https://www.amazon.com/gp/product/B075K3QBMX/ (or equivalent)
+ * QQ. M2.5 brass stand-off kit https://www.amazon.com/gp/product/B075K3QBMX/ (or equivalent)
+ * RR. 22AWG Silicone Hook Up Wire (stranded) https://www.amazon.com/gp/product/B07T4SYVYG/ (or equivalent, you want not-too-stiff wire than can handle 4 amps)
  
 
 [Return to Table of Contents](#table-of-contents)
