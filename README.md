@@ -63,6 +63,7 @@ Last updated 17-August 2022
  * O. bearing https://www.amazon.com/gp/product/B07S1B3MS6  
  * Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5  
  * R. 7in display https://www.adafruit.com/product/1934  
+ * S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
  * T. mono enclosed speaker - 3W 4 Ohm https://www.adafruit.com/product/3351  
  * U. head L bracket [stl](./data/stl/robud-head-L-bracket.stl)
  * V. servo horn (included with servo(Q))
@@ -120,11 +121,11 @@ Last updated 17-August 2022
      * x1 F. SainSmart IMX219 Camera Module https://www.amazon.com/gp/product/B07VFFRX4C  
      * x1 O. bearing https://www.amazon.com/gp/product/B07S1B3MS6 
      * x1 Q. MG90S 9G micro servo https://www.amazon.com/gp/product/B07F7VJQL5
-     * x1 S. 250mm 40pin display ribbon cable https://www.amazon.com/gp/product/B00N426GJA  
-     * x1 T. mono enclosed speaker - 3W 4 ohm https://www.adafruit.com/product/3351  
-     * x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
+     * x1 S. 40 Pin Flexible Flat Ribbon Cable 0.5mm Pitch - 200mm https://www.amazon.com/gp/product/B07C4P6S43
+     * x1 T. mono enclosed speaker - 3W 4 ohm https://www.adafruit.com/product/3351
      * x1 V. servo horn (packaged with Q MG90S 9G micro servo)
      * x1 W. server screw (packaged with Q MG90S 9G micro servo)
+     * x1 LL. Servo Tester https://www.amazon.com/gp/product/B07TQSKLBK
      * x1 MM. PCA9685 16 Channel 12 Bit PWM Servo Driver https://www.amazon.com/gp/product/B07RMTN4NZ
    
 ### 1. Attach two horizontal braces(A) with 3-hole fastener(B) & attach BNO-055  orientation sensor(E)  
