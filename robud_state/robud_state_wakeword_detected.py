@@ -1,5 +1,6 @@
 import pickle
 import random
+import re
 from typing import Dict
 from robud.robud_logging.MQTTHandler import MQTTHandler
 import argparse
@@ -52,8 +53,11 @@ def robud_state_wakeword_detected(mqtt_client:mqtt.Client, client_userdata:Dict)
         def on_message_stt_output(client:mqtt.Client, userdata, message):
             text = message.payload.decode()
             logger.info("STT Output Received: " + text)
-            client.publish(TOPIC_QUESTIONS,qos=2, payload=text) 
-            client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_IDLE")
+            if re.search(text,'*.go to sleep.*') != None:
+                client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_SLEEPING")
+            else:
+                client.publish(TOPIC_QUESTIONS,qos=2, payload=text) 
+                client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_IDLE")
 
         client_userdata["face_expression"] = np.zeros(shape=FACE_EXPRESSION_ARRAY_SIZE, dtype=np.int16)
         set_expression(client_userdata["face_expression"], Expressions[ExpressionId.OPEN])

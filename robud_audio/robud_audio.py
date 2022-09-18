@@ -34,6 +34,7 @@ from robud.robud_audio.robud_audio_config import (
     , SPEECH_DETECTION_PADDING_SEC
     , SPEECH_DETECTION_RATIO
     , BYTES_PER_FRAME
+    , SPEECH_TIMEOUT
 )
 
 import random
@@ -46,7 +47,7 @@ import traceback
 import sys
 import paho.mqtt.client as mqtt
 import pickle
-from time import sleep
+from time import monotonic, sleep
 from pyaudio import PyAudio, paInt16, paContinue, Stream
 import pyaudio
 #from precise_runner import PreciseEngine, PreciseRunner
@@ -150,17 +151,6 @@ try:
 
     def on_message_audio_output_data(client:mqtt.Client, userdata, message):
         stream_out.write(message.payload)    
-        #global audio_output_buffer
-        # audio = message.payload
-        # bytes_per_chunk = CHUNK * BYTES_PER_FRAME
-        # #logger.info('Audio Output Command Recieved: ' + command)
-        # while len(audio) > 0:
-        #     if len(audio) > bytes_per_chunk:
-        #         audio_output_buffer.append(audio[:bytes_per_chunk])
-        #         audio =  audio[bytes_per_chunk:]
-        #     else:
-        #         audio_output_buffer.append(audio)
-        #         audio = ""
         return
 
     client_userdata = {"command":""}
@@ -180,6 +170,7 @@ try:
     #
 
     #When I tried to put the below in the mqtt callback, it would never fully stop the stream and would never compelte the callback
+    speech_start_time=0.0
     while True:
         if len(client_userdata["command"]) > 0:
             command = client_userdata["command"]
@@ -207,6 +198,7 @@ try:
                     speech_ring_buffer.append((data,is_speech))
                     num_voiced = len([chunk for chunk, speech in speech_ring_buffer if speech])
                     if num_voiced > SPEECH_DETECTION_RATIO * speech_ring_buffer.maxlen:
+                        speech_start_time = monotonic()
                         speech_detection_triggered = True
                         logger.debug("Speech Detected")
                         speechchunks = bytes()
@@ -214,11 +206,15 @@ try:
                             mqtt_client.publish(TOPIC_SPEECH_INPUT_DATA,payload=chunk,qos=2)
                         speech_ring_buffer.clear()
                 else:
-                    #keep publishing audio until speech stops
+                    speech_timer = monotonic() - speech_start_time
+                    #keep publishing audio until speech stops or timout reached
                     mqtt_client.publish(TOPIC_SPEECH_INPUT_DATA,payload=data,qos=2)
                     speech_ring_buffer.append((data, is_speech))
                     num_unvoiced = len([chunk for chunk, speech in speech_ring_buffer if not speech])
-                    if num_unvoiced > SPEECH_DETECTION_RATIO * speech_ring_buffer.maxlen:
+                    if (
+                        num_unvoiced > SPEECH_DETECTION_RATIO * speech_ring_buffer.maxlen
+                        or speech_timer > SPEECH_TIMEOUT
+                    ):
                         speech_detection_triggered = False
                         speech_ring_buffer.clear()
                         mqtt_client.publish(TOPIC_SPEECH_INPUT_COMPLETE,payload="True",qos=2)
