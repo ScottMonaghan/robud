@@ -16,8 +16,8 @@ from robud.ai.object_detection_common import TOPIC_OBJECT_DETECTION_DETECTIONS, 
 from robud.motors.motors_common import TOPIC_HEAD_SERVO_ANGLE
 from robud.robud_voice.robud_voice_common import TOPIC_ROBUD_VOICE_TEXT_INPUT
 from robud.sensors.camera_common import CAMERA_HEIGHT, CAMERA_WIDTH
-from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
-from robud.sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
+#from robud.sensors.tof_common import TOPIC_SENSORS_TOF_RANGE
+#from robud.sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
 from robud.ai.wakeword_detection.wakeword_detection_common import TOPIC_WAKEWORD_DETECTED
 from robud.robud_state.robud_state_common import TOPIC_ROBUD_STATE, logger
 
@@ -50,8 +50,8 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
     TOPIC_ROBUD_LOGGING_LOG_ALL = TOPIC_ROBUD_LOGGING_LOG + "/#"
     LOGGING_LEVEL = logging.DEBUG
 
-    SLEEP_LIGHT_LEVEL = 85
-    WAKE_LIGHT_LEVEL = 105
+    #SLEEP_LIGHT_LEVEL = 85
+    #WAKE_LIGHT_LEVEL = 105
     MINIMUM_SLEEP = 30 #seconds
     MINIMUM_WAKE = 30 #seconds
 
@@ -68,11 +68,11 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         object_detections = []
         client_userdata["object_detections"] = object_detections
         recognized_objects = {}
-        tof_range = -1
-        light_level = 255
+        #tof_range = -1
+        #light_level = 255
         head_angle = None
-        client_userdata["tof_range"] = tof_range
-        client_userdata["light_level"] = light_level
+        #client_userdata["tof_range"] = tof_range
+        #client_userdata["light_level"] = light_level
         client_userdata["head_angle"] = head_angle
         def move_eyes(
             face_expression, 
@@ -124,11 +124,11 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         def on_message_object_detections(client, userdata, message):
             userdata["object_detections"] = pickle.loads(message.payload)
 
-        def on_message_tof_range(client, userdata, message):
-            userdata["tof_range"] = int(message.payload)
+        #def on_message_tof_range(client, userdata, message):
+        #    userdata["tof_range"] = int(message.payload)
 
-        def on_message_light_level(client, userdata, message):
-            userdata["light_level"] = int(message.payload)
+        #def on_message_light_level(client, userdata, message):
+        #    userdata["light_level"] = int(message.payload)
 
         def on_message_head_angle(client, userdata, message):
             userdata["head_angle"] = int(message.payload)
@@ -142,12 +142,12 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         mqtt_client.subscribe(TOPIC_OBJECT_DETECTION_DETECTIONS)
         mqtt_client.message_callback_add(TOPIC_OBJECT_DETECTION_DETECTIONS,on_message_object_detections)
         logger.info('Subcribed to ' + TOPIC_OBJECT_DETECTION_DETECTIONS)
-        mqtt_client.subscribe(TOPIC_SENSORS_TOF_RANGE)
+        #mqtt_client.subscribe(TOPIC_SENSORS_TOF_RANGE)
         #mqtt_client.message_callback_add(TOPIC_SENSORS_TOF_RANGE,on_message_tof_range)
         #logger.info('Subcribed to ' + TOPIC_SENSORS_TOF_RANGE)
-        mqtt_client.subscribe(TOPIC_SENSORS_LIGHT_LEVEL)
-        mqtt_client.message_callback_add(TOPIC_SENSORS_LIGHT_LEVEL,on_message_light_level)
-        logger.info('Subcribed to ' + TOPIC_SENSORS_LIGHT_LEVEL)
+        #mqtt_client.subscribe(TOPIC_SENSORS_LIGHT_LEVEL)
+        #mqtt_client.message_callback_add(TOPIC_SENSORS_LIGHT_LEVEL,on_message_light_level)
+        #logger.info('Subcribed to ' + TOPIC_SENSORS_LIGHT_LEVEL)
         mqtt_client.subscribe(TOPIC_HEAD_SERVO_ANGLE)
         mqtt_client.message_callback_add(TOPIC_HEAD_SERVO_ANGLE,on_message_head_angle)
         logger.info('Subcribed to ' + TOPIC_HEAD_SERVO_ANGLE)
@@ -171,7 +171,7 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         selected_position = (position_center,position_center)
         change_expression:bool = False
         last_dog_detection = 0
-        tof_range = -1
+        #tof_range = -1
         sleeping = False
         wake_time = monotonic()
         sleep_time = 0
@@ -179,15 +179,15 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
             loop_start = monotonic()
             duration = EXPRESSION_CHANGE_DURATION
             head_duration = None
-            tof_range = client_userdata["tof_range"]
-            light_level = client_userdata["light_level"]
+            #tof_range = client_userdata["tof_range"]
+            #light_level = client_userdata["light_level"]
             head_angle = client_userdata["head_angle"]
             #if head_angle == None:
             #    head_angle = 90
 
-            if light_level <= SLEEP_LIGHT_LEVEL and monotonic()-wake_time > MINIMUM_WAKE:
-                #fall asleep
-                mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_SLEEPING", retain=True)
+            #if light_level <= SLEEP_LIGHT_LEVEL and monotonic()-wake_time > MINIMUM_WAKE:
+            #    #fall asleep
+            #    mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_SLEEPING", retain=True)
             
             # elif tof_range > 30 and tof_range <= PERSON_DETECTION_RANGE:
             #     client_userdata["object_detections"] = None
@@ -289,10 +289,10 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         logger.info("Finishing up of ROBUD_STATE_IDLE")
         mqtt_client.unsubscribe(TOPIC_OBJECT_DETECTION_DETECTIONS)
         logger.info("Unsubscribed from " + TOPIC_OBJECT_DETECTION_DETECTIONS)
-        mqtt_client.unsubscribe(TOPIC_SENSORS_TOF_RANGE)
-        logger.info("Unsubscribed from " + TOPIC_OBJECT_DETECTION_DETECTIONS)
-        mqtt_client.unsubscribe(TOPIC_SENSORS_LIGHT_LEVEL)
-        logger.info("Unsubscribed from " + TOPIC_SENSORS_LIGHT_LEVEL)
+        #mqtt_client.unsubscribe(TOPIC_SENSORS_TOF_RANGE)
+        #logger.info("Unsubscribed from " + TOPIC_SENSORS_TOF_RANGE)
+        #mqtt_client.unsubscribe(TOPIC_SENSORS_LIGHT_LEVEL)
+        #logger.info("Unsubscribed from " + TOPIC_SENSORS_LIGHT_LEVEL)
         mqtt_client.unsubscribe(TOPIC_HEAD_SERVO_ANGLE)
         logger.info("Unsubscribed from " + TOPIC_HEAD_SERVO_ANGLE)
         mqtt_client.unsubscribe(TOPIC_WAKEWORD_DETECTED)
