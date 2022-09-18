@@ -21,8 +21,11 @@ from robud.sensors.light_level_common import TOPIC_SENSORS_LIGHT_LEVEL
 from robud.ai.wakeword_detection.wakeword_detection_common import TOPIC_WAKEWORD_DETECTED
 from robud.robud_state.robud_state_common import TOPIC_ROBUD_STATE, logger
 
-def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
-    logger.info("Starting ROBUD_STATE_IDLE")
+
+#same random facial expressions as idle
+#also move around and avoid obstacles 
+def robud_state_exploring(mqtt_client:mqtt.Client, client_userdata:Dict):
+    logger.info("Starting ROBUD_STATE_EXPLORING")
     random.seed()
 
     HEAD_SERVO_MAX_ANGLE = 170
@@ -36,24 +39,9 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
     HEAD_ANGLE_MAX = 180
     HEAD_ANGLE_MIN = 60
     MAX_VEERAGE = 10
-    MQTT_BROKER_ADDRESS = "robud.local"
-    MQTT_CLIENT_NAME = "robud_state_idle.py" + str(random.randint(0,999999999))
+    #MQTT_BROKER_ADDRESS = "robud.local"
+    #MQTT_CLIENT_NAME = "robud_state_exploring.py" + str(random.randint(0,999999999))
     HEAD_SERVO_SPEED = 150 #degrees/sec
-    PERSON_DETECTION_TIMEOUT = 5 #seconds
-    PERSON_DETECTION_RANGE = 80 #centimeters or less
-    PERSON_DETECTION_HEIGHT = 0.67 # % of CAMERA_HEIGHT
-    PERSON_DETECTION_WIDTH = 0.33 # % of CAMERA_WIDTH
-
-
-    TOPIC_ROBUD_LOGGING_LOG = "robud/robud_logging/log"
-    TOPIC_ROBUD_LOGGING_LOG_SIGNED = TOPIC_ROBUD_LOGGING_LOG + "/" + MQTT_CLIENT_NAME
-    TOPIC_ROBUD_LOGGING_LOG_ALL = TOPIC_ROBUD_LOGGING_LOG + "/#"
-    LOGGING_LEVEL = logging.DEBUG
-
-    SLEEP_LIGHT_LEVEL = 85
-    WAKE_LIGHT_LEVEL = 105
-    MINIMUM_SLEEP = 30 #seconds
-    MINIMUM_WAKE = 30 #seconds
 
     try:
 
@@ -62,17 +50,14 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
 
         rate = 100 #100hz rate for sending messages
         carry_on = True
-        # client_userdata = {}
-        # mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata)
         stopped=True
         object_detections = []
         client_userdata["object_detections"] = object_detections
         recognized_objects = {}
         tof_range = -1
-        light_level = 255
+
         head_angle = None
         client_userdata["tof_range"] = tof_range
-        client_userdata["light_level"] = light_level
         client_userdata["head_angle"] = head_angle
         def move_eyes(
             face_expression, 
@@ -127,8 +112,6 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         def on_message_tof_range(client, userdata, message):
             userdata["tof_range"] = int(message.payload)
 
-        def on_message_light_level(client, userdata, message):
-            userdata["light_level"] = int(message.payload)
 
         def on_message_head_angle(client, userdata, message):
             userdata["head_angle"] = int(message.payload)
@@ -143,11 +126,8 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         mqtt_client.message_callback_add(TOPIC_OBJECT_DETECTION_DETECTIONS,on_message_object_detections)
         logger.info('Subcribed to ' + TOPIC_OBJECT_DETECTION_DETECTIONS)
         mqtt_client.subscribe(TOPIC_SENSORS_TOF_RANGE)
-        #mqtt_client.message_callback_add(TOPIC_SENSORS_TOF_RANGE,on_message_tof_range)
-        #logger.info('Subcribed to ' + TOPIC_SENSORS_TOF_RANGE)
-        mqtt_client.subscribe(TOPIC_SENSORS_LIGHT_LEVEL)
-        mqtt_client.message_callback_add(TOPIC_SENSORS_LIGHT_LEVEL,on_message_light_level)
-        logger.info('Subcribed to ' + TOPIC_SENSORS_LIGHT_LEVEL)
+        mqtt_client.message_callback_add(TOPIC_SENSORS_TOF_RANGE,on_message_tof_range)
+        logger.info('Subcribed to ' + TOPIC_SENSORS_TOF_RANGE)
         mqtt_client.subscribe(TOPIC_HEAD_SERVO_ANGLE)
         mqtt_client.message_callback_add(TOPIC_HEAD_SERVO_ANGLE,on_message_head_angle)
         logger.info('Subcribed to ' + TOPIC_HEAD_SERVO_ANGLE)
@@ -175,53 +155,13 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         sleeping = False
         wake_time = monotonic()
         sleep_time = 0
-        while client_userdata["published_state"] == "ROBUD_STATE_IDLE":
+        while client_userdata["published_state"] == "ROBUD_STATE_EXPLORING":
             loop_start = monotonic()
             duration = EXPRESSION_CHANGE_DURATION
             head_duration = None
             tof_range = client_userdata["tof_range"]
-            light_level = client_userdata["light_level"]
             head_angle = client_userdata["head_angle"]
-            #if head_angle == None:
-            #    head_angle = 90
-
-            if light_level <= SLEEP_LIGHT_LEVEL and monotonic()-wake_time > MINIMUM_WAKE:
-                #fall asleep
-                mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_SLEEPING", retain=True)
             
-            # elif tof_range > 30 and tof_range <= PERSON_DETECTION_RANGE:
-            #     client_userdata["object_detections"] = None
-            #     mqtt_client.publish(topic=TOPIC_OBJECT_DETECTION_REQUEST,payload=int(True))    
-            #     logger.info("object detection requested")
-            #     logger.info("waiting for object detection response...")
-            #     start_wait = monotonic()
-            #     while (
-            #         client_userdata["object_detections"] is None
-            #         and monotonic() - start_wait < 1
-            #     ):
-            #         sleep(0.01)
-            #     if client_userdata["object_detections"] is None:
-            #         logger.info("object detection timeout")
-            #         mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_IDLE", retain=True)
-            #     else:
-            #         logger.info("object detection response receieved")
-            #         for detection in client_userdata["object_detections"]:               
-            #             if (
-            #                 detection["ClassLabel"] == "person" 
-            #                 and detection["Height"] > CAMERA_HEIGHT*PERSON_DETECTION_HEIGHT
-            #                 and detection["Width"] > CAMERA_WIDTH*PERSON_DETECTION_WIDTH
-            #                 ):
-            #                 logging.info("PERSON DETECTED, changing to ROBUD_STATE_PERSON_INTERACTION")
-            #                 mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload="ROBUD_STATE_PERSON_INTERACTION", retain=True)
-            #                 client_userdata["published_state"] = "ROBUD_STATE_PERSON_INTERACTION"
-            #             elif detection["ClassLabel"] == "dog" and detection["Height"] > CAMERA_HEIGHT*0.25:
-            #                 if monotonic()-last_dog_detection > PERSON_DETECTION_TIMEOUT:
-            #                     #greet the doggie!
-            #                     mqtt_client.publish(TOPIC_ROBUD_VOICE_TEXT_INPUT, "Hello little doggie. woof woof! Good doggie!")
-            #                     logging.info("Greeted a dog! (Height: " + str(detection["Height"]) + ")")
-            #                 last_person_detection = monotonic()
-                
-            # else:
             new_head_angle = head_angle
             #randomize position
             chance = random.random()
@@ -249,7 +189,6 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
 
             chance = random.random()
             if chance <= (1/(rate*AVG_EXPRESSION_CHANGE)):
-                #print('change expression')
                 chance = random.randint(1,4)
                 left_expression = Expressions[ExpressionId.OPEN]
                 right_expression = Expressions[ExpressionId.OPEN]
@@ -286,24 +225,22 @@ def robud_state_idle(mqtt_client:mqtt.Client, client_userdata:Dict):
         #transition out of state & clean up
         logger.info("State change detected:" + client_userdata["published_state"])
         #unsubscribe from all 
-        logger.info("Finishing up of ROBUD_STATE_IDLE")
+        logger.info("Finishing up of ROBUD_STATE_EXPLORING")
         mqtt_client.unsubscribe(TOPIC_OBJECT_DETECTION_DETECTIONS)
         logger.info("Unsubscribed from " + TOPIC_OBJECT_DETECTION_DETECTIONS)
         mqtt_client.unsubscribe(TOPIC_SENSORS_TOF_RANGE)
         logger.info("Unsubscribed from " + TOPIC_OBJECT_DETECTION_DETECTIONS)
-        mqtt_client.unsubscribe(TOPIC_SENSORS_LIGHT_LEVEL)
-        logger.info("Unsubscribed from " + TOPIC_SENSORS_LIGHT_LEVEL)
         mqtt_client.unsubscribe(TOPIC_HEAD_SERVO_ANGLE)
         logger.info("Unsubscribed from " + TOPIC_HEAD_SERVO_ANGLE)
         mqtt_client.unsubscribe(TOPIC_WAKEWORD_DETECTED)
         logger.info('Unsubscribed from' + TOPIC_WAKEWORD_DETECTED)
-        logger.info("Exiting ROBUD_STATE_IDLE")
+        logger.info("Exiting ROBUD_STATE_EXPLORING")
     except Exception as e:
         logger.critical(str(e) + "\n" + traceback.format_exc())              
 
 if __name__ == "__main__":
     MQTT_BROKER_ADDRESS = "robud.local"
-    MQTT_CLIENT_NAME = "robud_state_idle.py" + str(random.randint(0,999999999))
+    MQTT_CLIENT_NAME = "robud_state_exploring.py" + str(random.randint(0,999999999))
     client_userdata = {}
     mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_NAME, userdata=client_userdata)
     mqtt_client.connect(MQTT_BROKER_ADDRESS)
@@ -311,10 +248,10 @@ if __name__ == "__main__":
     logger.info('MQTT Client Connected')
     def on_message_robud_state(client, userdata, message):
         userdata["published_state"] = message.payload.decode()
-    client_userdata["published_state"] = "ROBUD_STATE_IDLE"
+    client_userdata["published_state"] = "ROBUD_STATE_EXPLORING"
     mqtt_client.subscribe(TOPIC_ROBUD_STATE)
     mqtt_client.message_callback_add(TOPIC_ROBUD_STATE,on_message_robud_state)
     logger.info('Subcribed to ' + TOPIC_ROBUD_STATE)
-    mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_IDLE", retain=True)
-    robud_state_idle(mqtt_client, client_userdata)
+    mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_EXPLORING", retain=True)
+    robud_state_exploring(mqtt_client, client_userdata)
 

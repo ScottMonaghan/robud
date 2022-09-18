@@ -55,6 +55,8 @@ def robud_state_wakeword_detected(mqtt_client:mqtt.Client, client_userdata:Dict)
             logger.info("STT Output Received: " + text)
             if re.search(text,'*.go to sleep.*') != None:
                 client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_SLEEPING")
+            elif re.search(text,'*.go exploring.*'):
+                client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_EXPLORING")
             else:
                 client.publish(TOPIC_QUESTIONS,qos=2, payload=text) 
                 client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_IDLE")
@@ -111,7 +113,7 @@ def robud_state_wakeword_detected(mqtt_client:mqtt.Client, client_userdata:Dict)
         while client_userdata["published_state"] == "ROBUD_STATE_WAKEWORD_DETECTED":
             sleep(5)
 
-        mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_IDLE", retain=True)
+        #mqtt_client.publish(topic=TOPIC_ROBUD_STATE, payload = "ROBUD_STATE_IDLE", retain=True)
         logger.info("Finishing up of ROBUD_STATE_WAKEWORD_DETECTION")
         mqtt_client.unsubscribe(TOPIC_FACE_ANIMATION_FRAME)
         logger.info("Unsubscribed from " + TOPIC_FACE_ANIMATION_FRAME)
