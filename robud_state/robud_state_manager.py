@@ -13,6 +13,7 @@ from robud.robud_state.robud_state_person_interaction import robud_state_person_
 from robud.robud_state.robud_state_sleeping import robud_state_sleeping
 from robud.robud_state.robud_state_wakeword_detected import robud_state_wakeword_detected
 from robud.robud_state.robud_state_exploring import robud_state_exploring
+from robud.robud_state.robud_state_follow import robud_state_follow
 from robud.robud_state.robud_state_common import TOPIC_ROBUD_STATE, logger
 
 if __name__ == "__main__":
@@ -23,6 +24,7 @@ if __name__ == "__main__":
         ,"ROBUD_STATE_SLEEPING":robud_state_sleeping
         ,"ROBUD_STATE_WAKEWORD_DETECTED":robud_state_wakeword_detected
         ,"ROBUD_STATE_EXPLORING":robud_state_exploring
+        ,"ROBUD_STATE_FOLLOW": robud_state_follow
         }
 
         MQTT_BROKER_ADDRESS = "robud.local"

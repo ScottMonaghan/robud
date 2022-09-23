@@ -55,7 +55,7 @@ try:
 
     sample_size = 4
     tolerance = 0.1
-    rate = 15 #publish rate in hz
+    rate = 5 #publish rate in hz
     # topic = TOPIC_SENSORS_TOF_RANGE
 
     def get_range_from_sample(sample):
@@ -113,8 +113,11 @@ try:
                 time.sleep( 1/rate - loop_time)
         except RuntimeError as e:
             logger.error("Timeout")
+            time.sleep(0.1)
         except OSError as e:
             logger.error(str(e) + "\n" + traceback.format_exc())
+            time.sleep(0.1)
+   
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
 except KeyboardInterrupt:

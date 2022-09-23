@@ -57,6 +57,8 @@ def robud_state_wakeword_detected(mqtt_client:mqtt.Client, client_userdata:Dict)
                 client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_SLEEPING")
             elif re.search(text,'*.go exploring.*'):
                 client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_EXPLORING")
+            elif re.search(text,'*.follow me.*'):
+                client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_FOLLOW")
             else:
                 client.publish(TOPIC_QUESTIONS,qos=2, payload=text) 
                 client.publish(TOPIC_ROBUD_STATE, "ROBUD_STATE_IDLE")

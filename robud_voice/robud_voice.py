@@ -114,6 +114,7 @@ try:
             speech = pitch_shift(speech,16000,6)
             mqtt_client.publish(topic=TOPIC_AUDIO_OUTPUT_DATA,payload=speech)
             #sleep(2)
+        sleep(0.1)
 except Exception as e:
     logger.critical(str(e) + "\n" + traceback.format_exc())
 except KeyboardInterrupt:
