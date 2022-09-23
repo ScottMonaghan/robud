@@ -43,7 +43,7 @@ def robud_state_follow(mqtt_client:mqtt.Client, client_userdata:Dict):
     MQTT_CLIENT_NAME = "robud_state_follow.py" + str(random.randint(0,999999999))
     HEAD_SERVO_SPEED = 150 #degrees/sec
     PERSON_DETECTION_TIMEOUT = 50 #milliseconds
-    PERSON_DETECTION_RANGE = 1000 #millimeters or less
+    PERSON_DETECTION_RANGE = 5000 #millimeters or less
     PERSON_DETECTION_HEIGHT = 0.67 # % of CAMERA_HEIGHT
     PERSON_DETECTION_WIDTH = 0.33 # % of CAMERA_WIDTH
 
