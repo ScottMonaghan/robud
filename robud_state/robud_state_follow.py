@@ -36,7 +36,9 @@ def robud_state_follow(mqtt_client:mqtt.Client, client_userdata:Dict):
     HEAD_ANGLE_MAX = 180
     HEAD_ANGLE_MIN = 10
     MAX_VEERAGE = 10
-    STOP_DISTANCE = 40 #centimeters or less
+    STOP_DISTANCE = 80 #centimeters or less
+    BACK_UP_DISTANCE = 40
+
     CENTER_RANGE_WIDTH = 120
 
     MQTT_BROKER_ADDRESS = "robud.local"
@@ -310,6 +312,8 @@ def robud_state_follow(mqtt_client:mqtt.Client, client_userdata:Dict):
                             logging.debug("person centered!")
                             if tof_range > STOP_DISTANCE:
                                 move_forward(stopped)
+                            elif tof_range < BACK_UP_DISTANCE:
+                                move_backward(stopped)
 
 
 
