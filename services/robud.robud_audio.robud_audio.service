@@ -3,6 +3,8 @@ Description=Robud Audio Service
 After=pulseaudio.service
 
 [Service]
+CPUSchedulingPolicy=fifo #set to realtime scheduling for audio stream capture/playback
+CPUSchedulingPriority=20
 Environment=PYTHONPATH=/home/robud
 Type=simple
 WorkingDirectory=/home/robud/
