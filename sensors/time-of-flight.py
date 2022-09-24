@@ -47,7 +47,7 @@ try:
     sensor = adafruit_vl53l0x.VL53L0X(i2c)
     sample_size = 4
     tolerance = 0.05
-    rate = 15 #publish rate in hz
+    rate = 5 #publish rate in hz
     topic = TOPIC_SENSORS_TOF_RANGE
 
     def get_range_from_sample(sample):
@@ -71,7 +71,8 @@ try:
                 sample.append(sensor.range)
             tof_range = get_range_from_sample(sample)
             #logger.debug('{} cm'.format(tof_range))
-            client.publish(topic=topic,payload=tof_range,qos=2)
+            if tof_range > -1:
+                client.publish(topic=topic,payload=tof_range,qos=2)
             loop_time = time.time()-loop_start
             if (loop_time<1/rate):
                 time.sleep( 1/rate - loop_time)
