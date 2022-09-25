@@ -280,6 +280,7 @@ try:
         odom = 0
         client_userdata["enable_blink"]=True
         while carry_on:
+            loop_start = time.monotonic()
             enable_blink = client_userdata["enable_blink"]
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
@@ -330,6 +331,9 @@ try:
             #screen.blit(tts_surface, ((SCREENWIDTH-tts_surface.get_width())/2,SCREENHEIGHT-tts_surface.get_height()))
             #update the display and show next frame
             pygame.display.flip()
+            loop_duration = time.monotonic() - loop_start
+            if loop_duration < 1/ANIMATION_FPS:
+                time.sleep((1/ANIMATION_FPS)-loop_duration)
             
     
     if __name__ == '__main__':
